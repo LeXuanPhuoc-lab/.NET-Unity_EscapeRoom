@@ -15,7 +15,7 @@ D:/CN7/PRU212/.NET-Unity_EscapeRoom/EscapeRoom_2DUnity
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-51168
+52608
 Successfully changed project path to: D:/CN7/PRU212/.NET-Unity_EscapeRoom/EscapeRoom_2DUnity
 D:/CN7/PRU212/.NET-Unity_EscapeRoom/EscapeRoom_2DUnity
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -49,12 +49,12 @@ D:/CN7/PRU212/.NET-Unity_EscapeRoom/EscapeRoom_2DUnity
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [8740] Host "[IP] 192.168.153.1 [Port] 0 [Flags] 2 [Guid] 2848005287 [EditorId] 2848005287 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-HP2DTMU) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [19256] Host "[IP] 192.168.153.1 [Port] 0 [Flags] 2 [Guid] 3536434342 [EditorId] 3536434342 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-HP2DTMU) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
 
-Player connection [8740] Host "[IP] 192.168.153.1 [Port] 0 [Flags] 2 [Guid] 2848005287 [EditorId] 2848005287 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-HP2DTMU) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [19256] Host "[IP] 192.168.153.1 [Port] 0 [Flags] 2 [Guid] 3536434342 [EditorId] 3536434342 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-HP2DTMU) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
 
 [Physics::Module] Initialized MultithreadedJobDispatcher with 15 workers.
-Refreshing native plugins compatible for Editor in 8.01 ms, found 4 plugins.
+Refreshing native plugins compatible for Editor in 9.54 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.28f1 (6bae5ce6b222)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2022.3.28f1/Editor/Data/Resources/UnitySubsystems
@@ -70,7 +70,7 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2022.3.28f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2022.3.28f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2022.3.28f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56712
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56212
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.28f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
@@ -78,45 +78,45 @@ Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.28f1/
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.28f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.28f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.28f1/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.UWP.Extensions.dll
-Registered in 0.010459 seconds.
-- Loaded All Assemblies, in  0.344 seconds
+Registered in 0.007754 seconds.
+- Loaded All Assemblies, in  0.332 seconds
 Native extension for UWP target not found
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 212 ms
+Android Extension - Scanning For ADB Devices 236 ms
 Native extension for OSXStandalone target not found
 Native extension for WebGL target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.537 seconds
-Domain Reload Profiling: 880ms
-	BeginReloadAssembly (94ms)
+- Finished resetting the current domain, in  0.556 seconds
+Domain Reload Profiling: 887ms
+	BeginReloadAssembly (119ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (36ms)
-	RebuildNativeTypeToScriptingClass (12ms)
-	initialDomainReloadingComplete (58ms)
-	LoadAllAssembliesAndSetupDomain (143ms)
-		LoadAssemblies (94ms)
+	RebuildCommonClasses (29ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (48ms)
+	LoadAllAssembliesAndSetupDomain (126ms)
+		LoadAssemblies (118ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (140ms)
-			TypeCache.Refresh (139ms)
-				TypeCache.ScanAssembly (125ms)
+		AnalyzeDomain (124ms)
+			TypeCache.Refresh (122ms)
+				TypeCache.ScanAssembly (110ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
-			ResolveRequiredComponents (1ms)
-	FinalizeReload (537ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (556ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (476ms)
+		SetupLoadedEditorAssemblies (501ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (330ms)
-			SetLoadedEditorAssemblies (4ms)
+			InitializePlatformSupportModulesInManaged (348ms)
+			SetLoadedEditorAssemblies (6ms)
 			RefreshPlugins (0ms)
 			BeforeProcessingInitializeOnLoad (2ms)
-			ProcessInitializeOnLoadAttributes (98ms)
-			ProcessInitializeOnLoadMethodAttributes (41ms)
+			ProcessInitializeOnLoadAttributes (103ms)
+			ProcessInitializeOnLoadMethodAttributes (42ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -124,8 +124,8 @@ Domain Reload Profiling: 880ms
 ========================================================================
 Worker process is ready to serve import requests
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.607 seconds
-Refreshing native plugins compatible for Editor in 2.33 ms, found 4 plugins.
+- Loaded All Assemblies, in  0.618 seconds
+Refreshing native plugins compatible for Editor in 3.86 ms, found 4 plugins.
 Native extension for UWP target not found
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
@@ -136,47 +136,47 @@ Package Manager log level set to [2]
 [Package Manager] UpmClient::Send -- Unable to send message (not connected to UPM process).
 [Package Manager] Cannot connect to Unity Package Manager local server
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.744 seconds
-Domain Reload Profiling: 1350ms
-	BeginReloadAssembly (135ms)
+- Finished resetting the current domain, in  0.739 seconds
+Domain Reload Profiling: 1356ms
+	BeginReloadAssembly (154ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (5ms)
+		DisableScriptedObjects (6ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (21ms)
-	RebuildCommonClasses (33ms)
+		CreateAndSetChildDomain (25ms)
+	RebuildCommonClasses (36ms)
 	RebuildNativeTypeToScriptingClass (11ms)
-	initialDomainReloadingComplete (37ms)
-	LoadAllAssembliesAndSetupDomain (390ms)
-		LoadAssemblies (282ms)
+	initialDomainReloadingComplete (41ms)
+	LoadAllAssembliesAndSetupDomain (374ms)
+		LoadAssemblies (280ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (183ms)
-			TypeCache.Refresh (153ms)
-				TypeCache.ScanAssembly (132ms)
-			ScanForSourceGeneratedMonoScriptInfo (24ms)
+		AnalyzeDomain (182ms)
+			TypeCache.Refresh (155ms)
+				TypeCache.ScanAssembly (137ms)
+			ScanForSourceGeneratedMonoScriptInfo (21ms)
 			ResolveRequiredComponents (5ms)
-	FinalizeReload (744ms)
+	FinalizeReload (740ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (594ms)
+		SetupLoadedEditorAssemblies (588ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (27ms)
 			SetLoadedEditorAssemblies (3ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (61ms)
-			ProcessInitializeOnLoadAttributes (456ms)
-			ProcessInitializeOnLoadMethodAttributes (43ms)
-			AfterProcessingInitializeOnLoad (5ms)
+			BeforeProcessingInitializeOnLoad (57ms)
+			ProcessInitializeOnLoadAttributes (459ms)
+			ProcessInitializeOnLoadMethodAttributes (37ms)
+			AfterProcessingInitializeOnLoad (4ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (5ms)
 Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
-Refreshing native plugins compatible for Editor in 2.18 ms, found 4 plugins.
+Refreshing native plugins compatible for Editor in 2.88 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 4036 Unused Serialized files (Serialized files now loaded: 0)
 Unloading 65 unused Assets / (62.1 KB). Loaded Objects now: 4499.
-Memory consumption went from 149.3 MB to 149.2 MB.
-Total: 3.680100 ms (FindLiveObjects: 0.288700 ms CreateObjectMapping: 0.112100 ms MarkObjects: 3.159600 ms  DeleteObjects: 0.118700 ms)
+Memory consumption went from 149.3 MB to 149.3 MB.
+Total: 5.166100 ms (FindLiveObjects: 0.406900 ms CreateObjectMapping: 0.257500 ms MarkObjects: 4.364200 ms  DeleteObjects: 0.136000 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
@@ -191,3 +191,48 @@ AssetImportParameters requested are different than current active one (requested
   custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 9488.161545 seconds.
+  path: Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 - SpriteSheet.png
+  artifactKey: Guid(0538e6b90fa1ecc4a8c6cdbb3617fee1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 - SpriteSheet.png using Guid(0538e6b90fa1ecc4a8c6cdbb3617fee1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00018d1247e295f03b2ce6d5bf36ed37') in 0.066906 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.340739 seconds.
+  path: Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 Sprites/Golden Chest 2 - frame  01.png
+  artifactKey: Guid(ab6852e4e552752408c0d2a66cb92dc7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 Sprites/Golden Chest 2 - frame  01.png using Guid(ab6852e4e552752408c0d2a66cb92dc7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6d94964a13045594d96c0834bf29ba1f') in 0.013132 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000013 seconds.
+  path: Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 Sprites/Golden Chest 2 - frame  03.png
+  artifactKey: Guid(33aab9f5c7eebe742aa61e47db7886f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 Sprites/Golden Chest 2 - frame  03.png using Guid(33aab9f5c7eebe742aa61e47db7886f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1037b0f976e9e7b631d7b85d74e65db4') in 0.010407 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.003432 seconds.
+  path: Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 Sprites/Golden Chest 2 - frame  04.png
+  artifactKey: Guid(c398032ecdc4f774f86bdd14c93d6070) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 Sprites/Golden Chest 2 - frame  04.png using Guid(c398032ecdc4f774f86bdd14c93d6070) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2cedd3ee2adbd958a1f1244dbd15c065') in 0.014651 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 Sprites/Golden Chest 2 - frame  05.png
+  artifactKey: Guid(d02ee520c89806f428e3985d6af30efa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/karsiori/Pixel Chest Pack - Animated/Sprites/Golden Chest 2/Golden Chest 2 Sprites/Golden Chest 2 - frame  05.png using Guid(d02ee520c89806f428e3985d6af30efa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '387aef8f9e4ced1f0e32aa260bce6dd7') in 0.015281 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+TcpMessagingSession - receive error: operation aborted. errorcode: 995, details: The I/O operation has been aborted because of either a thread exit or an application request.
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0

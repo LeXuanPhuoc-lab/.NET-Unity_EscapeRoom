@@ -34,7 +34,6 @@ mono_crash.*
 *_p.c
 *_i.h
 *.ilk
-*.meta
 *.tmp
 *.log
 *.vspscc

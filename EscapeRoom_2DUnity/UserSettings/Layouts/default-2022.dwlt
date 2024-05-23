@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Hierarchy
   m_RootView: {fileID: 7}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 151
+  controlID: 49
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1073,9 +1073,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 2.6545846, y: -2.078667, z: -0.2166901}
+    m_Target: {x: 15.63694, y: 3.4879496, z: -0.3524227}
     speed: 2
-    m_Value: {x: 2.4498947, y: -2.3857021, z: -0.22742441}
+    m_Value: {x: 15.63694, y: 3.4879496, z: -0.3524227}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 31
@@ -1125,9 +1125,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 22.780615
+    m_Target: 36.353878
     speed: 2
-    m_Value: 23.854048
+    m_Value: 36.353878
   m_Ortho:
     m_Target: 1
     speed: 2

@@ -28,7 +28,9 @@ public partial class EscapeRoomUnityContext : DbContext
     public virtual DbSet<QuestionAnswer> QuestionAnswers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-       => optionsBuilder.UseSqlServer(GetConnectionString());
+    {
+        optionsBuilder.UseSqlServer(GetConnectionString());
+    }
 
     private string GetConnectionString()
     {
@@ -36,24 +38,24 @@ public partial class EscapeRoomUnityContext : DbContext
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
             .Build();
-
-        return config.GetConnectionString("DefaultDB")!;
+        return config.GetConnectionString("DefaultDB");
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<GameSession>(entity =>
         {
-            entity.HasKey(e => e.SessionId).HasName("PK__GameSess__C9F492905CA4C226");
+            entity.HasKey(e => e.SessionId).HasName("PK__GameSess__C9F49290FB8C60D6");
 
             entity.ToTable("GameSession");
 
+            entity.Property(e => e.Hint).HasMaxLength(100);
             entity.Property(e => e.SessionName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Leaderboard>(entity =>
         {
-            entity.HasKey(e => e.LeaderBoardId).HasName("PK__Leaderbo__91D44214A142F19C");
+            entity.HasKey(e => e.LeaderBoardId).HasName("PK__Leaderbo__91D4421493D00BC0");
 
             entity.ToTable("Leaderboard");
 
@@ -75,13 +77,13 @@ public partial class EscapeRoomUnityContext : DbContext
 
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Player__3213E83F7076E9D7");
+            entity.HasKey(e => e.Id).HasName("PK__Player__3213E83F4347761C");
 
             entity.ToTable("Player");
 
-            entity.HasIndex(e => e.PlayerId, "UQ__Player__4A4E74C923C0E728").IsUnique();
+            entity.HasIndex(e => e.PlayerId, "UQ__Player__4A4E74C9B7D270D4").IsUnique();
 
-            entity.HasIndex(e => e.Username, "UQ__Player__536C85E4DA68088B").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Player__536C85E4DBC68C1A").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email).HasMaxLength(255);
@@ -100,7 +102,7 @@ public partial class EscapeRoomUnityContext : DbContext
 
         modelBuilder.Entity<PlayerGameAnswer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PlayerGa__3213E83FE1BBDA6B");
+            entity.HasKey(e => e.Id).HasName("PK__PlayerGa__3213E83F4F401746");
 
             entity.ToTable("PlayerGameAnswer");
 
@@ -141,7 +143,7 @@ public partial class EscapeRoomUnityContext : DbContext
 
         modelBuilder.Entity<PlayerGameSession>(entity =>
         {
-            entity.HasKey(e => new { e.SessionId, e.PlayerId }).HasName("PK__PlayerGa__5D5075DC543E41DE");
+            entity.HasKey(e => new { e.SessionId, e.PlayerId }).HasName("PK__PlayerGa__5D5075DCDD5F45CC");
 
             entity.ToTable("PlayerGameSession");
 
@@ -161,14 +163,16 @@ public partial class EscapeRoomUnityContext : DbContext
 
         modelBuilder.Entity<Question>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Question__3213E83F7BBF98A5");
+            entity.HasKey(e => e.Id).HasName("PK__Question__3213E83F406A6A02");
 
             entity.ToTable("Question");
 
-            entity.HasIndex(e => e.QuestionId, "UQ__Question__0DC06FAD6357F910").IsUnique();
+            entity.HasIndex(e => e.QuestionId, "UQ__Question__0DC06FAD6C8FB79C").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Image).HasMaxLength(200);
+            entity.Property(e => e.QuestionDesc)
+                .IsRequired()
+                .HasMaxLength(500);
             entity.Property(e => e.QuestionId)
                 .IsRequired()
                 .HasMaxLength(36)
@@ -177,11 +181,11 @@ public partial class EscapeRoomUnityContext : DbContext
 
         modelBuilder.Entity<QuestionAnswer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Question__3213E83F18802507");
+            entity.HasKey(e => e.Id).HasName("PK__Question__3213E83F3EFFC6F3");
 
             entity.ToTable("QuestionAnswer");
 
-            entity.HasIndex(e => e.QuestionAnswerId, "UQ__Question__86BEDFCEC58B6E2A").IsUnique();
+            entity.HasIndex(e => e.QuestionAnswerId, "UQ__Question__86BEDFCE4C0C15DA").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Answer).HasMaxLength(150);

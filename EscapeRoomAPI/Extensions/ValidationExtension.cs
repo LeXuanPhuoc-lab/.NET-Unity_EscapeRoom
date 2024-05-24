@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EscapeRoomAPI.Extensions;
 
@@ -33,12 +34,11 @@ public static class ValidationExtension
         return error;
     }
 
-    public static async Task<ValidationProblemDetails?> ValidateAsync<TRequest> (this TRequest request)
+    public static async Task<ValidationProblemDetails?> ValidateAsync<TRequest> (this TRequest request, IServiceProvider serviceProvider)
     {
-        var validatorType = typeof(IValidator<>).MakeGenericType(typeof(TRequest));
-        var validator = (IValidator<TRequest>?)Activator.CreateInstance(validatorType);
+        var validator = serviceProvider.GetService<IValidator<TRequest>>();
 
-        if(validator is null) throw new InvalidOperationException($"No validator found for type {typeof(TRequest).Name}");
+        if (validator is null) throw new InvalidOperationException($"No validator found for type {typeof(TRequest).Name}");
 
         var result = await validator.ValidateAsync(request);
         if (!result.IsValid)

@@ -17,7 +17,7 @@ public partial class PlayerGameAnswer
 
     public string SelectAnswerId { get; set; }
 
-    public bool? IsCorrect { get; set; }
+    public bool IsCorrect { get; set; }
 
     public virtual Player Player { get; set; }
 

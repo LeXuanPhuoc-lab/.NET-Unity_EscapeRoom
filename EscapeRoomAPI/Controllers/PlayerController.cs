@@ -1,10 +1,12 @@
 using AutoMapper;
 using EscapeRoomAPI.Dtos;
 using EscapeRoomAPI.Entities;
+using EscapeRoomAPI.Enums;
 using EscapeRoomAPI.Extensions;
 using EscapeRoomAPI.Payloads;
 using EscapeRoomAPI.Payloads.Requests;
 using EscapeRoomAPI.Payloads.Responses;
+using EscapeRoomAPI.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,19 +17,22 @@ public class PlayerController : ControllerBase
 {
     private readonly EscapeRoomUnityContext _context;
     private readonly IMapper _mapper;
+    private readonly IServiceProvider _serviceProvider;
 
     public PlayerController(EscapeRoomUnityContext context,
-        IMapper mapper)
+        IMapper mapper,
+        IServiceProvider serviceProvider)
     {
         _context = context;
         _mapper = mapper;
+        _serviceProvider = serviceProvider;
     }
 
     [HttpPost(APIRoutes.Players.CreateRoom, Name = nameof(CreateRoomAsync))]
     public async Task<IActionResult> CreateRoomAsync([FromBody] CreateRoomRequest reqObj)
     {
         // Process register validation 
-        var validationResult = await reqObj.ValidateAsync();
+        var validationResult = await reqObj.ValidateAsync(_serviceProvider);
         if (validationResult is not null) // Invoke errors
         {
             return BadRequest(new BaseResponse
@@ -100,7 +105,7 @@ public class PlayerController : ControllerBase
                 Message = $"Không tìm thấy player {username}",
                 IsSuccess = false
             });
-        
+
         // Check player already exist in any game session
         var isplayerJoinedGame =
             await _context.GameSessions
@@ -115,12 +120,12 @@ public class PlayerController : ControllerBase
                 IsSuccess = false
             });
         }
-        
+
         // Get game session
         var gameSession = await _context.GameSessions
             .Include(gs => gs.PlayerGameSessions)
             .FirstOrDefaultAsync(gs =>
-                gs.IsWaiting.HasValue && gs.IsWaiting.Value  // Game session not started yet
+                gs.IsWaiting  // Game session not started yet
              && gs.PlayerGameSessions.Count < gs.TotalPlayer); // Not full (less than total player || enough for one more)
 
         if (gameSession is null) return NotFound(
@@ -135,7 +140,8 @@ public class PlayerController : ControllerBase
         gameSession.PlayerGameSessions.Add(new PlayerGameSession
         {
             Player = player,
-            IsHost = false
+            IsHost = false,
+            IsReady = false
         });
         // Save to DB
         var result = await _context.SaveChangesAsync() > 0;
@@ -183,10 +189,51 @@ public class PlayerController : ControllerBase
         }
         _context.Remove(playerGameSession);
 
-        // Check if player is host 
-        if (playerGameSession.IsHost.HasValue
-         && playerGameSession.IsHost.Value)
+        //// Check if player is host 
+        //if (playerGameSession.IsHost)
+        //{
+        //    // Remove all relevant features (PlayerSession, PlayerAnswer, Leaderboard,...)
+        //    // Get all player in game session
+        //    var allPlayerGameSession = await _context.PlayerGameSessions
+        //            .Include(x => x.Player)
+        //                .ThenInclude(x => x.PlayerGameAnswers)
+        //            .Where(x => x.SessionId == playerGameSession.SessionId)
+        //            .ToListAsync();
+
+        //    foreach (var pgs in allPlayerGameSession)
+        //    {
+        //        // Get all player game answers 
+        //        var playerGameAnswers = pgs.Player.PlayerGameAnswers;
+
+        //        // Remove player game session
+        //        pgs.Player = null!;
+        //        _context.Remove(pgs);
+
+        //        // Clear all answer question 
+        //        _context.RemoveRange(playerGameAnswers);
+        //    }
+        //}
+
+        // Check if last player out game session -> Remove leaderboard
+        var playersInGame = await _context.PlayerGameSessions
+                .Where(x => x.SessionId == playerGameSession.SessionId)
+                .CountAsync();
+        if (playersInGame == 1)
         {
+            // Remove all relevant features (PlayerSession, PlayerAnswer, Leaderboard,...)
+            // Get all player answers
+            var playerGameAnswers = await _context.PlayerGameAnswers
+                    .Where(x => x.SessionId == playerGameSession.SessionId)
+                    .ToListAsync();
+
+            // Clear all answer  
+            _context.RemoveRange(playerGameAnswers);
+
+            // Remove leaderboard
+            _context.RemoveRange(await _context.Leaderboards
+                .Where(x => x.SessionId == playerGameSession.SessionId)
+                .ToListAsync());
+
             // Get game session
             var gameSessionToDelete = await _context.GameSessions.FirstOrDefaultAsync(x =>
                 x.SessionId == playerGameSession.SessionId);
@@ -194,27 +241,28 @@ public class PlayerController : ControllerBase
             if (gameSessionToDelete is null)
                 return Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
 
-            // Remove game session
+            // Remove game session when last player out room
             // Provide access to tracking information and operation
             if (_context.GameSessions.Entry(gameSessionToDelete).State == EntityState.Detached)
             {
                 // Ensure that entity is being track by context 
                 _context.Attach(gameSessionToDelete); // Change entity's state to "Deleted"
             }
+
+            // Remove leaderboard
             _context.Remove(gameSessionToDelete);
         }
 
         // Save DB change 
         var result = await _context.SaveChangesAsync() > 0;
 
-        if (result) // Process successfully
-            Ok(new BaseResponse
+        return result // Process successfully
+            ? Ok(new BaseResponse
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = $"Thoát thành công"
-            });
-
-        return Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
+            })
+            : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
 
     [HttpPatch(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
@@ -244,8 +292,24 @@ public class PlayerController : ControllerBase
                 IsSuccess = false
             });
 
+        // Check if game already started or not 
+        if (!playerGameSession.Session.IsWaiting)
+        {
+            return BadRequest(new BaseResponse
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = "Người chơi đang trong trò chơi, không thể chuẩn bị"
+            });
+        }
+
+
         // Modify ready status
-        playerGameSession.IsReady = !playerGameSession.IsReady;
+        if (_context.Entry(playerGameSession).State == EntityState.Detached)
+        {
+            _context.Attach(playerGameSession);
+        }
+        _context.Entry(playerGameSession).Property(s => s.IsReady).CurrentValue = !playerGameSession.IsReady;
+        _context.Entry(playerGameSession).Property(s => s.IsReady).IsModified = true;
         // Save change
         var result = await _context.SaveChangesAsync() > 0;
 
@@ -287,19 +351,41 @@ public class PlayerController : ControllerBase
             });
 
         // Check if player is host
-        if (playerGameSession.IsHost.HasValue && playerGameSession.IsHost.Value)
+        if (playerGameSession.IsHost)
         {
             // Process starting game...
 
-            // Check if all players in room was ready
+            // Check if game already started or not 
+            if (!playerGameSession.Session.IsWaiting)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Bắt đầu trò chơi thất bại, trò chơi đang diễn ra"
+                });
+            }
+
+            // Get all players in session, except host player
             var listPlayerSession = await _context.PlayerGameSessions
                 .Include(x => x.Player)
-                .Where(x => x.SessionId == playerGameSession.SessionId)
+                .Where(x => x.SessionId == playerGameSession.SessionId
+                    && x.PlayerId != playerGameSession.PlayerId)
                 .ToListAsync();
 
+            // To start game, at least 2 players
+            if (listPlayerSession.Count < 1)
+            {
+                return BadRequest(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Yêu cầu ít nhất 2 người chơi để bắt đầu"
+                });
+            }
+
+            // Check if all players in room was ready
             foreach (var ps in listPlayerSession)
             {
-                if (ps.IsReady.HasValue && !ps.IsReady.Value)
+                if (!ps.IsReady)
                     return BadRequest(new BaseResponse
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
@@ -327,6 +413,111 @@ public class PlayerController : ControllerBase
                 Message = $"Trò chơi đã bắt đầu, bạn còn {playerGameSession.Session.EndTime.TotalMinutes} phút để thoát khỏi nơi này",
                 IsSuccess = true
             })
-            : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
+            : BadRequest(new BaseResponse
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = $"Bắt đầu trò chơi thất bại, bạn không phải chủ phòng"
+            });
+    }
+
+    [HttpGet(APIRoutes.Players.SubmitUnlockRoomKey, Name = nameof(SubmitUnlockRoomKeyAsync))]
+    public async Task<IActionResult> SubmitUnlockRoomKeyAsync([FromRoute] string username, [FromRoute] int key, bool isHard)
+    {
+        // Check exist player 
+        var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(username));
+        if (player is null) return NotFound(
+            new BaseResponse
+            {
+                StatusCode = StatusCodes.Status404NotFound,
+                Message = $"Không tìm thấy player {username}",
+                IsSuccess = false
+            });
+
+        // Get playing game session
+        var playerGameSession = await _context.PlayerGameSessions
+            .Include(x => x.Session)
+            .FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
+        if (playerGameSession is null)
+        {
+            return BadRequest(new BaseResponse
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = "Không tìm thấy người chơi"
+            });
+        }
+
+        // Check game is end yet
+        if (playerGameSession.Session.IsEnd)
+        {
+            // Here in unity script we show up leader board for all player in room
+            return BadRequest(new BaseResponse
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = "Trò chơi đã kết thúc"
+            });
+        }
+
+        // Get all player correct answer
+        var playerAnswers = await _context.PlayerGameAnswers
+            .Include(x => x.Question)
+            .Where(x => x.PlayerId == playerGameSession.PlayerId)
+            .ToListAsync();
+
+        // Count all digits, which are correct
+        var digitsFromCorrect = playerAnswers.Select(x => x.Question)
+            .Where(x => x.IsHard.Equals(isHard))
+            .Select(x => x.KeyDigit).ToList();
+
+        // Process unclock whenever total correct is excess than 4 digits
+        if (digitsFromCorrect.Count >= 4)
+        {
+            // Compare with hint
+            var hint = playerGameSession.Session.Hint;
+            var unClockKey = NumberUtils.CombineDigitsIntoNumber(digitsFromCorrect, hint);
+
+            var isCorrect = false;
+
+            switch (hint)
+            {
+                case nameof(UnclockHint.Ascending):
+                    if (NumberUtils.IsAscending(key) && key == unClockKey) isCorrect = true;
+                    break;
+                case nameof(UnclockHint.Descending):
+                    if (NumberUtils.IsDescending(key) && key == unClockKey) isCorrect = true;
+                    break;
+            }
+
+            if (isCorrect && !isHard)
+            {
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Mở khóa thành công",
+                    IsSuccess = true
+                });
+            }
+            else if (isCorrect && isHard)
+            {
+                // Check if all hard question is answer, and successfully open main door
+                // Game is end
+                playerGameSession.Session.IsEnd = true;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Trò chơi kết thúc",
+                    IsSuccess = true
+                });
+            }
+        }
+
+        // Others situtation -> Wrong key pass -> Not allow to unclock the door 
+        return BadRequest(new BaseResponse
+        {
+            StatusCode = StatusCodes.Status400BadRequest,
+            Message = "Sai mật khẩu"
+        });
     }
 }

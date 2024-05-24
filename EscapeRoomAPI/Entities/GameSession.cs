@@ -11,15 +11,17 @@ public partial class GameSession
 
     public string SessionName { get; set; }
 
-    public TimeOnly StartTime { get; set; }
+    public TimeSpan StartTime { get; set; }
 
-    public TimeOnly EndTime { get; set; }
+    public TimeSpan EndTime { get; set; }
 
     public int TotalPlayer { get; set; }
 
-    public bool? IsWaiting { get; set; }
+    public bool IsWaiting { get; set; }
 
-    public bool? IsEnd { get; set; }
+    public bool IsEnd { get; set; }
+
+    public string Hint { get; set; }
 
     public virtual ICollection<Leaderboard> Leaderboards { get; set; } = new List<Leaderboard>();
 

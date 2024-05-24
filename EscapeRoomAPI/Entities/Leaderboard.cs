@@ -13,7 +13,7 @@ public partial class Leaderboard
 
     public string PlayerId { get; set; }
 
-    public int? TotalRightAnswer { get; set; }
+    public int TotalRightAnswer { get; set; }
 
     public virtual Player Player { get; set; }
 

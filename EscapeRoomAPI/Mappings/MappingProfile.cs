@@ -11,5 +11,9 @@ public class MappingProfile : Profile
         CreateMap<Player, PlayerDto>().ReverseMap();
         CreateMap<GameSession, GameSessionDto>().ReverseMap();
         CreateMap<PlayerGameSession, PlayerGameSessionDto>().ReverseMap();
+        CreateMap<PlayerGameAnswer, PlayerGameAnswerDto>().ReverseMap();
+        CreateMap<Question, QuestionDto>().ReverseMap();
+        CreateMap<QuestionAnswer, QuestionAnswerDto>().ReverseMap();
+        CreateMap<Leaderboard, LeaderboardDto>().ReverseMap();
     }
 }

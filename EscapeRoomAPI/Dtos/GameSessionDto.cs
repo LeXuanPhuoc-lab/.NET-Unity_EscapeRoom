@@ -10,8 +10,9 @@ public class GameSessionDto
 
     public int TotalPlayer { get; set; }
 
-    public bool? IsWaiting { get; set; } 
+    public bool IsWaiting { get; set; } 
 
-    public bool? IsEnd { get; set; } 
+    public bool IsEnd { get; set; }
+    public string Hint { get; set; } = string.Empty;
     public virtual ICollection<PlayerDto> Players { get; set; } = new List<PlayerDto>();
 }

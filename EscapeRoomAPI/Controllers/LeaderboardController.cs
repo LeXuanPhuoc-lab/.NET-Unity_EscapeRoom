@@ -1,4 +1,5 @@
 using AutoMapper;
+using EscapeRoomAPI.Dtos;
 using EscapeRoomAPI.Entities;
 using EscapeRoomAPI.Payloads;
 using EscapeRoomAPI.Payloads.Responses;
@@ -47,25 +48,65 @@ public class LeaderboardController : ControllerBase
             });
         }
 
+        // Check if leaderboard already create
+        var existingLeaderboard = await _context.Leaderboards
+                .Include(x => x.Player)
+                .Where(x => x.SessionId == playerGameSession.SessionId) 
+                .ToListAsync();
+
+        if (existingLeaderboard.Any())
+        {
+            return Ok(new BaseResponse
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Tạo leaderboard thành công",
+                Data = _mapper.Map<List<LeaderboardDto>>(existingLeaderboard)
+            });
+        }
+
+
         // Get all player in game session
         var players = await _context.PlayerGameSessions
+            .Include(x => x.Player)
+                .ThenInclude(x => x.PlayerGameAnswers)
             .Where(x => x.SessionId == playerGameSession.SessionId)
             .Select(x => x.Player)
             .ToListAsync();
 
 
+        var leaderBoards = new List<Leaderboard>();
         // Foreach player, count their correct answer
         foreach (var p in players)
         {
             // Total correct answers
             var listofCorrectAnswers = await _context.PlayerGameAnswers
-                .Where(x => x.PlayerId == p.PlayerId 
-                    && x.IsCorrect.HasValue
-                    && x.IsCorrect.Value)
+                .Where(x => x.PlayerId == p.PlayerId
+                    && x.IsCorrect)
                 .ToListAsync();
-            // var totalCorrect = listAns
+
+            leaderBoards.Add(new Leaderboard
+            {
+                Player = p,
+                SessionId = playerGameSession.SessionId,
+                TotalRightAnswer = listofCorrectAnswers.Count,
+            });
         }
 
-        return Ok();
+
+        // Sorting rank - descending order
+        leaderBoards.Sort((x, y) => y.TotalRightAnswer.CompareTo(x.TotalRightAnswer));
+
+        // Save To DB
+        await _context.Leaderboards.AddRangeAsync(leaderBoards);
+        await _context.SaveChangesAsync();
+
+        return leaderBoards.Any()
+            ? Ok(new BaseResponse
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Tạo leaderboard thành công",
+                Data = _mapper.Map<List<LeaderboardDto>>(leaderBoards)
+            })
+            : Problem("Có lỗi xảy ra, không thể tạo leaderboard", null, StatusCodes.Status500InternalServerError);
     }
 }

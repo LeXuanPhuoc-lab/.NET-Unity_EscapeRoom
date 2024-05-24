@@ -15,12 +15,15 @@ public class AuthenticationController : ControllerBase
 {
     private readonly EscapeRoomUnityContext _context;
     private readonly IMapper _mapper;
+    private readonly IServiceProvider _serviceProvider;
 
     public AuthenticationController(EscapeRoomUnityContext context,
-        IMapper mapper)
+        IMapper mapper,
+        IServiceProvider serviceProvider)
     {
         _context = context;
         _mapper = mapper;
+        _serviceProvider = serviceProvider;
     }
 
 
@@ -28,7 +31,7 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> SignInAsync([FromBody] SignInRequest reqObj)
     {
         // Process sign in validation 
-        var validationResult = await reqObj.ValidateAsync();
+        var validationResult = await reqObj.ValidateAsync(_serviceProvider);
         if (validationResult is not null) // Invoke errors
         {
             return BadRequest(new BaseResponse
@@ -54,7 +57,7 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest reqObj)
     {
         // Process register validation 
-        var validationResult = await reqObj.ValidateAsync();
+        var validationResult = await reqObj.ValidateAsync(_serviceProvider);
         if (validationResult is not null) // Invoke errors
         {
             return BadRequest(new BaseResponse
@@ -65,10 +68,21 @@ public class AuthenticationController : ControllerBase
             });
         }
 
+        // Check exist username
+        var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(reqObj.Username));
+        if(player is not null)
+        {
+            return BadRequest(new BaseResponse
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = "Tên tài khoản đã tồn tại"
+            });
+        }
+
         // Convert to typeof(Entity)
         var playerEntity = _mapper.Map<Player>(reqObj.ToPlayerDto());
         // Add new player 
-        _context.Players.Add(playerEntity);
+        await _context.Players.AddAsync(playerEntity);
         var result = await _context.SaveChangesAsync() > 0; 
 
         return result 

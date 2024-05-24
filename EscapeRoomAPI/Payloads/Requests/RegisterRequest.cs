@@ -8,7 +8,7 @@ public class RegisterRequest
 
     public string Password { get; set; } = string.Empty;
 
-    public string? Email { get; set; }
+    public string? Email { get; set; } = string.Empty;
 
     public DateTime? RegistrationDate { get; set; } = DateTime.Now;
 
@@ -21,6 +21,7 @@ public static class RegisterRequestExtension
     {
         return new PlayerDto
         {
+            PlayerId = Guid.NewGuid().ToString(),
             Username = request.Username,
             Password = request.Password,
             Email = request.Email,

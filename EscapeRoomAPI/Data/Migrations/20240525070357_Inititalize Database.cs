@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EscapeRoomAPI.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDatabase : Migration
+    public partial class InititalizeDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,12 +21,13 @@ namespace EscapeRoomAPI.Data.Migrations
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     TotalPlayer = table.Column<int>(type: "int", nullable: false),
-                    IsWaiting = table.Column<bool>(type: "bit", nullable: true),
-                    IsEnd = table.Column<bool>(type: "bit", nullable: true)
+                    IsWaiting = table.Column<bool>(type: "bit", nullable: false),
+                    IsEnd = table.Column<bool>(type: "bit", nullable: false),
+                    Hint = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__GameSess__C9F492905CA4C226", x => x.SessionId);
+                    table.PrimaryKey("PK__GameSess__C9F49290FB8C60D6", x => x.SessionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,7 +45,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Player__3213E83F7076E9D7", x => x.id);
+                    table.PrimaryKey("PK__Player__3213E83F4347761C", x => x.id);
                     table.UniqueConstraint("AK_Player_PlayerId", x => x.PlayerId);
                 });
 
@@ -55,13 +56,14 @@ namespace EscapeRoomAPI.Data.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuestionId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false, defaultValueSql: "(CONVERT([nvarchar](36),newid()))"),
-                    Image = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    KeyDigit = table.Column<int>(type: "int", nullable: true),
-                    IsHard = table.Column<bool>(type: "bit", nullable: true)
+                    QuestionDesc = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    KeyDigit = table.Column<int>(type: "int", nullable: false),
+                    IsHard = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Question__3213E83F7BBF98A5", x => x.id);
+                    table.PrimaryKey("PK__Question__3213E83F406A6A02", x => x.id);
                     table.UniqueConstraint("AK_Question_QuestionId", x => x.QuestionId);
                 });
 
@@ -73,11 +75,11 @@ namespace EscapeRoomAPI.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SessionId = table.Column<int>(type: "int", nullable: false),
                     PlayerId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    TotalRightAnswer = table.Column<int>(type: "int", nullable: true)
+                    TotalRightAnswer = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Leaderbo__91D44214A142F19C", x => x.LeaderBoardId);
+                    table.PrimaryKey("PK__Leaderbo__91D4421493D00BC0", x => x.LeaderBoardId);
                     table.ForeignKey(
                         name: "FK_Leaderboard_PlayerId",
                         column: x => x.PlayerId,
@@ -96,12 +98,12 @@ namespace EscapeRoomAPI.Data.Migrations
                 {
                     SessionId = table.Column<int>(type: "int", nullable: false),
                     PlayerId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    IsHost = table.Column<bool>(type: "bit", nullable: true),
-                    IsReady = table.Column<bool>(type: "bit", nullable: true)
+                    IsHost = table.Column<bool>(type: "bit", nullable: false),
+                    IsReady = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__PlayerGa__5D5075DC543E41DE", x => new { x.SessionId, x.PlayerId });
+                    table.PrimaryKey("PK__PlayerGa__5D5075DCDD5F45CC", x => new { x.SessionId, x.PlayerId });
                     table.ForeignKey(
                         name: "FK_PlayerGameSession_PlayerId",
                         column: x => x.PlayerId,
@@ -127,7 +129,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Question__3213E83F18802507", x => x.id);
+                    table.PrimaryKey("PK__Question__3213E83F3EFFC6F3", x => x.id);
                     table.UniqueConstraint("AK_QuestionAnswer_QuestionAnswerId", x => x.QuestionAnswerId);
                     table.ForeignKey(
                         name: "FK_QuestionAnswer_QuestionId",
@@ -146,11 +148,11 @@ namespace EscapeRoomAPI.Data.Migrations
                     PlayerId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     QuestionId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     SelectAnswerId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: true)
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__PlayerGa__3213E83FE1BBDA6B", x => x.id);
+                    table.PrimaryKey("PK__PlayerGa__3213E83F4F401746", x => x.id);
                     table.ForeignKey(
                         name: "FK_PlayerGameAnswer_PlayerId",
                         column: x => x.PlayerId,
@@ -184,13 +186,13 @@ namespace EscapeRoomAPI.Data.Migrations
                 column: "SessionId");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Player__4A4E74C923C0E728",
+                name: "UQ__Player__4A4E74C9B7D270D4",
                 table: "Player",
                 column: "PlayerId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Player__536C85E4DA68088B",
+                name: "UQ__Player__536C85E4DBC68C1A",
                 table: "Player",
                 column: "Username",
                 unique: true);
@@ -221,7 +223,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 column: "PlayerId");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Question__0DC06FAD6357F910",
+                name: "UQ__Question__0DC06FAD6C8FB79C",
                 table: "Question",
                 column: "QuestionId",
                 unique: true);
@@ -232,7 +234,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Question__86BEDFCEC58B6E2A",
+                name: "UQ__Question__86BEDFCE4C0C15DA",
                 table: "QuestionAnswer",
                 column: "QuestionAnswerId",
                 unique: true);

@@ -33,10 +33,14 @@ namespace EscapeRoomAPI.Data.Migrations
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<bool?>("IsEnd")
+                    b.Property<string>("Hint")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsEnd")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsWaiting")
+                    b.Property<bool>("IsWaiting")
                         .HasColumnType("bit");
 
                     b.Property<string>("SessionName")
@@ -50,7 +54,7 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("SessionId")
-                        .HasName("PK__GameSess__C9F492905CA4C226");
+                        .HasName("PK__GameSess__C9F49290FB8C60D6");
 
                     b.ToTable("GameSession", (string)null);
                 });
@@ -71,11 +75,11 @@ namespace EscapeRoomAPI.Data.Migrations
                     b.Property<int>("SessionId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TotalRightAnswer")
+                    b.Property<int>("TotalRightAnswer")
                         .HasColumnType("int");
 
                     b.HasKey("LeaderBoardId")
-                        .HasName("PK__Leaderbo__91D44214A142F19C");
+                        .HasName("PK__Leaderbo__91D4421493D00BC0");
 
                     b.HasIndex("PlayerId");
 
@@ -121,12 +125,12 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Player__3213E83F7076E9D7");
+                        .HasName("PK__Player__3213E83F4347761C");
 
-                    b.HasIndex(new[] { "PlayerId" }, "UQ__Player__4A4E74C923C0E728")
+                    b.HasIndex(new[] { "PlayerId" }, "UQ__Player__4A4E74C9B7D270D4")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "Username" }, "UQ__Player__536C85E4DA68088B")
+                    b.HasIndex(new[] { "Username" }, "UQ__Player__536C85E4DBC68C1A")
                         .IsUnique();
 
                     b.ToTable("Player", (string)null);
@@ -141,7 +145,7 @@ namespace EscapeRoomAPI.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool?>("IsCorrect")
+                    b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
                     b.Property<string>("PlayerId")
@@ -163,7 +167,7 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id")
-                        .HasName("PK__PlayerGa__3213E83FE1BBDA6B");
+                        .HasName("PK__PlayerGa__3213E83F4F401746");
 
                     b.HasIndex("PlayerId");
 
@@ -185,14 +189,14 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<bool?>("IsHost")
+                    b.Property<bool>("IsHost")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsReady")
+                    b.Property<bool>("IsReady")
                         .HasColumnType("bit");
 
                     b.HasKey("SessionId", "PlayerId")
-                        .HasName("PK__PlayerGa__5D5075DC543E41DE");
+                        .HasName("PK__PlayerGa__5D5075DCDD5F45CC");
 
                     b.HasIndex("PlayerId");
 
@@ -209,14 +213,18 @@ namespace EscapeRoomAPI.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Image")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsHard")
+                    b.Property<bool>("IsHard")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("KeyDigit")
+                    b.Property<int>("KeyDigit")
                         .HasColumnType("int");
+
+                    b.Property<string>("QuestionDesc")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("QuestionId")
                         .IsRequired()
@@ -226,9 +234,9 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasDefaultValueSql("(CONVERT([nvarchar](36),newid()))");
 
                     b.HasKey("Id")
-                        .HasName("PK__Question__3213E83F7BBF98A5");
+                        .HasName("PK__Question__3213E83F406A6A02");
 
-                    b.HasIndex(new[] { "QuestionId" }, "UQ__Question__0DC06FAD6357F910")
+                    b.HasIndex(new[] { "QuestionId" }, "UQ__Question__0DC06FAD6C8FB79C")
                         .IsUnique();
 
                     b.ToTable("Question", (string)null);
@@ -262,11 +270,11 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Question__3213E83F18802507");
+                        .HasName("PK__Question__3213E83F3EFFC6F3");
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex(new[] { "QuestionAnswerId" }, "UQ__Question__86BEDFCEC58B6E2A")
+                    b.HasIndex(new[] { "QuestionAnswerId" }, "UQ__Question__86BEDFCE4C0C15DA")
                         .IsUnique();
 
                     b.ToTable("QuestionAnswer", (string)null);

@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using AutoMapper;
+using EscapeRoomAPI.Data;
 using EscapeRoomAPI.Entities;
 using EscapeRoomAPI.Mappings;
 using EscapeRoomAPI.Payloads.Requests;
@@ -28,6 +29,9 @@ builder.Services.AddTransient<IValidator<SignInRequest>, SignInValidator>();
 builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterValidator>();
 builder.Services.AddTransient<IValidator<CreateRoomRequest>, CreateRoomValidator>();
 builder.Services.AddTransient<IValidator<IFormFile>, ImageFileValidator>();
+
+// Add Database Intializer
+builder.Services.AddScoped<DatabaseInitializer>();
 
 // Add AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
@@ -59,6 +63,13 @@ builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
 }));
 
 var app = builder.Build();
+
+// Hook into application lifetime events and trigger only application fully started
+app.Lifetime.ApplicationStarted.Register(async () =>
+{
+    // Database Initialiser
+    await app.InitialiseDatabaseAsync();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

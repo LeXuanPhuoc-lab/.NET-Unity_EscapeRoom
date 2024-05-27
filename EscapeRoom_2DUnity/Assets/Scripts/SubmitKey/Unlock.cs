@@ -6,14 +6,32 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class SubmitKey : MonoBehaviour
+public class Unlock : MonoBehaviour
 {
     [SerializeField] private TMP_InputField Input1; // Part of the Key 1
     [SerializeField] private TMP_InputField Input2; // Part of the Key 2
     [SerializeField] private TMP_InputField Input3; // Part of the Key 3
     [SerializeField] private TMP_InputField Input4; // Part of the Key 4
-    [SerializeField] private Button sendButton; // Button to send data
+    [SerializeField] private Button sendButton;
+    [SerializeField] float destroyDelay = 0.5f;
     [SerializeField] private GameObject uiPanel;
+    private Collider2D collisionCollider;
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Unlock")
+        {
+            Debug.Log("Unlock here");
+
+            // Đặt isTrigger thành true cho collider của đối tượng va chạm
+            collision.isTrigger = false;
+
+            collisionCollider = collision;
+
+            // Set hiện Ui
+            uiPanel.SetActive(true);
+        }
+    }
 
     private void Start()
     {
@@ -55,6 +73,8 @@ public class SubmitKey : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("Response: " + request.downloadHandler.text);
+            collisionCollider.isTrigger = true;
+            HideUI();
         }
         else
         {

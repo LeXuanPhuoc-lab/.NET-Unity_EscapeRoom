@@ -30,39 +30,50 @@ public class Call_Question_API : MonoBehaviour
     [SerializeField] private Button answerC;
     [SerializeField] private Button answerD;
     [SerializeField] private RawImage imageBackground;
+    [SerializeField] private GameObject questionScreen;
+    [SerializeField] private GameObject player;
 
-    private string existedQuestion = "Hello World";
-    private string existedAnswerA = "#";
-    private string existedAnswerB = "#";
-    private string existedAnswerC = "#";
-    private string existedAnswerD = "#";
-    private string existedImageQuestion ="";
+    public static bool isQuestionScreenActive = false;
+    private string currentItemID = string.Empty;
+
+    private Dictionary<string, Question> questionsDictionary = new Dictionary<string, Question>();
 
     void Start()
     {
-        if (!existedQuestion.Equals("Hello World") &&
-            !existedAnswerA.Equals("#") &&
-            !existedAnswerB.Equals("#") &&
-            !existedAnswerC.Equals("#") &&
-            !existedAnswerD.Equals("#"))
-        {
-            answerA.GetComponentInChildren<TMP_Text>().text = existedAnswerA;
-            answerB.GetComponentInChildren<TMP_Text>().text = existedAnswerB;
-            answerC.GetComponentInChildren<TMP_Text>().text = existedAnswerC;
-            answerD.GetComponentInChildren<TMP_Text>().text = existedAnswerD;
-            ShowQuestion(existedQuestion);
-            if (!string.IsNullOrEmpty(existedImageQuestion))
-            {
-                ShowImage();
-            }
-
-            return;
-        }
-
-        StartCoroutine(GetRequest("http://localhost:6000/api/questions/hard-level?username=test"));
+        questionScreen.SetActive(false);
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
+    void Update()
+    {
+        if (isQuestionScreenActive && Input.GetKeyDown(KeyCode.Escape))
+        {
+            HideQuestionScreen();
+        }
+    }
+
+    public void ShowQuestionScreen(string itemID)
+    {
+        currentItemID = itemID;
+
+        if (questionsDictionary.ContainsKey(currentItemID))
+        {
+            var question = questionsDictionary[currentItemID];
+            DisplayQuestion(question);
+        }
+        else
+        {
+            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username=test"));
+        }
+    }
+
+    public void HideQuestionScreen()
+    {
+        questionScreen.SetActive(false);
+        isQuestionScreenActive = false;
+        Time.timeScale = 1;
+        player.GetComponent<Player.Player>().enabled = true;
+    }
+
     IEnumerator GetRequest(string uri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -82,22 +93,31 @@ public class Call_Question_API : MonoBehaviour
                 if (baseResponse.StatusCode == 200 && baseResponse.Data != null)
                 {
                     Question question = baseResponse.Data;
-                    Debug.Log(question);
                     Debug.Log($"QuestionDesc: {question.QuestionDesc}");
                     Debug.Log($"Image: {question.Image}");
-                    if (!string.IsNullOrWhiteSpace(question.Image))
-                    {
-                        StartCoroutine(LoadImage(question.Image));
-                        existedImageQuestion = question.Image;
-                    }
-                    ShowQuestion(question.QuestionDesc);
-                    SetAnswers(question.QuestionAnswers);
+
+                    questionsDictionary[currentItemID] = question;
+                    DisplayQuestion(question);
                 }
             }
         }
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
+    void DisplayQuestion(Question question)
+    {
+        ResetQuestionScreen();
+        if (!string.IsNullOrWhiteSpace(question.Image))
+        {
+            StartCoroutine(LoadImage(question.Image));
+        }
+        ShowQuestion(question.QuestionDesc);
+        SetAnswers(question.QuestionAnswers);
+        questionScreen.SetActive(true);
+        isQuestionScreenActive = true;
+        Time.timeScale = 0;
+        player.GetComponent<Player.Player>().enabled = false;
+    }
+
     IEnumerator LoadImage(string url)
     {
         using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(url))
@@ -126,36 +146,31 @@ public class Call_Question_API : MonoBehaviour
     {
         text.gameObject.SetActive(true);
         text.text = questionDesc;
-        existedQuestion = questionDesc;
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
     void SetAnswers(ICollection<QuestionAnswer> questionAnswers)
     {
+        var answers = new List<Button> { answerA, answerB, answerC, answerD };
+        int i = 0;
+
         foreach (var answer in questionAnswers)
         {
-            if (existedAnswerA.Equals("#"))
+            if (i < answers.Count)
             {
-                answerA.GetComponentInChildren<TMP_Text>().text = answer.Answer;
-                existedAnswerA = answer.Answer;
+                answers[i].GetComponentInChildren<TMP_Text>().text = answer.Answer;
+                answers[i].gameObject.SetActive(true);
+                i++;
             }
-            else if (existedAnswerB.Equals("#"))
-            {
-                answerB.GetComponentInChildren<TMP_Text>().text = answer.Answer;
-                existedAnswerB = answer.Answer;
-            }
-            else if (existedAnswerC.Equals("#"))
-            {
-                answerC.GetComponentInChildren<TMP_Text>().text = answer.Answer;
-                existedAnswerC = answer.Answer;
-            }
-            else if (existedAnswerD.Equals("#"))
-            {
-                answerD.GetComponentInChildren<TMP_Text>().text = answer.Answer;
-                existedAnswerD = answer.Answer;
-            }
-
-            Debug.Log($"Answer: {answer.Answer}, IsTrue: {answer.IsTrue}");
         }
+    }
+
+    void ResetQuestionScreen()
+    {
+        text.gameObject.SetActive(false);
+        imageBackground.gameObject.SetActive(false);
+        answerA.gameObject.SetActive(false);
+        answerB.gameObject.SetActive(false);
+        answerC.gameObject.SetActive(false);
+        answerD.gameObject.SetActive(false);
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="Assets\Scripts\Question\Call_Question_API.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Follow Camera.cs" />
+    <Compile Include="Assets\Scripts\Question\QuestionTrigger.cs" />
     <Compile Include="Assets\Scripts\Models\BaseResponse.cs" />
     <Reference Include="UnityEngine">
       <HintPath>E:\New folder\2022.3.28f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.dll</HintPath>

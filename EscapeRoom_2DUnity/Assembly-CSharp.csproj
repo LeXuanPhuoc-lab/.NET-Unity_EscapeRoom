@@ -50,6 +50,7 @@
     <Compile Include="Assets\Scripts\Question\Call_Question_API.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Follow Camera.cs" />
+    <Compile Include="Assets\Scripts\Question\QuestionTrigger.cs" />
     <Compile Include="Assets\Scripts\Models\BaseResponse.cs" />
     <None Include="Library\PackageCache\com.unity.modules.subsystems@1.0.0\package.json" />
     <None Include="Library\PackageCache\com.unity.render-pipelines.universal@14.0.11\package.json" />

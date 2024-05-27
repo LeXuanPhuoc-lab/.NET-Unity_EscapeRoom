@@ -36,6 +36,7 @@ namespace Home
 
             if (gameSession is not null)
             {
+                waitRoom.ResetReadyButton();
                 waitRoom.UpdateStates();
                 Debug.Log(9);
                 homeCanvas.ShowWaitRoom();
@@ -46,6 +47,28 @@ namespace Home
         public void ShowError(string message)
         {
             homeCanvas.ShowError(message);
+        }
+
+        public async Task OutRoom()
+        {
+            var success = await APIManager.Instance.OutRoomAsync(userName);
+            if (success)
+            {
+                homeCanvas.ShowHomeMenu();
+            }
+        }
+
+        public async Task Ready()
+        {
+            Debug.Log(19);
+            var success = await APIManager.Instance.ReadyAsync(userName);
+            if (success)
+            {
+                Debug.Log(21);
+                waitRoom.HandleReadySuccess();
+            }
+
+            Debug.Log(22);
         }
     }
 }

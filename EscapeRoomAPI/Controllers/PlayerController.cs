@@ -278,9 +278,10 @@ public class PlayerController : ControllerBase
             : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
 
-    [HttpPatch(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
+    [HttpPost(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
     public async Task<IActionResult> ModifyReadyAsync([FromRoute] string username)
     {
+        Console.WriteLine(username);
         // Check exist player 
         var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(username));
         if (player is null)
@@ -292,12 +293,16 @@ public class PlayerController : ControllerBase
                     IsSuccess = false
                 });
 
+        Console.WriteLine(1);
+
         // Already in a room
         var playerGameSession = await _context.PlayerGameSessions
             .Include(x => x.Player)
             .Include(x => x.Session)
             .FirstOrDefaultAsync(x =>
                 x.PlayerId == player.PlayerId);
+
+        Console.WriteLine(2);
         if (playerGameSession is null)
             return BadRequest(
                 new BaseResponse
@@ -306,6 +311,8 @@ public class PlayerController : ControllerBase
                     Message = $"Player không thể ready khi chưa tham gia phòng chơi",
                     IsSuccess = false
                 });
+
+        Console.WriteLine(3);
 
         // Check if game already started or not 
         if (!playerGameSession.Session.IsWaiting)
@@ -316,6 +323,8 @@ public class PlayerController : ControllerBase
                 Message = "Người chơi đang trong trò chơi, không thể chuẩn bị"
             });
         }
+
+        Console.WriteLine(4);
 
 
         // Modify ready status
@@ -328,6 +337,8 @@ public class PlayerController : ControllerBase
         _context.Entry(playerGameSession).Property(s => s.IsReady).IsModified = true;
         // Save change
         var result = await _context.SaveChangesAsync() > 0;
+
+        Console.WriteLine(5);
 
         return result
             ? Ok(new BaseResponse

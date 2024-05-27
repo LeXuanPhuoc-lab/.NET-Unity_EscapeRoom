@@ -56,6 +56,57 @@ namespace Home
 
             return response.Data;
         }
+
+        public async Task<bool> OutRoomAsync(string username)
+        {
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.DeleteAsync(
+                $"http://localhost:6000/api/players/{username}/room");
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+            }
+
+            return true;
+        }
+
+        public async Task<bool> ReadyAsync(string username)
+        {
+            Debug.Log(20);
+            var requestBody = JsonConvert.SerializeObject(new(), _serializerSettings);
+            var httpClient = new HttpClient();
+            Debug.Log(30);
+            var httpResponseMessage = await httpClient.PostAsync(
+                $"http://localhost:6000/api/players/{username}/room/ready",
+                new StringContent(requestBody, Encoding.UTF8, "application/json"));
+
+            Debug.Log(40);
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+            Debug.Log(50);
+            Debug.Log(serializedResponseBody);
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+            Debug.Log(60);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log(70);
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+            }
+
+            Debug.Log(80);
+
+            return true;
+        }
     }
 // Define a class to represent the JSON data
 
@@ -67,6 +118,7 @@ namespace Home
         public string Message { get; set; } = null!;
         public GameSessionDto Data { get; set; } = null!;
         public bool IsSuccess { get; set; }
+        public IDictionary<string, string[]> Errors = null!;
     }
 
 
@@ -77,6 +129,23 @@ namespace Home
         public string RoomName { get; set; } = null!;
         public int TotalPlayer { get; set; }
         public int EndTimeToMinute { get; set; }
+    }
+
+    [System.Serializable]
+    public class PlayerGameSessionDto
+    {
+        public int SessionId { get; set; }
+
+        public string PlayerId { get; set; } = string.Empty;
+
+        public bool IsHost { get; set; }
+
+        public bool IsReady { get; set; }
+
+        // [JsonIgnore]
+        public virtual PlayerDto Player { get; set; } = null!;
+
+        [JsonIgnore] public virtual GameSessionDto Session { get; set; } = null!;
     }
 
 
@@ -113,6 +182,8 @@ namespace Home
 
         public bool IsEnd { get; set; }
         public string Hint { get; set; } = string.Empty;
-        public virtual IEnumerable<PlayerDto> Players { get; set; } = new List<PlayerDto>();
+
+        public virtual IEnumerable<PlayerGameSessionDto> PlayerGameSessions { get; set; } =
+            new List<PlayerGameSessionDto>();
     }
 }

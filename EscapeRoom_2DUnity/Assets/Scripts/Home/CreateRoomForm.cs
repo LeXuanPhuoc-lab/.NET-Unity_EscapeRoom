@@ -11,6 +11,18 @@ namespace Home
         [SerializeField] private TMP_InputField totalPlayer;
         [SerializeField] private TMP_InputField endTimeToMinute;
 
+        public void ResetInputs()
+        {
+            roomName.text = string.Empty;
+            totalPlayer.text = string.Empty;
+            endTimeToMinute.text = string.Empty;
+        }
+
+        private void OnEnable()
+        {
+            ResetInputs();
+        }
+
         public void HandleCreateRoom()
         {
             var roomNameValue = roomName.text;
@@ -32,18 +44,6 @@ namespace Home
                 RoomName = roomNameValue,
                 EndTimeToMinute = int.Parse(endTimeToMinuteValue)
             });
-
-
-            // var room = new Room
-            // {
-            //     RoomName = roomNameValue,
-            //     TotalPlayer = int.Parse(totalPlayerValue),
-            //     EndTimeToMinute = int.Parse(endTimeToMinuteValue)
-            // };
-            //
-            // GameManager.Instance.CreateRoom(room);
-            //
-            // gameObject.SetActive(false);
         }
     }
 }

@@ -1,72 +1,67 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using Newtonsoft.Json;
+
 
 namespace Home
 {
     public class APIManager : MonoBehaviour
     {
-        public APIManager()
+        public static APIManager Instance;
+
+        private readonly JsonSerializerSettings _serializerSettings = new();
+
+        private void Awake()
         {
-        }
-
-        public IEnumerator CreateRoomAsync(CreateRoomBody body)
-        {
-            Debug.Log(3);
-            // Create the request body
-            string requestBody =
-                $"{{\"username\":\"${body.Username}\",\"roomName\":\"${body.RoomName}\",\"totalPlayer\":${body.TotalPlayer},\"endTimeToMinute\":${body.EndTimeToMinute}}}";
-
-            // Create a UnityWebRequest object
-            UnityWebRequest request = new UnityWebRequest("http://localhost:6000/api/players/room", "POST");
-
-            // Set the request headers
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            // Convert the request body to byte array and attach it to the request
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(requestBody);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-
-            // Send the request asynchronously
-            yield return request.SendWebRequest();
-
-            // Check for errors
-            if (request.result != UnityWebRequest.Result.Success)
+            if (Instance == null)
             {
-                // var a = JsonUtility.FromJson<ApiResponse>(request.error);
-                Debug.LogError("Error: " + request.error);
-                Debug.LogError("Error2: " + request.downloadHandler.text);
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
-                // Request successful, handle response data
-                string responseData = request.downloadHandler.text;
-                Debug.Log("Response: " + responseData);
-
-                // Parse the JSON response and extract GameSessionDto data
-                GameSessionDto gameSession = JsonUtility.FromJson<GameSessionDto>(responseData);
-                if (gameSession != null)
-                {
-                    HomeManager.Instance.gameSession = gameSession;
-                    Debug.Log(HomeManager.Instance.gameSession.SessionName);
-                    Debug.Log(HomeManager.Instance.gameSession.TotalPlayer);
-                    Debug.Log(HomeManager.Instance.gameSession.EndTime);
-                }
-                else
-                {
-                    Debug.LogError("Failed to parse GameSessionDto from response.");
-                }
+                Destroy(gameObject);
             }
+
+            _serializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+            _serializerSettings.Formatting = Formatting.Indented;
+        }
+
+        public async Task<GameSessionDto> CreateRoomAsync(CreateRoomBody body)
+        {
+            Debug.Log(4);
+            var requestBody = JsonConvert.SerializeObject(body, _serializerSettings);
+
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.PostAsync(
+                "http://localhost:6000/api/players/room",
+                new StringContent(requestBody, Encoding.UTF8, "application/json"));
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+            }
+
+            return response.Data;
         }
     }
 // Define a class to represent the JSON data
 
 
     [System.Serializable]
-    public class ApiResponse
+    public class CreateRoomResponse
     {
         public int StatusCode { get; set; }
         public string Message { get; set; } = null!;

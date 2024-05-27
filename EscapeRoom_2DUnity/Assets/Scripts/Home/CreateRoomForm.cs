@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +10,6 @@ namespace Home
         [SerializeField] private TMP_InputField roomName;
         [SerializeField] private TMP_InputField totalPlayer;
         [SerializeField] private TMP_InputField endTimeToMinute;
-        [SerializeField] private APIManager apiManager;
 
         public void HandleCreateRoom()
         {
@@ -24,7 +24,7 @@ namespace Home
             }
 
             Debug.Log(1);
-            
+
             HomeManager.Instance.CreateRoom(new CreateRoomBody()
             {
                 Username = "",

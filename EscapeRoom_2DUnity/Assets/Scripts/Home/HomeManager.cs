@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Home
@@ -6,10 +7,11 @@ namespace Home
     public class HomeManager : MonoBehaviour
     {
         public static HomeManager Instance;
-        private APIManager _apiManager;
 
         [HideInInspector] public string userName = "kingchen";
         [HideInInspector] public GameSessionDto gameSession;
+        [SerializeField] private HomeCanvas homeCanvas;
+        [SerializeField] private WaitRoom waitRoom;
 
         private void Awake()
         {
@@ -22,15 +24,28 @@ namespace Home
             {
                 Destroy(gameObject);
             }
-
-            _apiManager = gameObject.AddComponent<APIManager>();
         }
 
-        public void CreateRoom(CreateRoomBody requestBody)
+        public async Task CreateRoom(CreateRoomBody requestBody)
         {
             Debug.Log(2);
             requestBody.Username = userName;
-            StartCoroutine(_apiManager.CreateRoomAsync(requestBody));
+            Debug.Log(3);
+            gameSession = await APIManager.Instance.CreateRoomAsync(requestBody);
+            Debug.Log(7);
+
+            if (gameSession is not null)
+            {
+                waitRoom.UpdateStates();
+                Debug.Log(9);
+                homeCanvas.ShowWaitRoom();
+                Debug.Log(11);
+            }
+        }
+
+        public void ShowError(string message)
+        {
+            homeCanvas.ShowError(message);
         }
     }
 }

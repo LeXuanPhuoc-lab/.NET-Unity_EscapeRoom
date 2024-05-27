@@ -32,11 +32,15 @@ public class PlayerController : ControllerBase
     public async Task<IActionResult> CreateRoomAsync([FromBody] CreateRoomRequest reqObj)
     {
         Console.WriteLine("client data");
-        Console.WriteLine(reqObj.ToString());
+        Console.WriteLine(reqObj.Username);
+        Console.WriteLine(reqObj.RoomName);
+        Console.WriteLine(reqObj.TotalPlayer);
+        Console.WriteLine(reqObj.EndTimeToMinute);
         // Process register validation 
         var validationResult = await reqObj.ValidateAsync(_serviceProvider);
         if (validationResult is not null) // Invoke errors
         {
+            Console.WriteLine(validationResult.Errors);
             return BadRequest(new BaseResponse
             {
                 StatusCode = StatusCodes.Status400BadRequest,

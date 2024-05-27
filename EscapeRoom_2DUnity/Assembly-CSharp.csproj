@@ -47,10 +47,11 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Home\CreateRoomForm.cs" />
     <Compile Include="Assets\Scripts\Home\HomeManager.cs" />
-    <Compile Include="Assets\Scripts\Home\HomeScene.cs" />
     <Compile Include="Assets\Scripts\Inputs\UserInput.cs" />
     <Compile Include="Assets\Scripts\Home\APIManager.cs" />
     <Compile Include="Assets\Scripts\Inputs\Controls.cs" />
+    <Compile Include="Assets\Scripts\Home\HomeCanvas.cs" />
+    <Compile Include="Assets\Scripts\Home\WaitRoom.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Follow Camera.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -330,6 +331,9 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>D:\code\EscapeRoom\EscapeRoom_2DUnity\Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>D:\code\EscapeRoom\EscapeRoom_2DUnity\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:\app\UnityEditor\2022.3.28f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>

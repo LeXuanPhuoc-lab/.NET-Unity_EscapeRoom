@@ -31,6 +31,11 @@ public class Unlock : MonoBehaviour
             // Set hiện Ui
             uiPanel.SetActive(true);
         }
+
+        if (collision.tag == "Passed")
+        {
+            uiPanel.SetActive(false);
+        }
     }
 
     private void Start()
@@ -74,6 +79,7 @@ public class Unlock : MonoBehaviour
         {
             Debug.Log("Response: " + request.downloadHandler.text);
             collisionCollider.isTrigger = true;
+            collisionCollider.tag = "Passed";
             HideUI();
         }
         else

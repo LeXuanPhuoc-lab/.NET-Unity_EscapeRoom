@@ -31,10 +31,16 @@ public class PlayerController : ControllerBase
     [HttpPost(APIRoutes.Players.CreateRoom, Name = nameof(CreateRoomAsync))]
     public async Task<IActionResult> CreateRoomAsync([FromBody] CreateRoomRequest reqObj)
     {
+        Console.WriteLine("client data");
+        Console.WriteLine(reqObj.Username);
+        Console.WriteLine(reqObj.RoomName);
+        Console.WriteLine(reqObj.TotalPlayer);
+        Console.WriteLine(reqObj.EndTimeToMinute);
         // Process register validation 
         var validationResult = await reqObj.ValidateAsync(_serviceProvider);
         if (validationResult is not null) // Invoke errors
         {
+            Console.WriteLine(validationResult.Errors);
             return BadRequest(new BaseResponse
             {
                 StatusCode = StatusCodes.Status400BadRequest,
@@ -45,13 +51,14 @@ public class PlayerController : ControllerBase
 
         // Check exist player 
         var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(reqObj.Username));
-        if (player is null) return NotFound(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = $"Không tìm thấy player {reqObj.Username}",
-                IsSuccess = false
-            });
+        if (player is null)
+            return NotFound(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = $"Không tìm thấy player {reqObj.Username}",
+                    IsSuccess = false
+                });
 
         // Check player already exist in any game session
         var isplayerJoinedGame =
@@ -98,13 +105,14 @@ public class PlayerController : ControllerBase
     {
         // Check exist player 
         var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(username));
-        if (player is null) return NotFound(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = $"Không tìm thấy player {username}",
-                IsSuccess = false
-            });
+        if (player is null)
+            return NotFound(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = $"Không tìm thấy player {username}",
+                    IsSuccess = false
+                });
 
         // Check player already exist in any game session
         var isplayerJoinedGame =
@@ -125,16 +133,18 @@ public class PlayerController : ControllerBase
         var gameSession = await _context.GameSessions
             .Include(gs => gs.PlayerGameSessions)
             .FirstOrDefaultAsync(gs =>
-                gs.IsWaiting  // Game session not started yet
-             && gs.PlayerGameSessions.Count < gs.TotalPlayer); // Not full (less than total player || enough for one more)
+                gs.IsWaiting // Game session not started yet
+                && gs.PlayerGameSessions.Count <
+                gs.TotalPlayer); // Not full (less than total player || enough for one more)
 
-        if (gameSession is null) return NotFound(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = "Hiện tại không còn phòng trống",
-                IsSuccess = false
-            });
+        if (gameSession is null)
+            return NotFound(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = "Hiện tại không còn phòng trống",
+                    IsSuccess = false
+                });
 
         // Add user to game session as member
         gameSession.PlayerGameSessions.Add(new PlayerGameSession
@@ -162,24 +172,26 @@ public class PlayerController : ControllerBase
     {
         // Check exist player 
         var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(username));
-        if (player is null) return NotFound(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = $"Không tìm thấy player {username}",
-                IsSuccess = false
-            });
+        if (player is null)
+            return NotFound(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = $"Không tìm thấy player {username}",
+                    IsSuccess = false
+                });
 
         // Proccess out room request
         // Get player game session
         var playerGameSession = await _context.PlayerGameSessions
             .FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
-        if (playerGameSession is null) return BadRequest(new BaseResponse
-        {
-            StatusCode = StatusCodes.Status400BadRequest,
-            Message = "Hiện tại bạn đang không phòng chơi",
-            IsSuccess = false
-        });
+        if (playerGameSession is null)
+            return BadRequest(new BaseResponse
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Message = "Hiện tại bạn đang không phòng chơi",
+                IsSuccess = false
+            });
 
         // Remove player game session
         if (_context.PlayerGameSessions.Entry(playerGameSession).State == EntityState.Detached)
@@ -187,6 +199,7 @@ public class PlayerController : ControllerBase
             // Ensure that entity is being track by context 
             _context.Attach(playerGameSession); // Change entity's state to "Deleted"
         }
+
         _context.Remove(playerGameSession);
 
         //// Check if player is host 
@@ -216,15 +229,15 @@ public class PlayerController : ControllerBase
 
         // Check if last player out game session -> Remove leaderboard
         var playersInGame = await _context.PlayerGameSessions
-                .Where(x => x.SessionId == playerGameSession.SessionId)
-                .CountAsync();
+            .Where(x => x.SessionId == playerGameSession.SessionId)
+            .CountAsync();
         if (playersInGame == 1)
         {
             // Remove all relevant features (PlayerSession, PlayerAnswer, Leaderboard,...)
             // Get all player answers
             var playerGameAnswers = await _context.PlayerGameAnswers
-                    .Where(x => x.SessionId == playerGameSession.SessionId)
-                    .ToListAsync();
+                .Where(x => x.SessionId == playerGameSession.SessionId)
+                .ToListAsync();
 
             // Clear all answer  
             _context.RemoveRange(playerGameAnswers);
@@ -265,18 +278,22 @@ public class PlayerController : ControllerBase
             : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
 
-    [HttpPatch(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
+    [HttpPost(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
     public async Task<IActionResult> ModifyReadyAsync([FromRoute] string username)
     {
+        Console.WriteLine(username);
         // Check exist player 
         var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(username));
-        if (player is null) return NotFound(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = $"Không tìm thấy player {username}",
-                IsSuccess = false
-            });
+        if (player is null)
+            return NotFound(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = $"Không tìm thấy player {username}",
+                    IsSuccess = false
+                });
+
+        Console.WriteLine(1);
 
         // Already in a room
         var playerGameSession = await _context.PlayerGameSessions
@@ -284,13 +301,18 @@ public class PlayerController : ControllerBase
             .Include(x => x.Session)
             .FirstOrDefaultAsync(x =>
                 x.PlayerId == player.PlayerId);
-        if (playerGameSession is null) return BadRequest(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status400BadRequest,
-                Message = $"Player không thể ready khi chưa tham gia phòng chơi",
-                IsSuccess = false
-            });
+
+        Console.WriteLine(2);
+        if (playerGameSession is null)
+            return BadRequest(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = $"Player không thể ready khi chưa tham gia phòng chơi",
+                    IsSuccess = false
+                });
+
+        Console.WriteLine(3);
 
         // Check if game already started or not 
         if (!playerGameSession.Session.IsWaiting)
@@ -302,16 +324,21 @@ public class PlayerController : ControllerBase
             });
         }
 
+        Console.WriteLine(4);
+
 
         // Modify ready status
         if (_context.Entry(playerGameSession).State == EntityState.Detached)
         {
             _context.Attach(playerGameSession);
         }
+
         _context.Entry(playerGameSession).Property(s => s.IsReady).CurrentValue = !playerGameSession.IsReady;
         _context.Entry(playerGameSession).Property(s => s.IsReady).IsModified = true;
         // Save change
         var result = await _context.SaveChangesAsync() > 0;
+
+        Console.WriteLine(5);
 
         return result
             ? Ok(new BaseResponse
@@ -329,26 +356,28 @@ public class PlayerController : ControllerBase
     {
         // Check exist player 
         var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(username));
-        if (player is null) return NotFound(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = $"Không tìm thấy player {username}",
-                IsSuccess = false
-            });
+        if (player is null)
+            return NotFound(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = $"Không tìm thấy player {username}",
+                    IsSuccess = false
+                });
 
         // Already in a room
         var playerGameSession = await _context.PlayerGameSessions
             .Include(x => x.Session)
             .FirstOrDefaultAsync(x =>
                 x.PlayerId == player.PlayerId);
-        if (playerGameSession is null) return BadRequest(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status400BadRequest,
-                Message = $"Player không thể bắt đầu màn chơi khi chưa tham gia phòng chơi",
-                IsSuccess = false
-            });
+        if (playerGameSession is null)
+            return BadRequest(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = $"Player không thể bắt đầu màn chơi khi chưa tham gia phòng chơi",
+                    IsSuccess = false
+                });
 
         // Check if player is host
         if (playerGameSession.IsHost)
@@ -369,7 +398,7 @@ public class PlayerController : ControllerBase
             var listPlayerSession = await _context.PlayerGameSessions
                 .Include(x => x.Player)
                 .Where(x => x.SessionId == playerGameSession.SessionId
-                    && x.PlayerId != playerGameSession.PlayerId)
+                            && x.PlayerId != playerGameSession.PlayerId)
                 .ToListAsync();
 
             // To start game, at least 2 players
@@ -399,6 +428,7 @@ public class PlayerController : ControllerBase
             {
                 _context.Attach(playerGameSession.Session);
             }
+
             _context.Entry(playerGameSession.Session).Property(s => s.IsWaiting).CurrentValue = false;
             _context.Entry(playerGameSession.Session).Property(s => s.IsWaiting).IsModified = true;
         }
@@ -410,7 +440,8 @@ public class PlayerController : ControllerBase
             ? Ok(new BaseResponse
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = $"Trò chơi đã bắt đầu, bạn còn {playerGameSession.Session.EndTime.TotalMinutes} phút để thoát khỏi nơi này",
+                Message =
+                    $"Trò chơi đã bắt đầu, bạn còn {playerGameSession.Session.EndTime.TotalMinutes} phút để thoát khỏi nơi này",
                 IsSuccess = true
             })
             : BadRequest(new BaseResponse
@@ -421,17 +452,19 @@ public class PlayerController : ControllerBase
     }
 
     [HttpGet(APIRoutes.Players.SubmitUnlockRoomKey, Name = nameof(SubmitUnlockRoomKeyAsync))]
-    public async Task<IActionResult> SubmitUnlockRoomKeyAsync([FromRoute] string username, [FromRoute] int key, bool isHard)
+    public async Task<IActionResult> SubmitUnlockRoomKeyAsync([FromRoute] string username, [FromRoute] int key,
+        bool isHard)
     {
         // Check exist player 
         var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(username));
-        if (player is null) return NotFound(
-            new BaseResponse
-            {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = $"Không tìm thấy player {username}",
-                IsSuccess = false
-            });
+        if (player is null)
+            return NotFound(
+                new BaseResponse
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = $"Không tìm thấy player {username}",
+                    IsSuccess = false
+                });
 
         // Get playing game session
         var playerGameSession = await _context.PlayerGameSessions

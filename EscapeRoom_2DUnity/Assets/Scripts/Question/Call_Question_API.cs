@@ -12,6 +12,7 @@ public class Call_Question_API : MonoBehaviour
 {
     public class Question
     {
+        public string QuestionId { get; set; } = string.Empty;
         public string QuestionDesc { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public int? KeyDigit { get; set; }
@@ -110,6 +111,7 @@ public class Call_Question_API : MonoBehaviour
         {
             StartCoroutine(LoadImage(question.Image));
         }
+
         ShowQuestion(question.QuestionDesc);
         SetAnswers(question.QuestionAnswers);
         questionScreen.SetActive(true);

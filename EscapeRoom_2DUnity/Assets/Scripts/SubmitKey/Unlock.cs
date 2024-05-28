@@ -16,10 +16,11 @@ public class Unlock : MonoBehaviour
     [SerializeField] float destroyDelay = 0.5f;
     [SerializeField] private GameObject uiPanel;
     private Collider2D collisionCollider;
+    private bool isUiVisible = false;
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Unlock")
+        if (collision.tag == "Unlock" && !isUiVisible)
         {
             Debug.Log("Unlock here");
 
@@ -30,6 +31,7 @@ public class Unlock : MonoBehaviour
 
             // Set hiện Ui
             uiPanel.SetActive(true);
+            isUiVisible = true;
         }
 
         if (collision.tag == "Passed")
@@ -114,6 +116,13 @@ public class Unlock : MonoBehaviour
         if (uiPanel != null)
         {
             uiPanel.SetActive(false);
+            isUiVisible = false;
+            // Reset the collider state to allow re-triggering
+            if (collisionCollider != null && collisionCollider.tag == "Unlock")
+            {
+                collisionCollider.isTrigger = true; // reset to allow future triggering
+                collisionCollider.tag = "Unlock";  // reset to original tag
+            }
             Debug.Log("UI Panel is hidden.");
         }
         else

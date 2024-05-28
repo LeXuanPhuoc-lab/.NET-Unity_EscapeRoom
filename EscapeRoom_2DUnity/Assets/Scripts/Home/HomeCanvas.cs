@@ -35,7 +35,7 @@ namespace Home
 
         public void ShowWaitRoom()
         {
-            Debug.Log(10);
+            Debug.Log("ShowWaitRoom");
             mainButtons.SetActive(false);
             waitRoom.SetActive(true);
             createRoomForm.SetActive(false);

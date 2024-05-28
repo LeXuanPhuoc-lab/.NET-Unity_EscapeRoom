@@ -12,7 +12,7 @@ public class PlayerGameSessionDto
 
     public bool? IsReady { get; set; }
 
-    [JsonIgnore]
+    // [JsonIgnore]
     public virtual PlayerDto Player { get; set; } = null!;
 
     [JsonIgnore]

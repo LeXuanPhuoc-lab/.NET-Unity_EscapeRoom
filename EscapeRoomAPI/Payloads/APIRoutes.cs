@@ -23,7 +23,7 @@ public class APIRoutes
         // [PATCH]
         public const string StartRoom = Base + "/players/{username}/room/start";
         // [PATCH]        
-        public const string ModifyReady = Base + "/players/{username}/room";
+        public const string ModifyReady = Base + "/players/{username}/room/ready";
     }
 
     public static class Questions

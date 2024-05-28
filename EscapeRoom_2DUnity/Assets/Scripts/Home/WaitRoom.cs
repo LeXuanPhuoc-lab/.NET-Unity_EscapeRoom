@@ -20,13 +20,18 @@ namespace Home
 
         public void UpdateStates()
         {
+            Debug.Log("UpdateStates");
             roomText.text = $"Room: {HomeManager.Instance.gameSession.SessionName}";
             totalPlayerText.text =
                 $"Total Player: {HomeManager.Instance.gameSession.PlayerGameSessions.Count()}/{HomeManager.Instance.gameSession.TotalPlayer}";
             durationText.text = $"Duration: {HomeManager.Instance.gameSession.EndTime.ToString()}";
-
+            Debug.Log("UpdateStates2");
             var hostPlayer = HomeManager.Instance.gameSession.PlayerGameSessions.FirstOrDefault(ps => ps.IsHost);
-            _isHost = hostPlayer is not null && hostPlayer.Player.Username == HomeManager.Instance.userName;
+            Debug.Log("UpdateStates3");
+            Debug.Log("hostPlayer");
+            Debug.Log(hostPlayer);
+            _isHost = hostPlayer is not null && hostPlayer.Player.Username == StaticData.Username;
+            Debug.Log("UpdateStates4");
 
             if (!_isHost)
             {
@@ -36,6 +41,7 @@ namespace Home
 
         public void ResetReadyButton()
         {
+            Debug.Log("ResetReadyButton");
             readyButton.interactable = true;
             readyButtonText.text = "Ready";
         }
@@ -54,6 +60,11 @@ namespace Home
         public void HandleOutRoom()
         {
             HomeManager.Instance.OutRoom();
+        }
+
+        public void HandleStartRoom()
+        {
+            HomeManager.Instance.StartRoom();
         }
     }
 }

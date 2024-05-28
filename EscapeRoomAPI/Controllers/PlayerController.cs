@@ -156,6 +156,17 @@ public class PlayerController : ControllerBase
         // Save to DB
         var result = await _context.SaveChangesAsync() > 0;
 
+        //tới đây thì PlayerGameSessions chỉ chứa một Player mới thêm, chứ ko phải chứ toàn bộ player trong gamesession, nên cần load thêm
+        if (result)
+        {
+            // Reload the PlayerGameSessions collection
+            await _context.Entry(gameSession)
+                .Collection(gs => gs.PlayerGameSessions)
+                .Query()
+                .Include(pgs => pgs.Player) // Include Player if needed
+                .LoadAsync();
+        }
+
         return result
             ? Ok(new BaseResponse
             {
@@ -278,7 +289,7 @@ public class PlayerController : ControllerBase
             : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
 
-    [HttpPost(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
+    [HttpPut(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
     public async Task<IActionResult> ModifyReadyAsync([FromRoute] string username)
     {
         Console.WriteLine(username);
@@ -351,7 +362,7 @@ public class PlayerController : ControllerBase
             : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
 
-    [HttpPatch(APIRoutes.Players.StartRoom, Name = nameof(StartRoomAsync))]
+    [HttpPut(APIRoutes.Players.StartRoom, Name = nameof(StartRoomAsync))]
     public async Task<IActionResult> StartRoomAsync([FromRoute] string username)
     {
         // Check exist player 

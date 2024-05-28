@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ namespace LeastSquares
         public TMP_InputField Input;
         public SteamLeaderboard Leaderboard;
         public LeaderboardType Type = LeaderboardType.Global;
-        private List<GameObject> _rows = new ();
+        private List<GameObject> _rows = new  ();
         private int _offset;
 
         void Start()
@@ -113,4 +113,4 @@ namespace LeastSquares
         Friends,
         AroundUser
     }
-}
+}*/

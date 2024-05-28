@@ -57,6 +57,28 @@ namespace Home
             return response.Data;
         }
 
+        public async Task<GameSessionDto> FindRoomAsync(string username)
+        {
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.GetAsync(
+                $"http://localhost:6000/api/players/{username}/room");
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+            }
+
+            Debug.Log("success 1");
+
+            return response.Data;
+        }
+
         public async Task<bool> OutRoomAsync(string username)
         {
             var httpClient = new HttpClient();

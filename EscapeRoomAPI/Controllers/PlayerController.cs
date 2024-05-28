@@ -156,6 +156,17 @@ public class PlayerController : ControllerBase
         // Save to DB
         var result = await _context.SaveChangesAsync() > 0;
 
+        //tới đây thì PlayerGameSessions chỉ chứa một Player mới thêm, chứ ko phải chứ toàn bộ player trong gamesession, nên cần load thêm
+        if (result)
+        {
+            // Reload the PlayerGameSessions collection
+            await _context.Entry(gameSession)
+                .Collection(gs => gs.PlayerGameSessions)
+                .Query()
+                .Include(pgs => pgs.Player) // Include Player if needed
+                .LoadAsync();
+        }
+
         return result
             ? Ok(new BaseResponse
             {

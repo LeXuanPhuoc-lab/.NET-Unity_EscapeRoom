@@ -8,7 +8,6 @@ namespace Home
     {
         public static HomeManager Instance;
 
-        [HideInInspector] public string userName = "kingchen";
         [HideInInspector] public GameSessionDto gameSession;
         [SerializeField] private HomeCanvas homeCanvas;
         [SerializeField] private WaitRoom waitRoom;
@@ -29,11 +28,24 @@ namespace Home
         public async Task CreateRoom(CreateRoomBody requestBody)
         {
             Debug.Log(2);
-            requestBody.Username = userName;
+            requestBody.Username = StaticData.Username;
             Debug.Log(3);
             gameSession = await APIManager.Instance.CreateRoomAsync(requestBody);
             Debug.Log(7);
 
+            if (gameSession is not null)
+            {
+                waitRoom.ResetReadyButton();
+                waitRoom.UpdateStates();
+                Debug.Log(9);
+                homeCanvas.ShowWaitRoom();
+                Debug.Log(11);
+            }
+        }
+
+        public async Task FindRoom()
+        {
+            gameSession = await APIManager.Instance.FindRoomAsync(StaticData.Username);
             if (gameSession is not null)
             {
                 waitRoom.ResetReadyButton();
@@ -51,7 +63,7 @@ namespace Home
 
         public async Task OutRoom()
         {
-            var success = await APIManager.Instance.OutRoomAsync(userName);
+            var success = await APIManager.Instance.OutRoomAsync(StaticData.Username);
             if (success)
             {
                 homeCanvas.ShowHomeMenu();
@@ -61,7 +73,7 @@ namespace Home
         public async Task Ready()
         {
             Debug.Log(19);
-            var success = await APIManager.Instance.ReadyAsync(userName);
+            var success = await APIManager.Instance.ReadyAsync(StaticData.Username);
             if (success)
             {
                 Debug.Log(21);

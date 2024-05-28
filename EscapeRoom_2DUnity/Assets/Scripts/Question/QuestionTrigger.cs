@@ -20,7 +20,7 @@ public class QuestionTrigger : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Hello world 1");
         if (other.CompareTag("Player"))
@@ -29,24 +29,12 @@ public class QuestionTrigger : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("Hello world");
-        if (other.CompareTag("Player"))
-        {
-            isPlayerNear = true;
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
+        Debug.Log("Bye bye :>");
         if (other.CompareTag("Player"))
         {
             isPlayerNear = false;
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
     }
 }

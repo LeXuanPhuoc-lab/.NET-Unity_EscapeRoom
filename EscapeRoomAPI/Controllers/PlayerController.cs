@@ -289,7 +289,7 @@ public class PlayerController : ControllerBase
             : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
 
-    [HttpPost(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
+    [HttpPut(APIRoutes.Players.ModifyReady, Name = nameof(ModifyReadyAsync))]
     public async Task<IActionResult> ModifyReadyAsync([FromRoute] string username)
     {
         Console.WriteLine(username);
@@ -362,7 +362,7 @@ public class PlayerController : ControllerBase
             : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
 
-    [HttpPatch(APIRoutes.Players.StartRoom, Name = nameof(StartRoomAsync))]
+    [HttpPut(APIRoutes.Players.StartRoom, Name = nameof(StartRoomAsync))]
     public async Task<IActionResult> StartRoomAsync([FromRoute] string username)
     {
         // Check exist player 

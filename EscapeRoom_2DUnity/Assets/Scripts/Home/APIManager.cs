@@ -52,6 +52,7 @@ namespace Home
                 Debug.Log("Error");
                 Debug.Log(response.Message);
                 HomeManager.Instance.ShowError(response.Message);
+                return null;
             }
 
             return response.Data;
@@ -72,6 +73,7 @@ namespace Home
                 Debug.Log("Error");
                 Debug.Log(response.Message);
                 HomeManager.Instance.ShowError(response.Message);
+                return null;
             }
 
             Debug.Log("success 1");
@@ -94,6 +96,7 @@ namespace Home
                 Debug.Log("Error");
                 Debug.Log(response.Message);
                 HomeManager.Instance.ShowError(response.Message);
+                return false;
             }
 
             return true;
@@ -105,7 +108,7 @@ namespace Home
             var requestBody = JsonConvert.SerializeObject(new(), _serializerSettings);
             var httpClient = new HttpClient();
             Debug.Log(30);
-            var httpResponseMessage = await httpClient.PostAsync(
+            var httpResponseMessage = await httpClient.PutAsync(
                 $"http://localhost:6000/api/players/{username}/room/ready",
                 new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
@@ -123,6 +126,39 @@ namespace Home
                 Debug.Log("Error");
                 Debug.Log(response.Message);
                 HomeManager.Instance.ShowError(response.Message);
+                return false;
+            }
+
+            Debug.Log(80);
+
+            return true;
+        }
+
+        public async Task<bool> StartRoomAsync(string username)
+        {
+            Debug.Log(20);
+            var requestBody = JsonConvert.SerializeObject(new(), _serializerSettings);
+            var httpClient = new HttpClient();
+            Debug.Log(30);
+            var httpResponseMessage = await httpClient.PutAsync(
+                $"http://localhost:6000/api/players/{username}/room/start",
+                new StringContent(requestBody, Encoding.UTF8, "application/json"));
+
+            Debug.Log(40);
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+            Debug.Log(50);
+            Debug.Log(serializedResponseBody);
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+            Debug.Log(60);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log(70);
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return false;
             }
 
             Debug.Log(80);

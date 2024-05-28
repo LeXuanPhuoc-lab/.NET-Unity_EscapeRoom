@@ -4638,9 +4638,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 911851755}
-        m_TargetAssemblyTypeName: Home.CreateRoomForm, Assembly-CSharp
-        m_MethodName: HandleCreateRoom
+      - m_Target: {fileID: 707470030}
+        m_TargetAssemblyTypeName: Home.WaitRoom, Assembly-CSharp
+        m_MethodName: HandleStartRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Home
 {
@@ -53,6 +54,16 @@ namespace Home
                 Debug.Log(9);
                 homeCanvas.ShowWaitRoom();
                 Debug.Log(11);
+            }
+        }
+
+        public async Task StartRoom()
+        {
+            var success = await APIManager.Instance.StartRoomAsync(StaticData.Username);
+            if (success)
+            {
+                StaticData.RemainTime = (float)gameSession.EndTime.TotalSeconds;
+                SceneManager.LoadScene("RF Castle/Scenes/MH1");
             }
         }
 

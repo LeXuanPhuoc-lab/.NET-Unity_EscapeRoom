@@ -61,5 +61,10 @@ namespace Home
         {
             HomeManager.Instance.OutRoom();
         }
+
+        public void HandleStartRoom()
+        {
+            HomeManager.Instance.StartRoom();
+        }
     }
 }

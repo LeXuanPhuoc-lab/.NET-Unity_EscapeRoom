@@ -9,9 +9,15 @@ namespace ScoreBoard
     [Serializable]
     public struct ScoreBoardEntryData 
     {
-        public string Name;
-        public int Score;
-      
+        public int Top;
+        public string entryName;
+        public int entryScore;
+        public ScoreBoardEntryData(int top, string username, int amountOfAnswer)
+        {
+            Top = top;
+            entryName = username;
+            entryScore = amountOfAnswer;
+        }
     }
 
 }

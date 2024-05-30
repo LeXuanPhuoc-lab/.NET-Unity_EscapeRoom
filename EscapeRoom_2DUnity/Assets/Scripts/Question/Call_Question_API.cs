@@ -12,7 +12,7 @@ public class Call_Question_API : MonoBehaviour
 {
     public class Question
     {
-        public string QuestionId { get; set; } = string.Empty;
+        public string QuestionId { get; set; }
         public string QuestionDesc { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public int? KeyDigit { get; set; }
@@ -21,8 +21,14 @@ public class Call_Question_API : MonoBehaviour
 
     public class QuestionAnswer
     {
+        public string QuestionAnswerId { get; set; }
         public string Answer { get; set; } = string.Empty;
-        public bool IsTrue { get; set; }
+    }
+
+    public class BaseResponse<T>
+    {
+        public int StatusCode { get; set; }
+        public T Data { get; set; }
     }
 
     [SerializeField] private TMP_Text text;
@@ -34,10 +40,12 @@ public class Call_Question_API : MonoBehaviour
     [SerializeField] private GameObject questionScreen;
     [SerializeField] private GameObject player;
 
+    public int? digitKey;
     public static bool isQuestionScreenActive = false;
     private string currentItemID = string.Empty;
-
     private Dictionary<string, Question> questionsDictionary = new Dictionary<string, Question>();
+
+    public Question CurrentQuestion { get; private set; }
 
     void Start()
     {
@@ -98,6 +106,8 @@ public class Call_Question_API : MonoBehaviour
                     Debug.Log($"Image: {question.Image}");
 
                     questionsDictionary[currentItemID] = question;
+                    CurrentQuestion = question;
+                    digitKey = question.KeyDigit;
                     DisplayQuestion(question);
                 }
             }
@@ -111,7 +121,6 @@ public class Call_Question_API : MonoBehaviour
         {
             StartCoroutine(LoadImage(question.Image));
         }
-
         ShowQuestion(question.QuestionDesc);
         SetAnswers(question.QuestionAnswers);
         questionScreen.SetActive(true);
@@ -161,6 +170,7 @@ public class Call_Question_API : MonoBehaviour
             {
                 answers[i].GetComponentInChildren<TMP_Text>().text = answer.Answer;
                 answers[i].gameObject.SetActive(true);
+                answers[i].name = answer.QuestionAnswerId; // Set QuestionAnswerId as the button's name for reference
                 i++;
             }
         }

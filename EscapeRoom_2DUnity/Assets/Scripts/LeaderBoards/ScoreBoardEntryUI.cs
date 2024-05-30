@@ -10,8 +10,8 @@ namespace ScoreBoard {
     public class ScoreBoardEntryUI : MonoBehaviour
     {
 
-        [SerializeField]
-        private TextMeshProUGUI TopText = null;
+      /*  [SerializeField]
+        private TextMeshProUGUI TopText = null;*/
         [SerializeField]
         private TextMeshProUGUI entryNameText = null;
         [SerializeField]
@@ -19,7 +19,7 @@ namespace ScoreBoard {
     
      public void Initialise(ScoreBoardEntryData data)
         {
-            TopText.text = data.Top.ToString();
+           // TopText.text = data.Top.ToString();
             entryNameText.text = data.entryName;
             entryNameText.text = data.entryScore.ToString();
 

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -20,9 +20,15 @@ namespace ScoreBoard {
         // viet vao file json
         private void Start()
         {
+      /*      // Tạo một mục mới cho bảng xếp hạng
+            ScoreBoardEntryData newEntry = new ScoreBoardEntryData("Alice", 100);
+
+            // Bây giờ bạn có thể thêm mục này vào danh sách các mục nhập bảng xếp hạng
+            AddEntry(newEntry);*/
             ScoreBoardSaveData saveScore = GetSaveScore();
             UpdateUI(saveScore);
             SaveScore(saveScore);
+      
 
         }
         public void AddEntry(ScoreBoardEntryData scoreBoardEntryData)

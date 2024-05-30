@@ -7,7 +7,7 @@ namespace ScoreBoard {
     [Serializable]
     public class ScoreBoardSaveData 
     {
-       public List <ScoreBoardEntryData> highScores = new List<ScoreBoardEntryData> ();
+       public List <ScoreBoardEntryData> highScore = new List<ScoreBoardEntryData> ();
 
     }
 

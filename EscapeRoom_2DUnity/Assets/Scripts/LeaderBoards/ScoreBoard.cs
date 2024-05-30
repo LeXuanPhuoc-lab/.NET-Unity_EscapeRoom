@@ -17,85 +17,51 @@ namespace ScoreBoard {
 
         private string Savepath => $"{Application.persistentDataPath}/highScores.json";
 
-        [SerializeField] private Transform highScoreHolderTransform = null;
-        [SerializeField] private GameObject scoreBoardEntryObject = null;
-
-        private ScoreBoardSaveData saveData = new ScoreBoardSaveData();
         // viet vao file json
         private void Start()
         {
-            /*ScoreBoardSaveData saveScore = GetSaveScore();
-            UpdateUI(saveScore);*/
+            ScoreBoardSaveData saveScore = GetSaveScore();
+            UpdateUI(saveScore);
+            SaveScore(saveScore);
 
-            var scoreBoard = FindObjectOfType<ScoreBoard>();
-            scoreBoard.AddScore("Alice", 10);
-            scoreBoard.AddScore("Bob", 8);
-            scoreBoard.AddScore("Charlie", 15);
         }
-        /*   public void AddEntry(ScoreBoardEntryData scoreBoardEntryData)
-           {
-               ScoreBoardSaveData savedScore = GetSaveScore();
-               bool scoreAdd = false;
-               for(int i = 0; i<savedScore.highScore.Count ; i++) { 
-               if(scoreBoardEntryData.entryScore > savedScore.highScore[i].entryScore) {
-                   savedScore.highScore.Insert(i, scoreBoardEntryData);
-                       scoreAdd =true;
-                       break;
-                   }
-               }
-               if(!scoreAdd&& savedScore.highScore.Count< maxLeadeBoard) {
-                   savedScore.highScore.Add(scoreBoardEntryData);
-               }
-               if(savedScore.highScore.Count>maxLeadeBoard)
-               {
-                   savedScore.highScore.RemoveRange(maxLeadeBoard,savedScore.highScore.Count- maxLeadeBoard);
-               }
-               UpdateUI(savedScore);
-
-               SaveScore(savedScore);
-           }*/
-        /*   private void UpdateUI(ScoreBoardSaveData saveScore)
-           {
-               foreach (Transform child in highScoreHolderStranfrom) { 
-               Destroy(child.gameObject); 
-               }
-               foreach (ScoreBoardEntryData highscore in saveScore.highScore) {
-                   Instantiate(ScoreBoardEntryObject, highScoreHolderStranfrom).GetComponent<ScoreBoardEntryUI>().Initialise(highscore);
-
-               }
-
-           }*/
-
-        public void AddScore(string username, int amountOfAnswer)
+        public void AddEntry(ScoreBoardEntryData scoreBoardEntryData)
         {
-            int top = saveData.highScores.Count + 1; // Xác ??nh th? t? m?i
-            var newEntry = new ScoreBoardEntryData(top, username, amountOfAnswer);
-            saveData.highScores.Add(newEntry);
-            UpdateUI();
-        }
-        public void UpdateUI()
-        {
-            // Xóa các m?c hi?n t?i
-            foreach (Transform child in highScoreHolderTransform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            // T?o các m?c m?i
-            foreach (ScoreBoardEntryData highscore in saveData.highScores)
-            {
-                var entryObject = Instantiate(scoreBoardEntryObject, highScoreHolderTransform);
-                var entryUI = entryObject.GetComponent<ScoreBoardEntryUI>();
-                if (entryUI != null)
-                {
-                    entryUI.Initialise(highscore);
+            ScoreBoardSaveData savedScore = GetSaveScore();
+            bool scoreAdd = false;
+            for(int i = 0; i<savedScore.highScore.Count ; i++) { 
+            if(scoreBoardEntryData.entryScore > savedScore.highScore[i].entryScore) {
+                savedScore.highScore.Insert(i, scoreBoardEntryData);
+                    scoreAdd =true;
+                    break;
                 }
             }
+            if(!scoreAdd&& savedScore.highScore.Count< maxLeadeBoard) {
+                savedScore.highScore.Add(scoreBoardEntryData);
+            }
+            if(savedScore.highScore.Count>maxLeadeBoard)
+            {
+                savedScore.highScore.RemoveRange(maxLeadeBoard,savedScore.highScore.Count- maxLeadeBoard);
+            }
+            UpdateUI(savedScore);
+
+            SaveScore(savedScore);
+        }
+        private void UpdateUI(ScoreBoardSaveData saveScore)
+        {
+            foreach (Transform child in highScoreHolderStranfrom) { 
+            Destroy(child.gameObject); 
+            }
+            foreach (ScoreBoardEntryData highscore in saveScore.highScore) {
+                Instantiate(ScoreBoardEntryObject, highScoreHolderStranfrom).GetComponent<ScoreBoardEntryUI>().Initialise(highscore);
+            
+            }
+
         }
         [ContextMenu ("add TestEntry ")]
-      /*  public void addTestEntry() {
+        public void addTestEntry() {
             AddEntry(TestEntryData);
-        }*/
+        }
 
         private ScoreBoardSaveData GetSaveScore()
         {

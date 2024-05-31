@@ -12,6 +12,7 @@ public class SubmitAnswer : MonoBehaviour
     public Button answerC;
     public Button answerD;
     public Call_Question_API callQuestionApi;
+    public HintTrigger hintTrigger;
 
     void Start()
     {
@@ -57,12 +58,15 @@ public class SubmitAnswer : MonoBehaviour
             else if (webRequest.result == UnityWebRequest.Result.Success)
             {
                 var jsonResponse = webRequest.downloadHandler.text;
-                var baseResponse = JsonConvert.DeserializeObject<BaseResponse<object>>(jsonResponse);
+                var baseResponse = JsonConvert.DeserializeObject<BaseResponse<SubmitAnswerResponse>>(jsonResponse);
                 if (baseResponse.StatusCode == 200)
                 {
                     if (baseResponse.Data != null)
                     {
                         Debug.Log("Chúc mừng bạn, đáp án chính xác");
+                        callQuestionApi.MarkQuestionAsAnswered(callQuestionApi.CurrentQuestion.QuestionId, baseResponse.Data.KeyDigit);
+                        callQuestionApi.HideQuestionScreen();
+                        hintTrigger.ShowHint(baseResponse.Data.KeyDigit);
                     }
                     else
                     {
@@ -75,5 +79,18 @@ public class SubmitAnswer : MonoBehaviour
                 }
             }
         }
+        
+    }
+    public void ResetAnswerButtons()
+    {
+        Button[] answerButtons = { answerA, answerB, answerC, answerD };
+        foreach (var button in answerButtons)
+        {
+            button.interactable = true;
+        }
+    }
+    private class SubmitAnswerResponse
+    {
+        public int KeyDigit { get; set; }
     }
 }

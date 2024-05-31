@@ -44,6 +44,7 @@ public class Call_Question_API : MonoBehaviour
     public static bool isQuestionScreenActive = false;
     private string currentItemID = string.Empty;
     private Dictionary<string, Question> questionsDictionary = new Dictionary<string, Question>();
+    public Dictionary<string, int?> questionAnsweredCorrectly = new Dictionary<string, int?>();
 
     public Question CurrentQuestion { get; private set; }
 
@@ -60,9 +61,9 @@ public class Call_Question_API : MonoBehaviour
         }
     }
 
-    public void ShowQuestionScreen(string itemID)
+    public void ShowQuestionScreen(GameObject item)
     {
-        currentItemID = itemID;
+        currentItemID = item.name;
 
         if (questionsDictionary.ContainsKey(currentItemID))
         {
@@ -71,7 +72,7 @@ public class Call_Question_API : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username=test"));
+            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username=test", item));
         }
     }
 
@@ -83,7 +84,7 @@ public class Call_Question_API : MonoBehaviour
         player.GetComponent<Player.Player>().enabled = true;
     }
 
-    IEnumerator GetRequest(string uri)
+    IEnumerator GetRequest(string uri, GameObject item)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -105,9 +106,10 @@ public class Call_Question_API : MonoBehaviour
                     Debug.Log($"QuestionDesc: {question.QuestionDesc}");
                     Debug.Log($"Image: {question.Image}");
 
-                    questionsDictionary[currentItemID] = question;
+                    questionsDictionary[question.QuestionId] = question;
                     CurrentQuestion = question;
                     digitKey = question.KeyDigit;
+                    item.name = question.QuestionId; // Rename the item with the QuestionId
                     DisplayQuestion(question);
                 }
             }
@@ -127,6 +129,9 @@ public class Call_Question_API : MonoBehaviour
         isQuestionScreenActive = true;
         Time.timeScale = 0;
         player.GetComponent<Player.Player>().enabled = false;
+
+        // Allow re-selection of answers
+        FindObjectOfType<SubmitAnswer>().ResetAnswerButtons();
     }
 
     IEnumerator LoadImage(string url)
@@ -184,5 +189,9 @@ public class Call_Question_API : MonoBehaviour
         answerB.gameObject.SetActive(false);
         answerC.gameObject.SetActive(false);
         answerD.gameObject.SetActive(false);
+    }
+    public void MarkQuestionAsAnswered(string questionID, int? keyDigit)
+    {
+        questionAnsweredCorrectly[questionID] =keyDigit;
     }
 }

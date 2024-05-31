@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 115333960}
   - component: {fileID: 115333962}
   m_Layer: 0
-  m_Name: Wooden Chest 1 - frame  00 (1)
+  m_Name: ChestQuestionB
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -686,7 +686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a9c21eebcc87548b9fd59a72511336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 2
 --- !u!1 &170155417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,6 +1773,7 @@ MonoBehaviour:
   answerC: {fileID: 1514466631}
   answerD: {fileID: 194575830}
   callQuestionApi: {fileID: 553432739}
+  hintTrigger: {fileID: 1006127935}
 --- !u!1 &576897839
 GameObject:
   m_ObjectHideFlags: 0
@@ -2566,7 +2566,7 @@ GameObject:
   - component: {fileID: 764705766}
   - component: {fileID: 764705768}
   m_Layer: 0
-  m_Name: Wooden Chest 1 - frame  00 (2)
+  m_Name: ChestQuestionC
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2696,7 +2696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a9c21eebcc87548b9fd59a72511336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 3
 --- !u!1 &846202958
 GameObject:
   m_ObjectHideFlags: 0
@@ -2883,6 +2882,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1006127934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1006127936}
+  - component: {fileID: 1006127935}
+  m_Layer: 0
+  m_Name: HintManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1006127935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006127934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dc3c36f332287243ba3fd7f19ee68bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hintUI: {fileID: 1264495251}
+  hintText: {fileID: 609787047}
+  hintImage: {fileID: 0}
+--- !u!4 &1006127936
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006127934}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2216.429, y: 884.55255, z: -9.462039}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1015957412
 GameObject:
   m_ObjectHideFlags: 0
@@ -3215,7 +3261,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1048167263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3349,7 +3395,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.03322029}
@@ -3652,7 +3698,7 @@ GameObject:
   - component: {fileID: 1195354370}
   - component: {fileID: 1195354372}
   m_Layer: 0
-  m_Name: Wooden Chest 1 - frame  00
+  m_Name: ChestQuestionA
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3782,7 +3828,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a9c21eebcc87548b9fd59a72511336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 1
 --- !u!1 &1206064609
 GameObject:
   m_ObjectHideFlags: 0
@@ -4299,7 +4344,7 @@ GameObject:
   - component: {fileID: 1328613852}
   - component: {fileID: 1328613854}
   m_Layer: 0
-  m_Name: Wooden Chest 1 - frame  00 (3)
+  m_Name: ChestQuestionD
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4429,7 +4474,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0a9c21eebcc87548b9fd59a72511336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemID: 4
 --- !u!1 &1402529998
 GameObject:
   m_ObjectHideFlags: 0
@@ -5977,3 +6021,4 @@ SceneRoots:
   - {fileID: 1402530000}
   - {fileID: 1264495252}
   - {fileID: 996742509}
+  - {fileID: 1006127936}

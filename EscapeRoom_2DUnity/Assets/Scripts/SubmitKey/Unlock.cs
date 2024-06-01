@@ -60,7 +60,7 @@ public class Unlock : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     public void SendData(string value1, string value2, string value3, string value4)
     {
-        string username = "phuoc";
+        string username = StaticData.Username;
         string key = string.Concat(value1, value2, value3, value4);
         string isHard = "false";
 

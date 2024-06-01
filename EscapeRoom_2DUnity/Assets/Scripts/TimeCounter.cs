@@ -20,6 +20,10 @@ public class TimeCounter : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        UpdateTime();
+    }
     public void UpdateTime()
     {
         // Debug.Log("Update Time");
@@ -27,5 +31,9 @@ public class TimeCounter : MonoBehaviour
         {
             StaticData.RemainTime = Math.Max(0, StaticData.RemainTime - Time.deltaTime);
         }
+    }
+
+    public static void TimePenalty(){
+            StaticData.RemainTime = Math.Max(0, StaticData.RemainTime - 30);
     }
 }

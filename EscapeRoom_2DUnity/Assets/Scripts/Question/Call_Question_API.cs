@@ -12,7 +12,7 @@ public class Call_Question_API : MonoBehaviour
 {
     public class Question
     {
-        public string QuestionId { get; set; } = string.Empty;
+        public string QuestionId { get; set; }
         public string QuestionDesc { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public int? KeyDigit { get; set; }
@@ -21,8 +21,14 @@ public class Call_Question_API : MonoBehaviour
 
     public class QuestionAnswer
     {
+        public string QuestionAnswerId { get; set; }
         public string Answer { get; set; } = string.Empty;
-        public bool IsTrue { get; set; }
+    }
+
+    public class BaseResponse<T>
+    {
+        public int StatusCode { get; set; }
+        public T Data { get; set; }
     }
 
     [SerializeField] private TMP_Text text;
@@ -34,10 +40,13 @@ public class Call_Question_API : MonoBehaviour
     [SerializeField] private GameObject questionScreen;
     [SerializeField] private GameObject player;
 
+    public int? digitKey;
     public static bool isQuestionScreenActive = false;
     private string currentItemID = string.Empty;
-
     private Dictionary<string, Question> questionsDictionary = new Dictionary<string, Question>();
+    public Dictionary<string, int?> questionAnsweredCorrectly = new Dictionary<string, int?>();
+
+    public Question CurrentQuestion { get; private set; }
 
     void Start()
     {
@@ -52,9 +61,9 @@ public class Call_Question_API : MonoBehaviour
         }
     }
 
-    public void ShowQuestionScreen(string itemID)
+    public void ShowQuestionScreen(GameObject item)
     {
-        currentItemID = itemID;
+        currentItemID = item.name;
 
         if (questionsDictionary.ContainsKey(currentItemID))
         {
@@ -63,7 +72,7 @@ public class Call_Question_API : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username=test"));
+            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username=kingchen2", item));
         }
     }
 
@@ -71,11 +80,10 @@ public class Call_Question_API : MonoBehaviour
     {
         questionScreen.SetActive(false);
         isQuestionScreenActive = false;
-        Time.timeScale = 1;
         player.GetComponent<Player.Player>().enabled = true;
     }
 
-    IEnumerator GetRequest(string uri)
+    IEnumerator GetRequest(string uri, GameObject item)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -97,7 +105,10 @@ public class Call_Question_API : MonoBehaviour
                     Debug.Log($"QuestionDesc: {question.QuestionDesc}");
                     Debug.Log($"Image: {question.Image}");
 
-                    questionsDictionary[currentItemID] = question;
+                    questionsDictionary[question.QuestionId] = question;
+                    CurrentQuestion = question;
+                    digitKey = question.KeyDigit;
+                    item.name = question.QuestionId; // Rename the item with the QuestionId
                     DisplayQuestion(question);
                 }
             }
@@ -111,13 +122,14 @@ public class Call_Question_API : MonoBehaviour
         {
             StartCoroutine(LoadImage(question.Image));
         }
-
         ShowQuestion(question.QuestionDesc);
         SetAnswers(question.QuestionAnswers);
         questionScreen.SetActive(true);
         isQuestionScreenActive = true;
-        Time.timeScale = 0;
         player.GetComponent<Player.Player>().enabled = false;
+
+        // Allow re-selection of answers
+        FindObjectOfType<SubmitAnswer>().ResetAnswerButtons();
     }
 
     IEnumerator LoadImage(string url)
@@ -161,6 +173,7 @@ public class Call_Question_API : MonoBehaviour
             {
                 answers[i].GetComponentInChildren<TMP_Text>().text = answer.Answer;
                 answers[i].gameObject.SetActive(true);
+                answers[i].name = answer.QuestionAnswerId; // Set QuestionAnswerId as the button's name for reference
                 i++;
             }
         }
@@ -174,5 +187,9 @@ public class Call_Question_API : MonoBehaviour
         answerB.gameObject.SetActive(false);
         answerC.gameObject.SetActive(false);
         answerD.gameObject.SetActive(false);
+    }
+    public void MarkQuestionAsAnswered(string questionID, int? keyDigit)
+    {
+        questionAnsweredCorrectly[questionID] =keyDigit;
     }
 }

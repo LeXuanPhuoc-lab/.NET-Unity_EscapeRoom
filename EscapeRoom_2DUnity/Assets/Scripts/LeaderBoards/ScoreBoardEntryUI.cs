@@ -21,7 +21,7 @@ namespace ScoreBoard {
         {
             TopText.text = data.Top.ToString();
             entryNameText.text = data.entryName;
-            entryNameText.text = data.entryScore.ToString();
+            entryScoreText.text = data.entryScore.ToString();
 
 
         }

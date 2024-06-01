@@ -104,7 +104,7 @@ namespace ScoreBoard {
 
                             // Tạo một đối tượng ScoreBoardEntryData và thêm vào danh sách
                               ScoreBoardEntryData entryData = new ScoreBoardEntryData(id, username, totalRightAnswer);
-                            leaderboardEntries.Add(entryData);
+                            AddEntry(entryData);
                         }
                     }
                     else
@@ -148,8 +148,11 @@ namespace ScoreBoard {
               }*/
         public void AddEntry(ScoreBoardEntryData scoreBoardEntryData)
         {
+            //lay du lieu
             ScoreBoardSaveData savedScore = GetSaveScore();
             bool scoreAdd = false;
+
+            // vong lap duyet qua danh sach diem cao 
             for(int i = 0; i<savedScore.highScore.Count ; i++) { 
             if(scoreBoardEntryData.entryScore > savedScore.highScore[i].entryScore) {
                 savedScore.highScore.Insert(i, scoreBoardEntryData);

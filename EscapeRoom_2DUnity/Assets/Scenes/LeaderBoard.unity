@@ -242,6 +242,7 @@ MonoBehaviour:
   highScoreHolderStranfrom: {fileID: 976568465}
   ScoreBoardEntryObject: {fileID: 0}
   TestEntryData:
+    Top: 0
     entryName: abc
     entryScore: 1232
 --- !u!224 &181026258 stripped
@@ -837,11 +838,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4949827700728964742, guid: e215a537f75503ec686ef469075b8157, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -545.8203
+      value: -545.8204
       objectReference: {fileID: 0}
     - target: {fileID: 4949827700728964742, guid: e215a537f75503ec686ef469075b8157, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 526.39856
+      value: 526.3982
       objectReference: {fileID: 0}
     - target: {fileID: 4949827700728964743, guid: e215a537f75503ec686ef469075b8157, type: 3}
       propertyPath: m_Layer
@@ -1187,8 +1188,9 @@ MonoBehaviour:
   highScoreHolderStranfrom: {fileID: 1085863811}
   ScoreBoardEntryObject: {fileID: 7315632099319825497, guid: 82a943877fd3c7948a0a70bc224440fc, type: 3}
   TestEntryData:
-    entryName: ytyt
-    entryScore: 56565
+    Top: 2
+    entryName: 123123
+    entryScore: 1111
 --- !u!1 &738540350
 GameObject:
   m_ObjectHideFlags: 0

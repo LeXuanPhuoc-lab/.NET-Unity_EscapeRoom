@@ -100,7 +100,3 @@ crashlytics-build.properties
 
 # ScriptableObject types
 .vscode/
-
-# Custom entries
-.vscode/EscapeRoom_2DUnity/Logs/shadercompiler-UnityShaderCompiler.exe0.log
-.vscode/EscapeRoom_2DUnity/UserSettings/Layouts/default-2022.dwlt

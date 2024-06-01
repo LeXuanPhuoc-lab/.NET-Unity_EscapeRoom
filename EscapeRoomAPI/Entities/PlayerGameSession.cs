@@ -11,11 +11,11 @@ public partial class PlayerGameSession
 
     public string PlayerId { get; set; }
 
-    public bool? IsHost { get; set; }
+    public bool IsHost { get; set; }
 
-    public bool? IsReady { get; set; }
+    public bool IsReady { get; set; }
 
-    public virtual Player Player { get; set; } 
+    public virtual Player Player { get; set; }
 
     public virtual GameSession Session { get; set; }
 }

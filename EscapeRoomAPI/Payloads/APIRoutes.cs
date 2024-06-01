@@ -1,43 +1,48 @@
 namespace EscapeRoomAPI.Payloads;
 
-public static class APIRoutes
+public class APIRoutes
 {
     public const string Base = "api";
 
-
     public static class Authentication
     {
-        public const string SignIn = "/sign-in";
-        public const string Register = "/register";
+        public const string SignIn = Base + "/sign-in";
+        public const string Register = Base + "/register";
     }
 
     public static class Players
     {
         // [POST]
-        public const string CreateRoom = "/players/{username:string}/room";
+        public const string CreateRoom = Base + "/players/room";
         // [GET]
-        public const string FindRoom = "/players/{username:string}/room";
+        public const string FindRoom = Base + "/players/{username}/room";
+        // [GET]
+        public const string SubmitUnlockRoomKey = Base + "/players/{username}/room/unclock/{key}";
         // [DELETE]
-        public const string OutRoom = "/players/{username:string}/room";
+        public const string OutRoom = Base + "/players/{username}/room";
         // [PATCH]
-        public const string StartRoom = "/players/{username:string}/room/start";
+        public const string StartRoom = Base + "/players/{username}/room/start";
         // [PATCH]        
-        public const string ModifyReady = "/players/{username:string}/room";
+        public const string ModifyReady = Base + "/players/{username}/room/ready";
     }
 
     public static class Questions
     {
         // [GET]
-        public const string RetrieveQuestionNormalLevel = "/questions/normal-level";
+        public const string RetrieveQuestionNormalLevel = Base + "/questions/normal-level";
         // [GET]
-        public const string RetrieveQuestionHardLevel = "/questions/hard-level";
+        public const string RetrieveQuestionHardLevel = Base + "/questions/hard-level";
+        // [GET]
+        public const string GetAllQuestion = Base + "/questions";
         // [POST]
-        public const string SubmitAnswer = "/questions/submit-answer";
+        public const string CreateQuestion = Base + "/questions";
+        // [POST]
+        public const string SubmitAnswer = Base + "/questions/submit-answer";
     }
 
     public static class Leaderboard
     {
         // [GET]
-        public const string ShowLeaderboard = "/leaderboard";
+        public const string ShowLeaderboard = Base + "/leaderboard";
     }
 }

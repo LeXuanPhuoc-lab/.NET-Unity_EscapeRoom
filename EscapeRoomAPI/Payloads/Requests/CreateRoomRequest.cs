@@ -1,4 +1,5 @@
 using EscapeRoomAPI.Dtos;
+using EscapeRoomAPI.Enums;
 
 namespace EscapeRoomAPI.Payloads.Requests;
 
@@ -14,6 +15,9 @@ public static class CreateRoomResponseExtension
 {
     public static GameSessionDto ToGameSessionDto(this CreateRoomRequest reqObj)
     {
+        var random = new Random();
+        var index = random.Next(0, 100);
+
         return new GameSessionDto
         {
             SessionName = reqObj.RoomName,
@@ -21,7 +25,8 @@ public static class CreateRoomResponseExtension
             IsWaiting = true,
             TotalPlayer = reqObj.TotalPlayer,
             StartTime = TimeSpan.Zero,
-            EndTime = TimeSpan.FromMinutes(reqObj.EndTimeToMinute)
+            EndTime = TimeSpan.FromMinutes(reqObj.EndTimeToMinute),
+            Hint = (index % 2 == 0) ? nameof(UnclockHint.Ascending) : nameof(UnclockHint.Descending)
         };
     }
 }

@@ -5,6 +5,8 @@ public class QuestionDto
     public int Id { get; set; }
 
     public string QuestionId { get; set; } = string.Empty;
+    
+    public string QuestionDesc { get; set; } = string.Empty;
 
     public string Image { get; set; } = string.Empty;
 

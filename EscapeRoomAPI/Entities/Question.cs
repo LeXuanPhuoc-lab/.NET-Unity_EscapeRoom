@@ -11,11 +11,13 @@ public partial class Question
 
     public string QuestionId { get; set; }
 
+    public string QuestionDesc { get; set; }
+
     public string Image { get; set; }
 
-    public int? KeyDigit { get; set; }
+    public int KeyDigit { get; set; }
 
-    public bool? IsHard { get; set; }
+    public bool IsHard { get; set; }
 
     public virtual ICollection<PlayerGameAnswer> PlayerGameAnswers { get; set; } = new List<PlayerGameAnswer>();
 

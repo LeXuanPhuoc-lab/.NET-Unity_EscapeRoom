@@ -71,6 +71,7 @@ public class SubmitAnswer : MonoBehaviour
                     else
                     {
                         Debug.Log("Đáp án không chính xác");
+                        TimeCounter.TimePenalty();
                     }
                 }
                 else

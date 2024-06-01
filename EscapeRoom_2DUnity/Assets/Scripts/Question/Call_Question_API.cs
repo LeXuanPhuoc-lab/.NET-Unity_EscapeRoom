@@ -80,7 +80,6 @@ public class Call_Question_API : MonoBehaviour
     {
         questionScreen.SetActive(false);
         isQuestionScreenActive = false;
-        Time.timeScale = 1;
         player.GetComponent<Player.Player>().enabled = true;
     }
 
@@ -127,7 +126,6 @@ public class Call_Question_API : MonoBehaviour
         SetAnswers(question.QuestionAnswers);
         questionScreen.SetActive(true);
         isQuestionScreenActive = true;
-        Time.timeScale = 0;
         player.GetComponent<Player.Player>().enabled = false;
 
         // Allow re-selection of answers

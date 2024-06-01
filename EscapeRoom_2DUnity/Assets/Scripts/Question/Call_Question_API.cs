@@ -72,7 +72,7 @@ public class Call_Question_API : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username=test", item));
+            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username=kingchen2", item));
         }
     }
 

@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+  - enabled: 0
+    path: Assets/karsiori/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/RF Castle/Scenes/Home.unity
+    guid: f0e5be05da3862d49b3a1fbc89bea2b5
+  - enabled: 1
+    path: Assets/RF Castle/Scenes/MH1.unity
+    guid: 33bdbd238a138964ca20818cbe403fcb
   m_configObjects: {}

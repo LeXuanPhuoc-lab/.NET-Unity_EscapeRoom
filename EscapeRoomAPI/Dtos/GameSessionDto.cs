@@ -2,6 +2,7 @@ namespace EscapeRoomAPI.Dtos;
 
 public class GameSessionDto
 {
+    public int SessionId { get; set; }  
     public string? SessionName { get; set; }
 
     public TimeSpan StartTime { get; set; }
@@ -10,9 +11,11 @@ public class GameSessionDto
 
     public int TotalPlayer { get; set; }
 
-    public bool IsWaiting { get; set; } 
+    public bool IsWaiting { get; set; }
 
     public bool IsEnd { get; set; }
     public string Hint { get; set; } = string.Empty;
-    public virtual ICollection<PlayerDto> Players { get; set; } = new List<PlayerDto>();
+
+    public virtual ICollection<PlayerGameSessionDto> PlayerGameSessions { get; set; } =
+        new List<PlayerGameSessionDto>();
 }

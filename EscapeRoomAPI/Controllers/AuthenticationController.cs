@@ -45,12 +45,14 @@ public class AuthenticationController : ControllerBase
         // Process sign in 
         // Get player by username & password
         var existingPlayer = await _context.Players.FirstOrDefaultAsync(
-                x => x.Username.Equals(reqObj.Username) && x.Password.Equals(reqObj.Password)
+            x => x.Username.Equals(reqObj.Username) && x.Password.Equals(reqObj.Password)
         );
 
         return existingPlayer is not null // sign in success
-            ? Ok(new BaseResponse { StatusCode = StatusCodes.Status200OK, Message = "Đăng nhập thành công, chiến thôi!!!" })
-            : Unauthorized();
+            ? Ok(new BaseResponse
+                { StatusCode = StatusCodes.Status200OK, Message = "Đăng nhập thành công, chiến thôi!!!" })
+            : Unauthorized(new BaseResponse
+                { StatusCode = StatusCodes.Status401Unauthorized, Message = "Sai username hoặc password" });
     }
 
     [HttpPost(APIRoutes.Authentication.Register, Name = nameof(RegisterAsync))]
@@ -70,7 +72,7 @@ public class AuthenticationController : ControllerBase
 
         // Check exist username
         var player = await _context.Players.FirstOrDefaultAsync(x => x.Username.Equals(reqObj.Username));
-        if(player is not null)
+        if (player is not null)
         {
             return BadRequest(new BaseResponse
             {
@@ -83,10 +85,11 @@ public class AuthenticationController : ControllerBase
         var playerEntity = _mapper.Map<Player>(reqObj.ToPlayerDto());
         // Add new player 
         await _context.Players.AddAsync(playerEntity);
-        var result = await _context.SaveChangesAsync() > 0; 
+        var result = await _context.SaveChangesAsync() > 0;
 
-        return result 
-            ? Ok(new BaseResponse{ StatusCode = StatusCodes.Status200OK, Message = "Tạo tài khoản thành công, chơi vui nhé!"})
+        return result
+            ? Ok(new BaseResponse
+                { StatusCode = StatusCodes.Status200OK, Message = "Tạo tài khoản thành công, chơi vui nhé!" })
             : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
 }

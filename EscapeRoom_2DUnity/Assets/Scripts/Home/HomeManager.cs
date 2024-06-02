@@ -31,14 +31,10 @@ namespace Home
             {
                 Destroy(gameObject);
             }
-
-            homeCanvas.SetDefaultErrorMessage();
         }
 
         public async Task CreateRoom(CreateRoomBody requestBody)
         {
-            Debug.Log(2);
-            requestBody.Username = StaticData.Username;
             Debug.Log(3);
             gameSession = await APIManager.Instance.CreateRoomAsync(requestBody);
             Debug.Log(7);
@@ -47,50 +43,64 @@ namespace Home
             {
                 waitRoom.ResetReadyButton();
                 waitRoom.UpdateStates();
-                Debug.Log(9);
-                homeCanvas.SetDefaultErrorMessage();
-                homeCanvas.ShowWaitRoom();
-                Debug.Log(11);
+                homeCanvas.ShowObject("WaitRoom");
             }
         }
 
-        private async Task ProcessFindOrReadyOrExistRoomAsync(string username)
+        public async Task Login(LoginBody requestBody)
         {
-            await _connection.InvokeAsync("InvokeFindOrReadyOrExistAsync", username);
+            var success = await APIManager.Instance.LoginAsync(requestBody);
+            if (success)
+            {
+                StaticData.Username = requestBody.Username;
+                homeCanvas.ShowObject("MainButtons");
+                Debug.Log(StaticData.Username);
+            }
+        }
+
+        public async Task Register(LoginBody requestBody)
+        {
+            var success = await APIManager.Instance.RegisterAsync(requestBody);
+            if (success)
+            {
+                StaticData.Username = requestBody.Username;
+                homeCanvas.ShowObject("MainButtons");
+                Debug.Log(StaticData.Username);
+            }
+        }
+
+        private async Task ProcessFindOrReadyOrExistRoomAsync()
+        {
+            await _connection.InvokeAsync("InvokeFindOrReadyOrExistAsync", StaticData.Username);
         }
 
         public async Task FindRoom()
         {
-            // gameSession = await APIManager.Instance.FindRoomAsync(StaticData.Username);
-            gameSession = await APIManager.Instance.FindRoomAsync("test");
+            gameSession = await APIManager.Instance.FindRoomAsync();
 
             if (gameSession is not null)
             {
-                
                 waitRoom.ResetReadyButton();
                 waitRoom.UpdateStates();
-                // Debug.Log(9);
-                homeCanvas.SetDefaultErrorMessage();
-                homeCanvas.ShowWaitRoom();
-                // Debug.Log(11);
-                
+                homeCanvas.ShowObject("WaitRoom");
+
                 // Process find room
-                await ProcessFindOrReadyOrExistRoomAsync("test");
+                await ProcessFindOrReadyOrExistRoomAsync();
             }
         }
 
-        private async Task ProcessStartRoom(string username)
+        private async Task ProcessStartRoom()
         {
-            await _connection.InvokeAsync("InvokeStartAsync", username);
+            await _connection.InvokeAsync("InvokeStartAsync", StaticData.Username);
         }
 
         public async Task StartRoom()
         {
-            var success = await APIManager.Instance.StartRoomAsync(StaticData.Username);
+            var success = await APIManager.Instance.StartRoomAsync();
 
             if (success)
             {
-                await ProcessStartRoom(StaticData.Username);
+                await ProcessStartRoom();
             }
         }
 
@@ -101,28 +111,27 @@ namespace Home
 
         public async Task OutRoom()
         {
-            var success = await APIManager.Instance.OutRoomAsync(StaticData.Username);
+            var success = await APIManager.Instance.OutRoomAsync();
             if (success)
             {
-                await ProcessFindOrReadyOrExistRoomAsync("test");
-                homeCanvas.SetDefaultErrorMessage();
-                homeCanvas.ShowHomeMenu();
+                Debug.Log("Out Successfully");
+                homeCanvas.ShowObject("MainButtons");
+                await ProcessFindOrReadyOrExistRoomAsync();
             }
         }
 
         public async Task Ready()
         {
             Debug.Log(19);
-            // var success = await APIManager.Instance.ReadyAsync(StaticData.Username);
-            var success = await APIManager.Instance.ReadyAsync("test");
+            var success = await APIManager.Instance.ReadyAsync();
             if (success)
             {
                 // Process ready 
-                await ProcessFindOrReadyOrExistRoomAsync("test");
 
                 Debug.Log(21);
                 homeCanvas.SetDefaultErrorMessage();
                 waitRoom.HandleReadySuccess();
+                await ProcessFindOrReadyOrExistRoomAsync();
             }
 
             Debug.Log(22);
@@ -135,10 +144,7 @@ namespace Home
                 // Config signalR connection
                 _connection = new HubConnectionBuilder().WithUrl($"{ServerAddress}/start-room").Build();
 
-                _connection.On<string>("InvokeConnectionMessage", (message) =>
-                {
-                    Debug.Log(message);
-                });
+                _connection.On<string>("InvokeConnectionMessage", (message) => { Debug.Log(message); });
 
                 _connection.On<bool, double, int>("OnStartingProcessed", (isStarted, endTime, sessionId) =>
                 {
@@ -155,9 +161,11 @@ namespace Home
                     }
                 });
 
-                _connection.On<int, int, int>("OnTriggerInWaitingRoomProcessed", (totalPlayerInSession,sessionPlayerCap,totalReadyPlayers) => {
-                    waitRoom.ProcessFindOrReadyUpdate(totalPlayerInSession,sessionPlayerCap,totalReadyPlayers);
-                });
+                _connection.On<int, int, int>("OnTriggerInWaitingRoomProcessed",
+                    (totalPlayerInSession, sessionPlayerCap, totalReadyPlayers) =>
+                    {
+                        waitRoom.ProcessFindOrReadyUpdate(totalPlayerInSession, sessionPlayerCap, totalReadyPlayers);
+                    });
 
                 // Start 
                 await _connection.StartAsync();

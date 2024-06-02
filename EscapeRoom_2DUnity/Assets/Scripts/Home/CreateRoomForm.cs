@@ -35,11 +35,11 @@ namespace Home
                 return;
             }
 
-            Debug.Log(1);
+            Debug.Log(100);
 
             HomeManager.Instance.CreateRoom(new CreateRoomBody()
             {
-                Username = "",
+                Username = StaticData.Username,
                 TotalPlayer = int.Parse(totalPlayerValue),
                 RoomName = roomNameValue,
                 EndTimeToMinute = int.Parse(endTimeToMinuteValue)

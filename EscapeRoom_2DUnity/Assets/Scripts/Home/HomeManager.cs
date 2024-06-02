@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using UnityEngine;
@@ -137,6 +135,7 @@ namespace Home
             Debug.Log(22);
         }
 
+
         public async Task ConnnectSignalRServer()
         {
             try
@@ -156,7 +155,13 @@ namespace Home
                         if (gameSession.SessionId == sessionId)
                         {
                             StaticData.RemainTime = (float)endTime;
-                            SceneManager.LoadScene("RF Castle/Scenes/MH1");
+                            Debug.Log(1000);
+                            UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                            {
+                                SceneManager.LoadScene("RF Castle/Scenes/MH1");
+                                Debug.Log(1001);
+                            });
+                            Debug.Log(1002);
                         }
                     }
                 });

@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using AutoMapper;
 using EscapeRoomAPI.Data;
 using EscapeRoomAPI.Entities;
+using EscapeRoomAPI.Hubs;
 using EscapeRoomAPI.Mappings;
 using EscapeRoomAPI.Payloads.Requests;
 using EscapeRoomAPI.Services;
@@ -62,6 +63,9 @@ builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
           .AllowAnyMethod();
 }));
 
+// SignalR
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Hook into application lifetime events and trigger only application fully started
@@ -83,5 +87,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<StartRoomHub>("/start-room");
 
 app.Run();

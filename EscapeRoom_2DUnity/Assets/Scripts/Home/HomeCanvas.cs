@@ -46,5 +46,10 @@ namespace Home
             Debug.Log(message);
             errorMessage.text = message;
         }
+
+        public void SetDefaultErrorMessage()
+        {
+            errorMessage.text = string.Empty;
+        }
     }
 }

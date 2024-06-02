@@ -24,6 +24,7 @@ public class TimeCounter : MonoBehaviour
     {
         UpdateTime();
     }
+    
     public void UpdateTime()
     {
         // Debug.Log("Update Time");
@@ -34,6 +35,6 @@ public class TimeCounter : MonoBehaviour
     }
 
     public static void TimePenalty(){
-            StaticData.RemainTime = Math.Max(0, StaticData.RemainTime - 30);
+        StaticData.RemainTime = Math.Max(0, StaticData.RemainTime - 30);
     }
 }

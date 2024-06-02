@@ -9,6 +9,8 @@ using EscapeRoomAPI.Payloads.Responses;
 using EscapeRoomAPI.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace EscapeRoomAPI.Controllers;
 
@@ -446,6 +448,9 @@ public class PlayerController : ControllerBase
 
         // Save change
         var result = await _context.SaveChangesAsync() > 0;
+
+        // Send message to all clients that subscribe 
+
 
         return result
             ? Ok(new BaseResponse

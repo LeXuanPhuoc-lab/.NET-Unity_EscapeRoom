@@ -35,7 +35,7 @@ public class SubmitAnswer : MonoBehaviour
         string uri = "http://localhost:6000/api/questions/submit-answer";
         var requestBody = new
         {
-            username = "kingchen2",
+            username = StaticData.Username,
             questionId = questionId,
             selectAnswerId = selectAnswerId
         };

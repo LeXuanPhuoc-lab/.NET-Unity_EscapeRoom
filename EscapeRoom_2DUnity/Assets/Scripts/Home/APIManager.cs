@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 
-
 namespace Home
 {
     public class APIManager : MonoBehaviour
@@ -166,7 +165,7 @@ namespace Home
             return true;
         }
     }
-// Define a class to represent the JSON data
+    // Define a class to represent the JSON data
 
 
     [System.Serializable]
@@ -228,6 +227,8 @@ namespace Home
     [System.Serializable]
     public class GameSessionDto
     {
+        public int SessionId { get; set; }
+        
         public string SessionName { get; set; }
 
         public TimeSpan StartTime { get; set; }

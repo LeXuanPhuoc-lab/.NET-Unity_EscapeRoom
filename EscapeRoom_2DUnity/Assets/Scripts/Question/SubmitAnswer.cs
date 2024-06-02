@@ -27,15 +27,16 @@ public class SubmitAnswer : MonoBehaviour
         if (callQuestionApi.CurrentQuestion == null) return;
 
         string selectedAnswerId = answerButton.name;
-        StartCoroutine(PostSubmitAnswer(callQuestionApi.CurrentQuestion.QuestionId, selectedAnswerId));
+        StartCoroutine(PostSubmitAnswer(callQuestionApi.CurrentQuestion.QuestionId, selectedAnswerId, answerButton));
     }
 
-    IEnumerator PostSubmitAnswer(string questionId, string selectAnswerId)
+    // ReSharper disable Unity.PerformanceAnalysis
+    IEnumerator PostSubmitAnswer(string questionId, string selectAnswerId, Button answerButton)
     {
         string uri = "http://localhost:6000/api/questions/submit-answer";
         var requestBody = new
         {
-            username = "kingchen2",
+            username = StaticData.Username,
             questionId = questionId,
             selectAnswerId = selectAnswerId
         };
@@ -71,6 +72,7 @@ public class SubmitAnswer : MonoBehaviour
                     else
                     {
                         Debug.Log("Đáp án không chính xác");
+                        StartCoroutine(FlashButtonRed(answerButton));
                         TimeCounter.TimePenalty();
                     }
                 }
@@ -80,8 +82,16 @@ public class SubmitAnswer : MonoBehaviour
                 }
             }
         }
-        
     }
+
+    private IEnumerator FlashButtonRed(Button button)
+    {
+        Color originalColor = button.image.color;
+        button.image.color = Color.red;
+        yield return new WaitForSeconds(2);
+        button.image.color = originalColor;
+    }
+
     public void ResetAnswerButtons()
     {
         Button[] answerButtons = { answerA, answerB, answerC, answerD };
@@ -90,6 +100,7 @@ public class SubmitAnswer : MonoBehaviour
             button.interactable = true;
         }
     }
+
     private class SubmitAnswerResponse
     {
         public int KeyDigit { get; set; }

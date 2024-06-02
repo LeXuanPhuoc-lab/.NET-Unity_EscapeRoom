@@ -59,6 +59,9 @@ public class Call_Question_API : MonoBehaviour
         {
             HideQuestionScreen();
         }
+
+        // Update time if the question screen is active
+        TimeCounter.Instance.UpdateTime();
     }
 
     public void ShowQuestionScreen(GameObject item)
@@ -72,7 +75,7 @@ public class Call_Question_API : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username=kingchen2", item));
+            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username={StaticData.Username}", item));
         }
     }
 
@@ -188,8 +191,9 @@ public class Call_Question_API : MonoBehaviour
         answerC.gameObject.SetActive(false);
         answerD.gameObject.SetActive(false);
     }
+
     public void MarkQuestionAsAnswered(string questionID, int? keyDigit)
     {
-        questionAnsweredCorrectly[questionID] =keyDigit;
+        questionAnsweredCorrectly[questionID] = keyDigit;
     }
 }

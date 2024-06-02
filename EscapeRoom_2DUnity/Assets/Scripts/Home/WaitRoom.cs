@@ -15,7 +15,8 @@ namespace Home
         [SerializeField] private TMP_Text totalPlayerText;
         [SerializeField] private TMP_Text totalReadyText;
         [SerializeField] private TMP_Text durationText;
-        [SerializeField] private GameObject startGameButton;
+        [SerializeField] private GameObject startGameButtonObject;
+        [SerializeField] private GameObject readyButtonObject;
         [SerializeField] private Button readyButton;
         [SerializeField] private TMP_Text readyButtonText;
         // [SerializeField] private TMP_Text outRoomButton;
@@ -48,7 +49,13 @@ namespace Home
 
             if (!_isHost)
             {
-                startGameButton.SetActive(false);
+                startGameButtonObject.SetActive(false);
+                readyButtonObject.SetActive(true);
+            }
+            else
+            {
+                startGameButtonObject.SetActive(true);
+                readyButtonObject.SetActive(false);
             }
         }
 

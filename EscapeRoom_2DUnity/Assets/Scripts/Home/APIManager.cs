@@ -56,12 +56,62 @@ namespace Home
 
             return response.Data;
         }
+        
+        public async Task<bool> LoginAsync(LoginBody body)
+        {
+            Debug.Log(4);
+            var requestBody = JsonConvert.SerializeObject(body, _serializerSettings);
 
-        public async Task<GameSessionDto> FindRoomAsync(string username)
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.PostAsync(
+                "http://localhost:6000/api/sign-in",
+                new StringContent(requestBody, Encoding.UTF8, "application/json"));
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> RegisterAsync(LoginBody body)
+        {
+            Debug.Log(4);
+            var requestBody = JsonConvert.SerializeObject(body, _serializerSettings);
+
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.PostAsync(
+                "http://localhost:6000/api/register",
+                new StringContent(requestBody, Encoding.UTF8, "application/json"));
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return false;
+            }
+
+            return true;
+        }
+        
+        public async Task<GameSessionDto> FindRoomAsync()
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.GetAsync(
-                $"http://localhost:6000/api/players/{username}/room");
+                $"http://localhost:6000/api/players/{StaticData.Username}/room");
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -80,11 +130,11 @@ namespace Home
             return response.Data;
         }
 
-        public async Task<bool> OutRoomAsync(string username)
+        public async Task<bool> OutRoomAsync()
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.DeleteAsync(
-                $"http://localhost:6000/api/players/{username}/room");
+                $"http://localhost:6000/api/players/{StaticData.Username}/room");
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -101,14 +151,14 @@ namespace Home
             return true;
         }
 
-        public async Task<bool> ReadyAsync(string username)
+        public async Task<bool> ReadyAsync()
         {
             Debug.Log(20);
             var requestBody = JsonConvert.SerializeObject(new(), _serializerSettings);
             var httpClient = new HttpClient();
             Debug.Log(30);
             var httpResponseMessage = await httpClient.PutAsync(
-                $"http://localhost:6000/api/players/{username}/room/ready",
+                $"http://localhost:6000/api/players/{StaticData.Username}/room/ready",
                 new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
             Debug.Log(40);
@@ -133,14 +183,14 @@ namespace Home
             return true;
         }
 
-        public async Task<bool> StartRoomAsync(string username)
+        public async Task<bool> StartRoomAsync()
         {
             Debug.Log(20);
             var requestBody = JsonConvert.SerializeObject(new(), _serializerSettings);
             var httpClient = new HttpClient();
             Debug.Log(30);
             var httpResponseMessage = await httpClient.PutAsync(
-                $"http://localhost:6000/api/players/{username}/room/start",
+                $"http://localhost:6000/api/players/{StaticData.Username}/room/start",
                 new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
             Debug.Log(40);
@@ -167,6 +217,12 @@ namespace Home
     }
     // Define a class to represent the JSON data
 
+    [System.Serializable]
+    public class LoginBody
+    {
+        public string Username { get; set; } = null!;
+        public string Password { get; set; } = null!;
+    }
 
     [System.Serializable]
     public class CreateRoomResponse

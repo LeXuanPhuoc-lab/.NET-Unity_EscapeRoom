@@ -17,10 +17,5 @@ public class RegisterValidator : AbstractValidator<RegisterRequest>
             .NotNull()
             .NotEmpty()
             .WithMessage("Chưa nhập mật khẩu kìa (¬‿¬)");
-        RuleFor(x => x.Email)
-            // Only apply email format whenever email is not empty
-            .NotEmpty().When(x => x.Email != null)
-            .EmailAddress()
-            .WithMessage("Wrong email format");
     }
 }

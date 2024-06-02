@@ -1,19 +1,23 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using TMPro;
 public class QuestionTrigger : MonoBehaviour
 {
     private Call_Question_API questionAPI;
     private HintTrigger hintTrigger;
     private bool isPlayerNear = false;
-
+    public GameObject textGuide;
+    
     void Start()
     {
         // Find the Call_Question_API script in the scene
         questionAPI = FindObjectOfType<Call_Question_API>();
         // Find the HintTrigger script in the scene
         hintTrigger = FindObjectOfType<HintTrigger>();
+        
+        textGuide.SetActive(false);
+        
     }
 
     void Update()
@@ -38,6 +42,7 @@ public class QuestionTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNear = true;
+            textGuide.SetActive(true);
         }
     }
 
@@ -46,6 +51,7 @@ public class QuestionTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNear = false;
+            textGuide.SetActive(false);
         }
     }
 }

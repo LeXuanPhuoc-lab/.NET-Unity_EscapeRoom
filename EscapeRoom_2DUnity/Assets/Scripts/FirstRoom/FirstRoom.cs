@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SignalR.Client;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,9 @@ namespace FirstRoom
     {
         [SerializeField] private TMP_Text remainTimeText;
 
+        private HubConnection _connection;
+        private const string ServerAddress = "https://localhost:7000";
+        
         void Start()
         {
             Debug.Log($"MH1: Counter: {StaticData.RemainTime}");

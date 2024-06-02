@@ -228,6 +228,7 @@ namespace Home
     public class GameSessionDto
     {
         public int SessionId { get; set; }
+        
         public string SessionName { get; set; }
 
         public TimeSpan StartTime { get; set; }

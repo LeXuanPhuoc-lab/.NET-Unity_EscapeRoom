@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Unlock : MonoBehaviour
 {
@@ -83,6 +84,7 @@ public class Unlock : MonoBehaviour
             collisionCollider.isTrigger = true;
             collisionCollider.tag = "Passed";
             HideUI();
+            SceneManager.LoadScene("RF Castle/Scenes/MH2");
         }
         else
         {

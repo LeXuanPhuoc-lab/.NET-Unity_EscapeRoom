@@ -48,6 +48,7 @@ public class QuestionTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        Debug.Log("Bye bye :>");
         if (other.CompareTag("Player"))
         {
             isPlayerNear = false;

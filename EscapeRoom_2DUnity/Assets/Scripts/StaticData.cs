@@ -5,5 +5,5 @@ using UnityEngine;
 public class StaticData : MonoBehaviour
 {
     public static float RemainTime = 5 * 60;
-    public static string Username = "test";
+    public static string Username = "kingchen";
 }

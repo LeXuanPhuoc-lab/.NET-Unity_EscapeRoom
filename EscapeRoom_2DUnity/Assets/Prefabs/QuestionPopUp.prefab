@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4025277889279295128}
   - component: {fileID: 8256832777575493446}
-  - component: {fileID: 8644959554249125296}
   m_Layer: 0
   m_Name: QuestionPopUp
   m_TagString: Untagged
@@ -53,21 +52,5 @@ MonoBehaviour:
   imageBackground: {fileID: 0}
   questionScreen: {fileID: 0}
   player: {fileID: 0}
---- !u!114 &8644959554249125296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6615270449103864071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8c0cd975897d0a46a3642e93c1dadef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  answerA: {fileID: 0}
-  answerB: {fileID: 0}
-  answerC: {fileID: 0}
-  answerD: {fileID: 0}
-  callQuestionApi: {fileID: 8256832777575493446}
-  hintTrigger: {fileID: 0}
+  correctSound: {fileID: 0}
+  incorrectSound: {fileID: 0}

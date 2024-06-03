@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Models;
+using UnityEngine;
 using Newtonsoft.Json;
 using TMPro;
-using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
@@ -16,8 +16,7 @@ public class Call_Question_API : MonoBehaviour
         public string QuestionDesc { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
         public int? KeyDigit { get; set; }
-        public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; } =
-            new List<QuestionAnswer>();
+        public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; } = new List<QuestionAnswer>();
     }
 
     public class QuestionAnswer
@@ -32,29 +31,16 @@ public class Call_Question_API : MonoBehaviour
         public T Data { get; set; }
     }
 
-    [SerializeField]
-    private TMP_Text text;
-
-    [SerializeField]
-    private Button answerA;
-
-    [SerializeField]
-    private Button answerB;
-
-    [SerializeField]
-    private Button answerC;
-
-    [SerializeField]
-    private Button answerD;
-
-    [SerializeField]
-    private RawImage imageBackground;
-
-    [SerializeField]
-    private GameObject questionScreen;
-
-    [SerializeField]
-    private GameObject player;
+    [SerializeField] private TMP_Text text;
+    [SerializeField] private Button answerA;
+    [SerializeField] private Button answerB;
+    [SerializeField] private Button answerC;
+    [SerializeField] private Button answerD;
+    [SerializeField] private RawImage imageBackground;
+    [SerializeField] private GameObject questionScreen;
+    [SerializeField] private GameObject player;
+    [SerializeField] public AudioSource correctSound; // Add this line
+    [SerializeField] public AudioSource incorrectSound; // Add this line
 
     public int? digitKey;
     public static bool isQuestionScreenActive = false;
@@ -88,12 +74,7 @@ public class Call_Question_API : MonoBehaviour
         }
         else
         {
-            StartCoroutine(
-                GetRequest(
-                    $"http://localhost:6000/api/questions/hard-level?username={StaticData.Username}",
-                    item
-                )
-            );
+            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username={StaticData.Username}", item));
         }
     }
 
@@ -110,10 +91,8 @@ public class Call_Question_API : MonoBehaviour
         {
             yield return webRequest.SendWebRequest();
 
-            if (
-                webRequest.result == UnityWebRequest.Result.ConnectionError
-                || webRequest.result == UnityWebRequest.Result.DataProcessingError
-            )
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
+                webRequest.result == UnityWebRequest.Result.DataProcessingError)
             {
                 Debug.LogError("Error: " + webRequest.error);
             }
@@ -152,8 +131,7 @@ public class Call_Question_API : MonoBehaviour
         player.GetComponent<Player.Player>().enabled = false;
 
         // Allow re-selection of answers
-        FindObjectOfType<SubmitAnswer>()
-            .ResetAnswerButtons();
+        FindObjectOfType<SubmitAnswer>().ResetAnswerButtons();
     }
 
     IEnumerator LoadImage(string url)

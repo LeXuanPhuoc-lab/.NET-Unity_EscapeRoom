@@ -30,7 +30,6 @@ public class SubmitAnswer : MonoBehaviour
         StartCoroutine(PostSubmitAnswer(callQuestionApi.CurrentQuestion.QuestionId, selectedAnswerId, answerButton));
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
     IEnumerator PostSubmitAnswer(string questionId, string selectAnswerId, Button answerButton)
     {
         string uri = "http://localhost:6000/api/questions/submit-answer";
@@ -68,12 +67,13 @@ public class SubmitAnswer : MonoBehaviour
                         callQuestionApi.MarkQuestionAsAnswered(callQuestionApi.CurrentQuestion.QuestionId, baseResponse.Data.KeyDigit);
                         callQuestionApi.HideQuestionScreen();
                         hintTrigger.ShowHint(baseResponse.Data.KeyDigit);
+                        callQuestionApi.correctSound.Play(); // Play correct sound
                     }
                     else
                     {
                         Debug.Log("Đáp án không chính xác");
-                        StartCoroutine(FlashButtonRed(answerButton));
                         TimeCounter.TimePenalty();
+                        StartCoroutine(ShowIncorrectAnswer(answerButton));
                     }
                 }
                 else
@@ -84,12 +84,13 @@ public class SubmitAnswer : MonoBehaviour
         }
     }
 
-    private IEnumerator FlashButtonRed(Button button)
+    IEnumerator ShowIncorrectAnswer(Button answerButton)
     {
-        Color originalColor = button.image.color;
-        button.image.color = Color.red;
+        Color originalColor = answerButton.image.color;
+        answerButton.image.color = Color.red;
+        callQuestionApi.incorrectSound.Play(); // Play incorrect sound
         yield return new WaitForSeconds(2);
-        button.image.color = originalColor;
+        answerButton.image.color = originalColor;
     }
 
     public void ResetAnswerButtons()

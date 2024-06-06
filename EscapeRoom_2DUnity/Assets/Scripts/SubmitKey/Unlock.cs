@@ -16,6 +16,9 @@ public class Unlock : MonoBehaviour
     [SerializeField] private Button sendButton;
     [SerializeField] float destroyDelay = 0.5f;
     [SerializeField] private GameObject uiPanel;
+    [SerializeField] private GameObject errorMessage;
+    [SerializeField] public AudioSource correctSound; // Add this line
+    [SerializeField] public AudioSource incorrectSound;
     private Collider2D collisionCollider;
     private bool isUiVisible = false;
 
@@ -43,6 +46,7 @@ public class Unlock : MonoBehaviour
 
     private void Start()
     {
+        errorMessage.SetActive(false);
         uiPanel.SetActive(false);
         // Add listener to the button to call SendData when clicked
         sendButton.onClick.AddListener(OnSendButtonClick);
@@ -81,14 +85,18 @@ public class Unlock : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("Response: " + request.downloadHandler.text);
+            correctSound.Play();
             collisionCollider.isTrigger = true;
             collisionCollider.tag = "Passed";
             HideUI();
-            SceneManager.LoadScene("RF Castle/Scenes/MH2");
+            SceneManager.LoadScene("RF Castle/Scenes/Quang");
         }
         else
         {
             Debug.Log("Error: " + request.error);
+            incorrectSound.Play();
+            errorMessage.SetActive(true);
+            StartCoroutine(HideErrorMessageAfterDelay(5.0f));
         }
     }
 
@@ -131,5 +139,10 @@ public class Unlock : MonoBehaviour
         {
             Debug.LogError("UI Panel is not assigned.");
         }
+    }
+    private IEnumerator HideErrorMessageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        errorMessage.SetActive(false);
     }
 }

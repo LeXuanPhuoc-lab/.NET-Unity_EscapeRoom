@@ -80,9 +80,11 @@ public class StartRoomHub : Hub
         // Total ready players
         var totalReadyPlayers = await _context.PlayerGameSessions.CountAsync(x => 
             x.SessionId == playerGameSession.SessionId && x.IsReady);
+        // Game session id
+        var gameSessionId = playerGameSession.SessionId;
 
         if (totalPlayerInSession > 0) 
             await Clients.All.SendAsync("OnTriggerInWaitingRoomProcessed", 
-                totalPlayerInSession, sessionPlayerCap, totalReadyPlayers);
+                totalPlayerInSession, sessionPlayerCap, totalReadyPlayers, gameSessionId);
     }
 }

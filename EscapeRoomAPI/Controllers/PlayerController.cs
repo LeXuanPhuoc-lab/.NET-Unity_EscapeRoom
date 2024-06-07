@@ -415,12 +415,12 @@ public class PlayerController : ControllerBase
                 .ToListAsync();
 
             // To start game, at least 2 players
-            if (listPlayerSession.Count < 1)
+            if (listPlayerSession.Count < 0)
             {
                 return BadRequest(new BaseResponse
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Yêu cầu ít nhất 2 người chơi để bắt đầu"
+                    Message = "Yêu cầu ít nhất 1 người chơi để bắt đầu"
                 });
             }
 

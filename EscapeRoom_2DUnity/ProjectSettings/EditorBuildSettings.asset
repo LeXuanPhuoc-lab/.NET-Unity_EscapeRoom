@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/RF Castle/Scenes/MH1.unity
     guid: 33bdbd238a138964ca20818cbe403fcb
+  - enabled: 1
+    path: Assets/RF Castle/Scenes/Quang.unity
+    guid: 37252d9e0d83c054d9d04d774fbcc6a7
   m_configObjects: {}

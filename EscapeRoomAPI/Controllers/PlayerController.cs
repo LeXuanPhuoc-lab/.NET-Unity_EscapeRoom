@@ -33,16 +33,10 @@ public class PlayerController : ControllerBase
     [HttpPost(APIRoutes.Players.CreateRoom, Name = nameof(CreateRoomAsync))]
     public async Task<IActionResult> CreateRoomAsync([FromBody] CreateRoomRequest reqObj)
     {
-        Console.WriteLine("client data");
-        Console.WriteLine(reqObj.Username);
-        Console.WriteLine(reqObj.RoomName);
-        Console.WriteLine(reqObj.TotalPlayer);
-        Console.WriteLine(reqObj.EndTimeToMinute);
         // Process register validation 
         var validationResult = await reqObj.ValidateAsync(_serviceProvider);
         if (validationResult is not null) // Invoke errors
         {
-            Console.WriteLine(validationResult.Errors);
             return BadRequest(new BaseResponse
             {
                 StatusCode = StatusCodes.Status400BadRequest,
@@ -79,6 +73,12 @@ public class PlayerController : ControllerBase
 
         // Create game session
         var gameSessionEntity = _mapper.Map<GameSession>(reqObj.ToGameSessionDto());
+        // Get all existing sessionCode
+        var existingCodes = await _context.GameSessions.Select(x => x.SessionCode).ToListAsync();
+        // Generate game session code 
+        var gameSessionCode = SessionHelper.GenerateUniqueSessionCode(existingCodes);
+        // Assign to game session
+        gameSessionEntity.SessionCode = gameSessionCode; 
         // Add user to game session
         gameSessionEntity.PlayerGameSessions.Add(new PlayerGameSession
         {
@@ -136,8 +136,8 @@ public class PlayerController : ControllerBase
             .Include(gs => gs.PlayerGameSessions)
             .FirstOrDefaultAsync(gs =>
                 gs.IsWaiting // Game session not started yet
-                && gs.PlayerGameSessions.Count <
-                gs.TotalPlayer); // Not full (less than total player || enough for one more)
+             && gs.IsPublic == true // Game session must be public
+             && gs.PlayerGameSessions.Count < gs.TotalPlayer); // Not full (less than total player || enough for one more)
 
         if (gameSession is null)
             return NotFound(
@@ -179,7 +179,7 @@ public class PlayerController : ControllerBase
             })
             : Problem("Có lỗi xảy ra", null, StatusCodes.Status500InternalServerError);
     }
-
+    
     [HttpDelete(APIRoutes.Players.OutRoom, Name = nameof(OutRoomAsync))]
     public async Task<IActionResult> OutRoomAsync([FromRoute] string username)
     {

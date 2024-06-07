@@ -166,10 +166,17 @@ namespace Home
                     }
                 });
 
-                _connection.On<int, int, int>("OnTriggerInWaitingRoomProcessed",
-                    (totalPlayerInSession, sessionPlayerCap, totalReadyPlayers) =>
+                _connection.On<int, int, int, int>("OnTriggerInWaitingRoomProcessed",
+                    (totalPlayerInSession, sessionPlayerCap, totalReadyPlayers, gameSessionId) =>
                     {
-                        waitRoom.ProcessFindOrReadyUpdate(totalPlayerInSession, sessionPlayerCap, totalReadyPlayers);
+                        if (gameSession is not null)
+                        {
+                            // Only process start game for users in same room with host user
+                            if (gameSession.SessionId == gameSessionId)
+                            {
+                                waitRoom.ProcessFindOrReadyUpdate(totalPlayerInSession, sessionPlayerCap, totalReadyPlayers);
+                            }
+                        }
                     });
 
                 // Start 

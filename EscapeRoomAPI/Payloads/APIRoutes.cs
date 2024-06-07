@@ -45,4 +45,14 @@ public class APIRoutes
         // [GET]
         public const string ShowLeaderboard = Base + "/leaderboard";
     }
+
+    public static class GameSessions
+    {
+        // [GET]
+        public const string JoinByCode = Base + "/game-sessions/code";
+        // [GET]
+        public const string JoinGameSession = Base + "/game-sessions/{sessionId}";
+        // [GET]
+        public const string RetrieveList = Base + "/game-sessions";
+    }
 }

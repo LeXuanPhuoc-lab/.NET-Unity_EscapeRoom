@@ -9,6 +9,7 @@ public class CreateRoomRequest
     public string RoomName { get; set; } = string.Empty;
     public int TotalPlayer { get; set; }
     public int EndTimeToMinute { get; set; }
+    public bool IsPublic { get; set; } = true;
 }
 
 public static class CreateRoomResponseExtension
@@ -23,6 +24,7 @@ public static class CreateRoomResponseExtension
             SessionName = reqObj.RoomName,
             IsEnd = false,
             IsWaiting = true,
+            IsPublic = reqObj.IsPublic,
             TotalPlayer = reqObj.TotalPlayer,
             StartTime = TimeSpan.Zero,
             EndTime = TimeSpan.FromMinutes(reqObj.EndTimeToMinute),

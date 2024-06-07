@@ -39,6 +39,8 @@ public class StartRoomHub : Hub
                         .Include(x => x.Session)
                     .FirstOrDefaultAsync(x => x.PlayerId.Equals(player.PlayerId));
 
+        if (playerGameSession is null) return;
+
         // Process edit game session status
         if (_context.Entry(playerGameSession.Session).State == EntityState.Detached)
         {

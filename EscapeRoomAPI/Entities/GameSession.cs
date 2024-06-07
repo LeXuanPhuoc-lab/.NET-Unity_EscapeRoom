@@ -11,6 +11,8 @@ public partial class GameSession
 
     public string SessionName { get; set; }
 
+    public string SessionCode { get; set; }
+
     public TimeSpan StartTime { get; set; }
 
     public TimeSpan EndTime { get; set; }
@@ -20,6 +22,8 @@ public partial class GameSession
     public bool IsWaiting { get; set; }
 
     public bool IsEnd { get; set; }
+
+    public bool? IsPublic { get; set; }
 
     public string Hint { get; set; }
 

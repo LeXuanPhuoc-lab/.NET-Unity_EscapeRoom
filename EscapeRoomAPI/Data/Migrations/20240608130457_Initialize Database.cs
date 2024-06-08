@@ -18,18 +18,18 @@ namespace EscapeRoomAPI.Data.Migrations
                     SessionId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SessionName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    SessionCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    SessionCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     TotalPlayer = table.Column<int>(type: "int", nullable: false),
                     IsWaiting = table.Column<bool>(type: "bit", nullable: false),
                     IsEnd = table.Column<bool>(type: "bit", nullable: false),
-                    IsPublic = table.Column<bool>(type: "bit", nullable: true),
+                    IsPublic = table.Column<bool>(type: "bit", nullable: false),
                     Hint = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__GameSess__C9F49290FB8C60D6", x => x.SessionId);
+                    table.PrimaryKey("PK__GameSess__C9F492901B46D757", x => x.SessionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,7 +47,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Player__3213E83F4347761C", x => x.id);
+                    table.PrimaryKey("PK__Player__3213E83FCAD2F2D2", x => x.id);
                     table.UniqueConstraint("AK_Player_PlayerId", x => x.PlayerId);
                 });
 
@@ -65,7 +65,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Question__3213E83F406A6A02", x => x.id);
+                    table.PrimaryKey("PK__Question__3213E83F75227A3C", x => x.id);
                     table.UniqueConstraint("AK_Question_QuestionId", x => x.QuestionId);
                 });
 
@@ -81,7 +81,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Leaderbo__91D4421493D00BC0", x => x.LeaderBoardId);
+                    table.PrimaryKey("PK__Leaderbo__91D442149723193C", x => x.LeaderBoardId);
                     table.ForeignKey(
                         name: "FK_Leaderboard_PlayerId",
                         column: x => x.PlayerId,
@@ -105,7 +105,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__PlayerGa__5D5075DCDD5F45CC", x => new { x.SessionId, x.PlayerId });
+                    table.PrimaryKey("PK__PlayerGa__5D5075DCB278F05E", x => new { x.SessionId, x.PlayerId });
                     table.ForeignKey(
                         name: "FK_PlayerGameSession_PlayerId",
                         column: x => x.PlayerId,
@@ -131,7 +131,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Question__3213E83F3EFFC6F3", x => x.id);
+                    table.PrimaryKey("PK__Question__3213E83FFE50928A", x => x.id);
                     table.UniqueConstraint("AK_QuestionAnswer_QuestionAnswerId", x => x.QuestionAnswerId);
                     table.ForeignKey(
                         name: "FK_QuestionAnswer_QuestionId",
@@ -154,7 +154,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__PlayerGa__3213E83F4F401746", x => x.id);
+                    table.PrimaryKey("PK__PlayerGa__3213E83F4FCA4DD2", x => x.id);
                     table.ForeignKey(
                         name: "FK_PlayerGameAnswer_PlayerId",
                         column: x => x.PlayerId,
@@ -188,19 +188,13 @@ namespace EscapeRoomAPI.Data.Migrations
                 column: "SessionId");
 
             migrationBuilder.CreateIndex(
-                name: "AK_Player_PlayerId",
+                name: "UQ__Player__4A4E74C95FB65E42",
                 table: "Player",
                 column: "PlayerId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Player__4A4E74C9B7D270D4",
-                table: "Player",
-                column: "PlayerId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "UQ__Player__536C85E4DBC68C1A",
+                name: "UQ__Player__536C85E4025B578D",
                 table: "Player",
                 column: "Username",
                 unique: true);
@@ -231,21 +225,9 @@ namespace EscapeRoomAPI.Data.Migrations
                 column: "PlayerId");
 
             migrationBuilder.CreateIndex(
-                name: "AK_Question_QuestionId",
+                name: "UQ__Question__0DC06FADEAB8E116",
                 table: "Question",
                 column: "QuestionId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "UQ__Question__0DC06FAD6C8FB79C",
-                table: "Question",
-                column: "QuestionId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "AK_QuestionAnswer_QuestionAnswerId",
-                table: "QuestionAnswer",
-                column: "QuestionAnswerId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -254,7 +236,7 @@ namespace EscapeRoomAPI.Data.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "UQ__Question__86BEDFCE4C0C15DA",
+                name: "UQ__Question__86BEDFCE7B684988",
                 table: "QuestionAnswer",
                 column: "QuestionAnswerId",
                 unique: true);

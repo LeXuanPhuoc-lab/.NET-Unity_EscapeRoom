@@ -23,7 +23,7 @@ public partial class GameSession
 
     public bool IsEnd { get; set; }
 
-    public bool? IsPublic { get; set; }
+    public bool IsPublic { get; set; }
 
     public string Hint { get; set; }
 

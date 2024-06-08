@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EscapeRoomAPI.Data.Migrations
 {
     [DbContext(typeof(EscapeRoomUnityContext))]
-    [Migration("20240607023437_Initialize Database")]
+    [Migration("20240608130457_Initialize Database")]
     partial class InitializeDatabase
     {
         /// <inheritdoc />
@@ -43,13 +43,14 @@ namespace EscapeRoomAPI.Data.Migrations
                     b.Property<bool>("IsEnd")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsPublic")
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsWaiting")
                         .HasColumnType("bit");
 
                     b.Property<string>("SessionCode")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -64,7 +65,7 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("SessionId")
-                        .HasName("PK__GameSess__C9F49290FB8C60D6");
+                        .HasName("PK__GameSess__C9F492901B46D757");
 
                     b.ToTable("GameSession", (string)null);
                 });
@@ -89,11 +90,11 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("LeaderBoardId")
-                        .HasName("PK__Leaderbo__91D4421493D00BC0");
+                        .HasName("PK__Leaderbo__91D442149723193C");
 
-                    b.HasIndex(new[] { "PlayerId" }, "IX_Leaderboard_PlayerId");
+                    b.HasIndex("PlayerId");
 
-                    b.HasIndex(new[] { "SessionId" }, "IX_Leaderboard_SessionId");
+                    b.HasIndex("SessionId");
 
                     b.ToTable("Leaderboard", (string)null);
                 });
@@ -135,15 +136,12 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Player__3213E83F4347761C");
+                        .HasName("PK__Player__3213E83FCAD2F2D2");
 
-                    b.HasIndex(new[] { "PlayerId" }, "AK_Player_PlayerId")
+                    b.HasIndex(new[] { "PlayerId" }, "UQ__Player__4A4E74C95FB65E42")
                         .IsUnique();
 
-                    b.HasIndex(new[] { "PlayerId" }, "UQ__Player__4A4E74C9B7D270D4")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "Username" }, "UQ__Player__536C85E4DBC68C1A")
+                    b.HasIndex(new[] { "Username" }, "UQ__Player__536C85E4025B578D")
                         .IsUnique();
 
                     b.ToTable("Player", (string)null);
@@ -180,15 +178,15 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id")
-                        .HasName("PK__PlayerGa__3213E83F4F401746");
+                        .HasName("PK__PlayerGa__3213E83F4FCA4DD2");
 
-                    b.HasIndex(new[] { "PlayerId" }, "IX_PlayerGameAnswer_PlayerId");
+                    b.HasIndex("PlayerId");
 
-                    b.HasIndex(new[] { "QuestionId" }, "IX_PlayerGameAnswer_QuestionId");
+                    b.HasIndex("QuestionId");
 
-                    b.HasIndex(new[] { "SelectAnswerId" }, "IX_PlayerGameAnswer_SelectAnswerId");
+                    b.HasIndex("SelectAnswerId");
 
-                    b.HasIndex(new[] { "SessionId" }, "IX_PlayerGameAnswer_SessionId");
+                    b.HasIndex("SessionId");
 
                     b.ToTable("PlayerGameAnswer", (string)null);
                 });
@@ -209,9 +207,9 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("SessionId", "PlayerId")
-                        .HasName("PK__PlayerGa__5D5075DCDD5F45CC");
+                        .HasName("PK__PlayerGa__5D5075DCB278F05E");
 
-                    b.HasIndex(new[] { "PlayerId" }, "IX_PlayerGameSession_PlayerId");
+                    b.HasIndex("PlayerId");
 
                     b.ToTable("PlayerGameSession", (string)null);
                 });
@@ -247,12 +245,9 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasDefaultValueSql("(CONVERT([nvarchar](36),newid()))");
 
                     b.HasKey("Id")
-                        .HasName("PK__Question__3213E83F406A6A02");
+                        .HasName("PK__Question__3213E83F75227A3C");
 
-                    b.HasIndex(new[] { "QuestionId" }, "AK_Question_QuestionId")
-                        .IsUnique();
-
-                    b.HasIndex(new[] { "QuestionId" }, "UQ__Question__0DC06FAD6C8FB79C")
+                    b.HasIndex(new[] { "QuestionId" }, "UQ__Question__0DC06FADEAB8E116")
                         .IsUnique();
 
                     b.ToTable("Question", (string)null);
@@ -286,14 +281,11 @@ namespace EscapeRoomAPI.Data.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Question__3213E83F3EFFC6F3");
+                        .HasName("PK__Question__3213E83FFE50928A");
 
-                    b.HasIndex(new[] { "QuestionAnswerId" }, "AK_QuestionAnswer_QuestionAnswerId")
-                        .IsUnique();
+                    b.HasIndex("QuestionId");
 
-                    b.HasIndex(new[] { "QuestionId" }, "IX_QuestionAnswer_QuestionId");
-
-                    b.HasIndex(new[] { "QuestionAnswerId" }, "UQ__Question__86BEDFCE4C0C15DA")
+                    b.HasIndex(new[] { "QuestionAnswerId" }, "UQ__Question__86BEDFCE7B684988")
                         .IsUnique();
 
                     b.ToTable("QuestionAnswer", (string)null);

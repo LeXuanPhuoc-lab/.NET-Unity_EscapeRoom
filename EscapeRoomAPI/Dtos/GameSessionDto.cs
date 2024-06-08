@@ -6,7 +6,7 @@ public class GameSessionDto
     
     public string? SessionName { get; set; } = string.Empty;
     
-    public string? SessionCode { get; set; } = string.Empty;
+    public string SessionCode { get; set; } = string.Empty;
     
     public TimeSpan StartTime { get; set; }
 

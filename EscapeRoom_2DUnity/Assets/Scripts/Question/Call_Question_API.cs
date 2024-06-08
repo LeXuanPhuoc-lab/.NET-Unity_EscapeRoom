@@ -53,6 +53,8 @@ public class Call_Question_API : MonoBehaviour
     void Start()
     {
         questionScreen.SetActive(false);
+
+        Debug.Log("Current Username: " + StaticData.Username);
     }
 
     void Update()
@@ -74,7 +76,7 @@ public class Call_Question_API : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/hard-level?username={StaticData.Username}", item));
+            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/normal-level?username={StaticData.Username}", item));
         }
     }
 

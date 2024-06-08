@@ -67,7 +67,7 @@ public class Unlock : MonoBehaviour
     {
         string username = StaticData.Username;
         string key = string.Concat(value1, value2, value3, value4);
-        string isHard = "true";
+        string isHard = "false";
 
         string url = $"http://localhost:6000/api/players/{username}/room/unclock/{key}?isHard={isHard}";
         Debug.Log("Request URL: " + url);

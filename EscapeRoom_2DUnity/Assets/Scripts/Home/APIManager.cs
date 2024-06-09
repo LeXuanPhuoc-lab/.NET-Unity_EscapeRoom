@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
@@ -56,7 +57,71 @@ namespace Home
 
             return response.Data;
         }
-        
+
+        public async Task<GameSessionDto> JoinRoomByCodeAsync(string roomCode)
+        {
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.GetAsync(
+                $"http://localhost:6000/api/game-sessions/code?username={StaticData.Username}&sessionCode={roomCode}");
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return null;
+            }
+
+            return response.Data;
+        }
+
+        public async Task<GameSessionDto> JoinRoomBySelectAsync(int sessionId)
+        {
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.GetAsync(
+                $"http://localhost:6000/api/game-sessions/{sessionId}?username={StaticData.Username}");
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response);
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return null;
+            }
+
+            return response.Data;
+        }
+
+        public async Task<List<GameSessionDto>> GetRoomsAsync()
+        {
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.GetAsync(
+                $"http://localhost:6000/api/game-sessions");
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<GetRoomsResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return new List<GameSessionDto>();
+            }
+
+            return response.Data;
+        }
+
         public async Task<bool> LoginAsync(LoginBody body)
         {
             Debug.Log(4);
@@ -106,8 +171,8 @@ namespace Home
 
             return true;
         }
-        
-        public async Task<GameSessionDto> FindRoomAsync()
+
+        public async Task<GameSessionDto> FindRandomRoomAsync()
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.GetAsync(
@@ -234,6 +299,15 @@ namespace Home
         public IDictionary<string, string[]> Errors = null!;
     }
 
+    public class GetRoomsResponse
+    {
+        public int StatusCode { get; set; }
+        public string Message { get; set; } = null!;
+        [ItemCanBeNull] public List<GameSessionDto> Data { get; set; } = null!;
+        public bool IsSuccess { get; set; }
+        public IDictionary<string, string[]> Errors = null!;
+    }
+
 
     [System.Serializable]
     public class CreateRoomBody
@@ -242,6 +316,8 @@ namespace Home
         public string RoomName { get; set; } = null!;
         public int TotalPlayer { get; set; }
         public int EndTimeToMinute { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 
     [System.Serializable]
@@ -284,17 +360,12 @@ namespace Home
     public class GameSessionDto
     {
         public int SessionId { get; set; }
-        
         public string SessionName { get; set; }
-
+        public string SessionCode { get; set; }
         public TimeSpan StartTime { get; set; }
-
         public TimeSpan EndTime { get; set; }
-
         public int TotalPlayer { get; set; }
-
         public bool IsWaiting { get; set; }
-
         public bool IsEnd { get; set; }
         public string Hint { get; set; } = string.Empty;
 

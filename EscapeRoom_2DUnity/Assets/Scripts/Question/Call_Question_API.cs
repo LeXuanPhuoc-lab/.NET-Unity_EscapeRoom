@@ -25,7 +25,7 @@ public class Call_Question_API : MonoBehaviour
         public string Answer { get; set; } = string.Empty;
     }
 
-    public class BaseResponse<T>
+    public class BaseResponse2<T>
     {
         public int StatusCode { get; set; }
         public T Data { get; set; }

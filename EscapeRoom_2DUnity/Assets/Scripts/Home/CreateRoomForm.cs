@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Home
 {
@@ -10,6 +11,7 @@ namespace Home
         [SerializeField] private TMP_InputField roomName;
         [SerializeField] private TMP_InputField totalPlayer;
         [SerializeField] private TMP_InputField endTimeToMinute;
+        [SerializeField] private Toggle isPrivate;
 
         public void ResetInputs()
         {
@@ -42,7 +44,8 @@ namespace Home
                 Username = StaticData.Username,
                 TotalPlayer = int.Parse(totalPlayerValue),
                 RoomName = roomNameValue,
-                EndTimeToMinute = int.Parse(endTimeToMinuteValue)
+                EndTimeToMinute = int.Parse(endTimeToMinuteValue),
+                IsPublic = !isPrivate.isOn
             });
         }
     }

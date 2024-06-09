@@ -100,3 +100,5 @@ crashlytics-build.properties
 
 # ScriptableObject types
 .vscode/
+
+firebase.json

@@ -25,7 +25,7 @@ public class GameSessionController : ControllerBase
     //  Summary:
     //      This function use to access private session only    
     [HttpGet(APIRoutes.GameSessions.JoinByCode, Name = nameof(JoinByCodeAsync))]
-    public async Task<IActionResult> JoinByCodeAsync([FromQuery] string sessionCode, 
+    public async Task<IActionResult> JoinByCodeAsync([FromQuery] string sessionCode,
         [FromQuery] string username)
     {
         // Check exist player 
@@ -55,16 +55,16 @@ public class GameSessionController : ControllerBase
         }
 
         // Check exist game session by code
-        var gameSession = await _context.GameSessions  
-                // Include player game-sessions serve for loading waiting room
-                .Include(x => x.PlayerGameSessions)
-                    // Retrieve player info 
-                    .ThenInclude(x => x.Player)
-                // With condition: same session code
-                .FirstOrDefaultAsync(x => x.SessionCode.Equals(sessionCode));
+        var gameSession = await _context.GameSessions
+            // Include player game-sessions serve for loading waiting room
+            .Include(x => x.PlayerGameSessions)
+            // Retrieve player info 
+            .ThenInclude(x => x.Player)
+            // With condition: same session code
+            .FirstOrDefaultAsync(x => x.SessionCode.Equals(sessionCode));
 
         // Not exist game session
-        if(gameSession is null)
+        if (gameSession is null)
         {
             return NotFound(new BaseResponse
             {
@@ -97,7 +97,7 @@ public class GameSessionController : ControllerBase
     //  Summary:
     //      This function handling click join game from list of session
     [HttpGet(APIRoutes.GameSessions.JoinGameSession, Name = nameof(JoinGameSessionAsync))]
-    public async Task<IActionResult> JoinGameSessionAsync([FromRoute] int sessionId, 
+    public async Task<IActionResult> JoinGameSessionAsync([FromRoute] int sessionId,
         [FromQuery] string username)
     {
         // Check exist player 
@@ -128,12 +128,12 @@ public class GameSessionController : ControllerBase
 
         // Check exist game session by code
         var gameSession = await _context.GameSessions
-                // Include player game-sessions serve for loading waiting room
-                .Include(x => x.PlayerGameSessions)
-                    // Retrieve player info 
-                    .ThenInclude(x => x.Player)
-                // With condition: same session code
-                .FirstOrDefaultAsync(x => x.SessionId == sessionId);
+            // Include player game-sessions serve for loading waiting room
+            .Include(x => x.PlayerGameSessions)
+            // Retrieve player info 
+            .ThenInclude(x => x.Player)
+            // With condition: same session code
+            .FirstOrDefaultAsync(x => x.SessionId == sessionId);
 
         // Not exist game session
         if (gameSession is null)
@@ -143,7 +143,8 @@ public class GameSessionController : ControllerBase
                 StatusCode = StatusCodes.Status404NotFound,
                 Message = $"Tham gia phòng chơi thất bại"
             });
-        }else if(gameSession.IsPublic == false)
+        }
+        else if (gameSession.IsPublic == false)
         {
             return BadRequest(new BaseResponse
             {
@@ -168,6 +169,7 @@ public class GameSessionController : ControllerBase
         // Retrieve game session successfully
         return Ok(new BaseResponse
         {
+            IsSuccess = true,
             StatusCode = StatusCodes.Status200OK,
             Message = "Tham gia phòng chơi thành công",
             Data = _mapper.Map<GameSessionDto>(gameSession)
@@ -180,11 +182,11 @@ public class GameSessionController : ControllerBase
     public async Task<IActionResult> RetrieveListAsync()
     {
         var gameSessions = await _context.GameSessions
-                // Include game session to count total player already joined room
-                .Include(x => x.PlayerGameSessions)
-                    //.ThenInclude(x => x.Player) -> It's unnecessary to get player
-                // With conditions: game is not end yet, still waiting for other players and is public
-                .Where(x => !x.IsEnd && x.IsWaiting && x.IsPublic == true).ToListAsync();
+            // Include game session to count total player already joined room
+            .Include(x => x.PlayerGameSessions)
+            //.ThenInclude(x => x.Player) -> It's unnecessary to get player
+            // With conditions: game is not end yet, still waiting for other players and is public
+            .Where(x => !x.IsEnd && x.IsWaiting && x.IsPublic == true).ToListAsync();
 
         // Not found any game session
         if (!gameSessions.Any())
@@ -199,6 +201,7 @@ public class GameSessionController : ControllerBase
         // Retrieve collection of game sessions successfully
         return Ok(new BaseResponse
         {
+            IsSuccess = true,
             StatusCode = StatusCodes.Status200OK,
             Message = "Tìm thấy phòng thành công",
             Data = _mapper.Map<List<GameSessionDto>>(gameSessions)

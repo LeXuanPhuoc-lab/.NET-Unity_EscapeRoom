@@ -56,7 +56,28 @@ namespace Home
 
             return response.Data;
         }
-        
+
+        public async Task<GameSessionDto> JoinRoomAsync(string roomCode)
+        {
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.GetAsync(
+                $"http://localhost:6000/api/game-sessions/code?username={StaticData.Username}&sessionCode={roomCode}");
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return null;
+            }
+
+            return response.Data;
+        }
+
         public async Task<bool> LoginAsync(LoginBody body)
         {
             Debug.Log(4);
@@ -106,8 +127,8 @@ namespace Home
 
             return true;
         }
-        
-        public async Task<GameSessionDto> FindRoomAsync()
+
+        public async Task<GameSessionDto> FindRandomRoomAsync()
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.GetAsync(
@@ -284,7 +305,7 @@ namespace Home
     public class GameSessionDto
     {
         public int SessionId { get; set; }
-        
+
         public string SessionName { get; set; }
 
         public TimeSpan StartTime { get; set; }

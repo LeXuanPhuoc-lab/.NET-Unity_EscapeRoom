@@ -44,6 +44,18 @@ namespace Home
                 homeCanvas.ShowObject("WaitRoom");
             }
         }
+        
+        public async void JoinRoom(string roomCode)
+        {
+            gameSession = await APIManager.Instance.JoinRoomAsync(roomCode);
+
+            if (gameSession is not null)
+            {
+                waitRoom.ResetReadyButton();
+                waitRoom.UpdateStates();
+                homeCanvas.ShowObject("WaitRoom");
+            }
+        }
 
         public async void Login(LoginBody requestBody)
         {
@@ -72,9 +84,9 @@ namespace Home
             await _connection.InvokeAsync("InvokeFindOrReadyOrExistAsync", StaticData.Username);
         }
 
-        public async void FindRoom()
+        public async void FindRandomRoom()
         {
-            gameSession = await APIManager.Instance.FindRoomAsync();
+            gameSession = await APIManager.Instance.FindRandomRoomAsync();
 
             if (gameSession is not null)
             {

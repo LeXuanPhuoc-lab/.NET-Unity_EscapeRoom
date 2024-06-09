@@ -28,7 +28,7 @@ namespace Home
         }
         
         private void OnEnable() {
-            HomeManager.Instance.ConnnectSignalRServer();    
+            HomeManager.Instance.ConnectSignalRServer();    
         }
 
         public void UpdateStates()

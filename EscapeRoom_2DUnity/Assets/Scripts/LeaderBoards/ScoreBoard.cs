@@ -85,7 +85,7 @@ namespace ScoreBoard {
 *
 */
                     // Giải mã JSON thành BaseResponse<List<ScoreBoardEntryData>>
-                    var responseParam = JsonConvert.DeserializeObject <BaseResponse<List<LeaderBoardResponse>>>(json);
+                    var responseParam = JsonConvert.DeserializeObject<BaseResponse<List<LeaderBoardResponse>>>(json);
 
                     // Kiểm tra nếu phản hồi thành công và có dữ liệu
                     if (responseParam.StatusCode == 200 && responseParam.Data != null)

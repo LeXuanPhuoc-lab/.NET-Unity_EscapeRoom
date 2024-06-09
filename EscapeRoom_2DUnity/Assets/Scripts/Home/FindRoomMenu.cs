@@ -1,13 +1,16 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Home
 {
     public class FindRoomMenu : MonoBehaviour
     {
-        [SerializeField] private TMP_InputField roomCode;
-        // [Serializable] private TMP_
+        [SerializeField] private TMP_InputField roomCodeInput;
+        [SerializeField] public GameObject roomItemPrefab;
+        public Transform scrollView;
 
         private void OnEnable()
         {
@@ -16,7 +19,19 @@ namespace Home
 
         private async void GenerateRoomLists()
         {
-            
+            var roomList = await HomeManager.Instance.GetRooms();
+
+            foreach (var room in roomList)
+            {
+                var newRoomItem = Instantiate(roomItemPrefab, scrollView);
+                newRoomItem.GetComponentInChildren<TMP_Text>().text = room.SessionName;
+                newRoomItem.GetComponent<Button>().onClick.AddListener(() => HandleJoinRoomBySelect(room.SessionId));
+            }
+        }
+
+        private void HandleJoinRoomBySelect(int sessionId)
+        {
+            HomeManager.Instance.JoinRoomBySelect(sessionId);
         }
 
         public void HandleFindRandomRoom()
@@ -26,14 +41,14 @@ namespace Home
 
         public void HandleJoinRoom()
         {
-            var roomCodeValue = roomCode.text;
+            var roomCodeInputValue = roomCodeInput.text;
 
-            if (string.IsNullOrEmpty(roomCodeValue))
+            if (string.IsNullOrEmpty(roomCodeInputValue))
             {
                 return;
             }
 
-            HomeManager.Instance.JoinRoom(roomCodeValue);
+            HomeManager.Instance.JoinRoomByCode(roomCodeInputValue);
         }
     }
 }

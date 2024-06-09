@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
@@ -57,7 +58,7 @@ namespace Home
             return response.Data;
         }
 
-        public async Task<GameSessionDto> JoinRoomAsync(string roomCode)
+        public async Task<GameSessionDto> JoinRoomByCodeAsync(string roomCode)
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.GetAsync(
@@ -73,6 +74,49 @@ namespace Home
                 Debug.Log(response.Message);
                 HomeManager.Instance.ShowError(response.Message);
                 return null;
+            }
+
+            return response.Data;
+        }
+
+        public async Task<GameSessionDto> JoinRoomBySelectAsync(int sessionId)
+        {
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.GetAsync(
+                $"http://localhost:6000/api/game-sessions/{sessionId}?username={StaticData.Username}");
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<CreateRoomResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response);
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return null;
+            }
+
+            return response.Data;
+        }
+
+        public async Task<List<GameSessionDto>> GetRoomsAsync()
+        {
+            var httpClient = new HttpClient();
+            var httpResponseMessage = await httpClient.GetAsync(
+                $"http://localhost:6000/api/game-sessions");
+
+            var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var response = JsonConvert.DeserializeObject<GetRoomsResponse>(serializedResponseBody);
+
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                Debug.Log("Error");
+                Debug.Log(response.Message);
+                HomeManager.Instance.ShowError(response.Message);
+                return new List<GameSessionDto>();
             }
 
             return response.Data;
@@ -251,6 +295,15 @@ namespace Home
         public int StatusCode { get; set; }
         public string Message { get; set; } = null!;
         public GameSessionDto Data { get; set; } = null!;
+        public bool IsSuccess { get; set; }
+        public IDictionary<string, string[]> Errors = null!;
+    }
+
+    public class GetRoomsResponse
+    {
+        public int StatusCode { get; set; }
+        public string Message { get; set; } = null!;
+        [ItemCanBeNull] public List<GameSessionDto> Data { get; set; } = null!;
         public bool IsSuccess { get; set; }
         public IDictionary<string, string[]> Errors = null!;
     }

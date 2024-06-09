@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using UnityEngine;
@@ -44,10 +45,27 @@ namespace Home
                 homeCanvas.ShowObject("WaitRoom");
             }
         }
-        
-        public async void JoinRoom(string roomCode)
+
+        public async Task<List<GameSessionDto>> GetRooms()
         {
-            gameSession = await APIManager.Instance.JoinRoomAsync(roomCode);
+            return await APIManager.Instance.GetRoomsAsync();
+        }
+
+        public async void JoinRoomByCode(string roomCode)
+        {
+            gameSession = await APIManager.Instance.JoinRoomByCodeAsync(roomCode);
+
+            if (gameSession is not null)
+            {
+                waitRoom.ResetReadyButton();
+                waitRoom.UpdateStates();
+                homeCanvas.ShowObject("WaitRoom");
+            }
+        }
+
+        public async void JoinRoomBySelect(int sessionId)
+        {
+            gameSession = await APIManager.Instance.JoinRoomBySelectAsync(sessionId);
 
             if (gameSession is not null)
             {
@@ -186,7 +204,8 @@ namespace Home
                             // Only process start game for users in same room with host user
                             if (gameSession.SessionId == gameSessionId)
                             {
-                                waitRoom.ProcessFindOrReadyUpdate(totalPlayerInSession, sessionPlayerCap, totalReadyPlayers);
+                                waitRoom.ProcessFindOrReadyUpdate(totalPlayerInSession, sessionPlayerCap,
+                                    totalReadyPlayers);
                             }
                         }
                     });

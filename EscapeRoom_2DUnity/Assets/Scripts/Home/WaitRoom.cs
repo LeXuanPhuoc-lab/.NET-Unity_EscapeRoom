@@ -12,6 +12,7 @@ namespace Home
     public class WaitRoom : MonoBehaviour
     {
         [SerializeField] private TMP_Text roomText;
+        [SerializeField] private TMP_Text roomCodeText;
         [SerializeField] private TMP_Text totalPlayerText;
         [SerializeField] private TMP_Text totalReadyText;
         [SerializeField] private TMP_Text durationText;
@@ -23,18 +24,21 @@ namespace Home
 
         private bool _isHost;
 
-        private void Awake() {
+        private void Awake()
+        {
             Debug.Log("Awake in wait room");
         }
-        
-        private void OnEnable() {
-            HomeManager.Instance.ConnectSignalRServer();    
+
+        private void OnEnable()
+        {
+            HomeManager.Instance.ConnectSignalRServer();
         }
 
         public void UpdateStates()
         {
             Debug.Log("UpdateStates");
             roomText.text = $"Room: {HomeManager.Instance.gameSession.SessionName}";
+            roomCodeText.text = $"Code: {HomeManager.Instance.gameSession.SessionCode}";
             totalPlayerText.text =
                 $"Total Player: {HomeManager.Instance.gameSession.PlayerGameSessions.Count()}/{HomeManager.Instance.gameSession.TotalPlayer}";
             totalReadyText.text = $"Total Ready: 0/{HomeManager.Instance.gameSession.TotalPlayer}";
@@ -78,25 +82,28 @@ namespace Home
             HomeManager.Instance.Ready();
         }
 
-        public void SetButtonTextColor(string hexColor)
+        private void SetButtonTextColor(string hexColor)
         {
             if (UnityEngine.ColorUtility.TryParseHtmlString(hexColor, out Color newColor))
-                {
-                    readyButton.image.color = newColor;
-                }
-                else
-                {
-                    Debug.LogError("Invalid hex color code");
-                }
+            {
+                readyButton.image.color = newColor;
+            }
+            else
+            {
+                Debug.LogError("Invalid hex color code");
+            }
         }
-        
+
         public void HandleReadySuccess()
         {
             // readyButton.interactable = false;
-            if(readyButtonText.text == "You are ready"){
+            if (readyButtonText.text == "You are ready")
+            {
                 readyButtonText.text = "Ready";
                 SetButtonTextColor("#FFF200");
-            }else{
+            }
+            else
+            {
                 readyButtonText.text = "You are ready";
                 SetButtonTextColor("#08F300");
             }

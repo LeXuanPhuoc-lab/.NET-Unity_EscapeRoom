@@ -263,6 +263,8 @@ namespace Home
         public string RoomName { get; set; } = null!;
         public int TotalPlayer { get; set; }
         public int EndTimeToMinute { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 
     [System.Serializable]
@@ -305,17 +307,12 @@ namespace Home
     public class GameSessionDto
     {
         public int SessionId { get; set; }
-
         public string SessionName { get; set; }
-
+        public string SessionCode { get; set; }
         public TimeSpan StartTime { get; set; }
-
         public TimeSpan EndTime { get; set; }
-
         public int TotalPlayer { get; set; }
-
         public bool IsWaiting { get; set; }
-
         public bool IsEnd { get; set; }
         public string Hint { get; set; } = string.Empty;
 

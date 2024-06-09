@@ -2421,15 +2421,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1091777795}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 013f6b536ac0b6a4f9873764681c7d84, type: 3}
+  m_Script: {fileID: 11500000, guid: 3dc57d2a8dbb1014fb200885818bf53d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Input1: {fileID: 2117083453}
-  Input2: {fileID: 2117083452}
-  Input3: {fileID: 2117083451}
-  Input4: {fileID: 2117083450}
+  input1: {fileID: 2117083453}
+  input2: {fileID: 2117083452}
+  input3: {fileID: 2117083451}
+  input4: {fileID: 2117083450}
   sendButton: {fileID: 2117083449}
-  destroyDelay: 0.5
   uiPanel: {fileID: 2117083448}
   errorMessage: {fileID: 197354692}
   correctSound: {fileID: 1587318452}

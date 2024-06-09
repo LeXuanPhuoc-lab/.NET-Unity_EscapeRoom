@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace SubmitKeys
 {
-    public class Unlock : MonoBehaviour
+    public class UnlockHard : MonoBehaviour
     {
         [SerializeField] private TMP_InputField input1; // Part of the Key 1
         [SerializeField] private TMP_InputField input2; // Part of the Key 2
@@ -42,6 +42,16 @@ namespace SubmitKeys
             {
                 uiPanel.SetActive(false);
             }
+
+            if (collision.CompareTag("NextRoom"))
+            {
+                // Log a message to the console
+                Debug.Log("Unlock scenes");
+
+                // Set the isTrigger property to false for the collided object's collider
+                SceneManager.LoadScene("RF Castle/Scenes/Quang");
+
+            }
         }
 
         private void Start()
@@ -67,7 +77,7 @@ namespace SubmitKeys
         {
             string username = StaticData.Username;
             string key = string.Concat(value1, value2, value3, value4);
-            string isHard = "false";
+            string isHard = "true";
 
             string url = $"http://localhost:6000/api/players/{username}/room/unclock/{key}?isHard={isHard}";
             Debug.Log("Request URL: " + url);

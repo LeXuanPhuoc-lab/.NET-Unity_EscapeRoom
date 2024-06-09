@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6874351738667623395}
   - component: {fileID: 1474782648802248577}
   - component: {fileID: 3862473706968542836}
-  - component: {fileID: 7324466261652914424}
   m_Layer: 0
   m_Name: SubmitKey
   m_TagString: Unlock
@@ -131,21 +130,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.011567, y: 1.6447855}
   m_EdgeRadius: 0
---- !u!114 &7324466261652914424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7493682783743991705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dc57d2a8dbb1014fb200885818bf53d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Input1: {fileID: 0}
-  Input2: {fileID: 0}
-  Input3: {fileID: 0}
-  Input4: {fileID: 0}
-  sendButton: {fileID: 0}
-  uiPanel: {fileID: 0}

@@ -119,6 +119,8 @@ namespace Home
 
         private async Task ProcessStartRoom()
         {
+
+            
             await _connection.InvokeAsync("InvokeStartAsync", StaticData.Username);
         }
 
@@ -186,6 +188,7 @@ namespace Home
                         {
                             StaticData.RemainTime = (float)endTime;
                             Debug.Log(1000);
+                            // Hm nay loi r H, mai hoi lai V xem vi connection vs call thanh cong ma k chuyen sceene
                             UnityMainThreadDispatcher.Instance().Enqueue(() =>
                             {
                                 SceneManager.LoadScene("RF Castle/Scenes/MH1");

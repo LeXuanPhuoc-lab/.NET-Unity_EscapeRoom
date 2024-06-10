@@ -55,6 +55,8 @@ namespace Home
                 return null;
             }
 
+            StaticData.KeyOder = response.Data.Hint;
+
             return response.Data;
         }
 
@@ -316,6 +318,7 @@ namespace Home
         public string RoomName { get; set; } = null!;
         public int TotalPlayer { get; set; }
         public int EndTimeToMinute { get; set; }
+        public string Hint { get; set; }
 
         public bool IsPublic { get; set; }
     }

@@ -1,20 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoadScenes : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Check if the collided object has the tag "NextRoom" and if the UI is not visible
-        if (collision.CompareTag("NextRoom"))
+        // Check if the collided object has the tag "GoToNhaRoom"
+        if (collision.CompareTag("GoToNhaRoom"))
         {
-            // Log a message to the console
-            Debug.Log("Unlock here");
-
-            // Set the isTrigger property to false for the collided object's collider
-            collision.isTrigger = false;
-
+            SceneManager.LoadScene("RF Castle/Scenes/MH2");
+        }if (collision.CompareTag("NextRoom"))
+        {
+            SceneManager.LoadScene("RF Castle/Scenes/Quang");
+        }
+        else
+        {
+            Debug.Log("cannot find the tag of the objects");
         }
     }
 }

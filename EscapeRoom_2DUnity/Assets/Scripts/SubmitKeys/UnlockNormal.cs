@@ -26,7 +26,7 @@ public class UnlockNormal : MonoBehaviour
         {
             Debug.Log("Unlock here");
 
-            // ??t isTrigger thành true cho collider c?a ??i t??ng va ch?m
+            // ??t isTrigger thï¿½nh true cho collider c?a ??i t??ng va ch?m
             collision.isTrigger = false;
 
             _collisionCollider = collision;
@@ -87,6 +87,7 @@ public class UnlockNormal : MonoBehaviour
             _collisionCollider.isTrigger = true;
             _collisionCollider.tag = "Passed";
             HideUI();
+            StaticData.CurrentScreen = "";
             SceneManager.LoadScene("RF Castle/Scenes/Quang");
         }
         else

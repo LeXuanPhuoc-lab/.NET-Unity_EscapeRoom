@@ -25,7 +25,7 @@ public class Call_Question_API : MonoBehaviour
         public string Answer { get; set; } = string.Empty;
     }
 
-    public class BaseResponse2<T>
+    public class BaseResponse<T>
     {
         public int StatusCode { get; set; }
         public T Data { get; set; }
@@ -39,8 +39,8 @@ public class Call_Question_API : MonoBehaviour
     [SerializeField] private RawImage imageBackground;
     [SerializeField] private GameObject questionScreen;
     [SerializeField] private GameObject player;
-    [SerializeField] public AudioSource correctSound; // Add this line
-    [SerializeField] public AudioSource incorrectSound; // Add this line
+    [SerializeField] public AudioSource correctSound;
+    [SerializeField] public AudioSource incorrectSound;
 
     public int? digitKey;
     public static bool isQuestionScreenActive = false;
@@ -53,8 +53,8 @@ public class Call_Question_API : MonoBehaviour
     void Start()
     {
         questionScreen.SetActive(false);
-
         Debug.Log("Current Username: " + StaticData.Username);
+        Debug.Log("Current Screen: " + StaticData.CurrentScreen);
     }
 
     void Update()
@@ -76,7 +76,8 @@ public class Call_Question_API : MonoBehaviour
         }
         else
         {
-            StartCoroutine(GetRequest($"http://localhost:6000/api/questions/normal-level?username={StaticData.Username}", item));
+            string apiUrl = GetApiUrl();
+            StartCoroutine(GetRequest(apiUrl, item));
         }
     }
 
@@ -116,6 +117,18 @@ public class Call_Question_API : MonoBehaviour
                     DisplayQuestion(question);
                 }
             }
+        }
+    }
+
+    string GetApiUrl()
+    {
+        if (StaticData.CurrentScreen != "MH1")
+        {
+            return $"http://localhost:6000/api/questions/hard-level?username={StaticData.Username}";
+        }
+        else
+        {
+            return $"http://localhost:6000/api/questions/normal-level?username={StaticData.Username}";
         }
     }
 

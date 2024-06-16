@@ -40,7 +40,7 @@ namespace Home
             newRoomItem.GetComponent<Button>().onClick.AddListener(() => HandleJoinRoomBySelect(room.SessionId));
             newRoomItem.GetComponent<Button>().gameObject.SetActive(true);
             var childCount = scrollView.childCount;
-            newRoomItem.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f * childCount + 496);
+            newRoomItem.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -100f * childCount + 92);
             scrollView.sizeDelta = new Vector2(scrollView.sizeDelta.x, 100 * childCount);
         }
 

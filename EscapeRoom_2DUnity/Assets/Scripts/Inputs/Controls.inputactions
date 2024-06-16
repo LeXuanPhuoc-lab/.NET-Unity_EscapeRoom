@@ -182,6 +182,34 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "Escape",
+            "id": "29199f8f-f2ac-4f22-8863-1c7e881f5db1",
+            "actions": [
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "256d9564-d086-491c-a913-3f8fd0124834",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1b227fb0-1be5-4d7d-a1e6-d5df309ab98a",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,6 +14,10 @@ namespace Home
         {
             errorMessage.text = "";
             ShowObject("LoginForm");
+            if (StaticData.Username != String.Empty)
+            {
+                ShowObject("MainButtons");
+            }
         }
 
 
@@ -26,7 +31,7 @@ namespace Home
         {
             errorMessage.text = string.Empty;
         }
-        
+
         public void ShowObject(string objectName)
         {
             errorMessage.text = "";

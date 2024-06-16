@@ -204,6 +204,34 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Escape"",
+            ""id"": ""29199f8f-f2ac-4f22-8863-1c7e881f5db1"",
+            ""actions"": [
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""256d9564-d086-491c-a913-3f8fd0124834"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1b227fb0-1be5-4d7d-a1e6-d5df309ab98a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -211,6 +239,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
+        // Escape
+        m_Escape = asset.FindActionMap("Escape", throwIfNotFound: true);
+        m_Escape_Escape = m_Escape.FindAction("Escape", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -314,8 +345,58 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         }
     }
     public MovementActions @Movement => new MovementActions(this);
+
+    // Escape
+    private readonly InputActionMap m_Escape;
+    private List<IEscapeActions> m_EscapeActionsCallbackInterfaces = new List<IEscapeActions>();
+    private readonly InputAction m_Escape_Escape;
+    public struct EscapeActions
+    {
+        private @Controls m_Wrapper;
+        public EscapeActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Escape => m_Wrapper.m_Escape_Escape;
+        public InputActionMap Get() { return m_Wrapper.m_Escape; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EscapeActions set) { return set.Get(); }
+        public void AddCallbacks(IEscapeActions instance)
+        {
+            if (instance == null || m_Wrapper.m_EscapeActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_EscapeActionsCallbackInterfaces.Add(instance);
+            @Escape.started += instance.OnEscape;
+            @Escape.performed += instance.OnEscape;
+            @Escape.canceled += instance.OnEscape;
+        }
+
+        private void UnregisterCallbacks(IEscapeActions instance)
+        {
+            @Escape.started -= instance.OnEscape;
+            @Escape.performed -= instance.OnEscape;
+            @Escape.canceled -= instance.OnEscape;
+        }
+
+        public void RemoveCallbacks(IEscapeActions instance)
+        {
+            if (m_Wrapper.m_EscapeActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IEscapeActions instance)
+        {
+            foreach (var item in m_Wrapper.m_EscapeActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_EscapeActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public EscapeActions @Escape => new EscapeActions(this);
     public interface IMovementActions
     {
         void OnMove(InputAction.CallbackContext context);
+    }
+    public interface IEscapeActions
+    {
+        void OnEscape(InputAction.CallbackContext context);
     }
 }

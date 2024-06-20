@@ -39,7 +39,7 @@ namespace ScoreBoard {
             SaveScore(saveScore);
             Debug.Log("Fetching leaderboard...");
 
-            List<ScoreBoardEntryData> leaderboard = await getLeaderBoardAsync("phuoc");
+            List<ScoreBoardEntryData> leaderboard = await getLeaderBoardAsync(StaticData.Username);
 
             if (leaderboard != null)
             {

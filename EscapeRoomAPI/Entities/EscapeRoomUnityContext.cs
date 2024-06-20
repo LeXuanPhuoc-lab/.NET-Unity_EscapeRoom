@@ -36,7 +36,8 @@ public partial class EscapeRoomUnityContext : DbContext
     {
         IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.json", true, true)
+            .AddJsonFile("appsettings.Docker.json", false, true)
             .Build();
         return config.GetConnectionString("DefaultDB");
     }

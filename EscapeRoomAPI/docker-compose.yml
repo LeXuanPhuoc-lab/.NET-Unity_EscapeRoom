@@ -1,0 +1,11 @@
+services:
+  escape_room:
+    # networks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - 7001:8080

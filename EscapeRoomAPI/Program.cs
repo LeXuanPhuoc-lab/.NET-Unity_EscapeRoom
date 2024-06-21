@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using AutoMapper;
 using EscapeRoomAPI.Data;
 using EscapeRoomAPI.Entities;
@@ -61,11 +61,9 @@ builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
     policy.WithOrigins("*")
           .AllowAnyHeader()
           .SetIsOriginAllowed(_ => true)
-          .AllowAnyMethod();
+          .WithMethods("GET", "POST"); // Chỉ cho phép GET và POST
 }));
 
-// SignalR
-builder.Services.AddSignalR();
 
 var app = builder.Build();
 

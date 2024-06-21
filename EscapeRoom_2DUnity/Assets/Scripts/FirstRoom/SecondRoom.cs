@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.SignalR.Client;
 using TMPro;
 using UnityEngine;
 
 namespace FirstRoom
 {
-    public class FirstRoom : MonoBehaviour
+    public class SecondRoom : MonoBehaviour
     {
         [SerializeField] private TMP_Text remainTimeText;
 
@@ -18,7 +18,6 @@ namespace FirstRoom
 
         void Update()
         {
-            TimeCounter.Instance.UpdateTime();
             UpdateTimeText();
         }
 

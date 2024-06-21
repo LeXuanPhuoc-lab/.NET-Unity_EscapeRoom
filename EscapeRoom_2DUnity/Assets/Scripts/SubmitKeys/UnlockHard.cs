@@ -19,6 +19,9 @@ namespace SubmitKeys
         [SerializeField] private GameObject errorMessage;
         [SerializeField] public AudioSource correctSound; // Add this line
         [SerializeField] public AudioSource incorrectSound;
+
+        [SerializeField] public GameObject LeaderBoard;
+        
         private Collider2D _collisionCollider;
         private bool _isUiVisible;
 
@@ -52,6 +55,10 @@ namespace SubmitKeys
                 SceneManager.LoadScene("RF Castle/Scenes/Quang");
 
             }
+            if (collision.CompareTag("GoToNhaRoom"))
+            {
+                SceneManager.LoadScene("RF Castle/Scenes/MH2");
+            }
         }
 
         private void Start()
@@ -60,6 +67,7 @@ namespace SubmitKeys
             uiPanel.SetActive(false);
             // Add listener to the button to call SendData when clicked
             sendButton.onClick.AddListener(OnSendButtonClick);
+            LeaderBoard.SetActive(false);
         }
 
         public void OnSendButtonClick()
@@ -79,7 +87,7 @@ namespace SubmitKeys
             string key = string.Concat(value1, value2, value3, value4);
             string isHard = "true";
 
-            string url = $"http://localhost:6000/api/players/{username}/room/unclock/{key}?isHard={isHard}";
+            string url = $"https://escaperoom.ddnsking.com/api/players/{username}/room/unclock/{key}?isHard={isHard}";
             Debug.Log("Request URL: " + url);
             StartCoroutine(GetRequest(url));
         }
@@ -99,7 +107,7 @@ namespace SubmitKeys
                 _collisionCollider.isTrigger = true;
                 _collisionCollider.tag = "Passed";
                 HideUI();
-                SceneManager.LoadScene("RF Castle/Scenes/Quang");
+                LeaderBoard.SetActive(true);
             }
             else
             {

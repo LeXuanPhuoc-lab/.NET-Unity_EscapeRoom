@@ -32,7 +32,7 @@ public class SubmitAnswer : MonoBehaviour
 
     IEnumerator PostSubmitAnswer(string questionId, string selectAnswerId, Button answerButton)
     {
-        string uri = "http://localhost:6000/api/questions/submit-answer";
+        string uri = "https://escaperoom.ddnsking.com/api/questions/submit-answer";
         var requestBody = new
         {
             username = StaticData.Username,

@@ -57,7 +57,7 @@ namespace ScoreBoard {
 
         public async Task<List<ScoreBoardEntryData>> getLeaderBoardAsync(string usernamePlayer)
         {
-            using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://localhost:7000/api/leaderboard?username={usernamePlayer}"))
+            using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://escaperoom.ddnsking.com/api/leaderboard?username={usernamePlayer}"))
             {
                 // Gửi yêu cầu web
                 var operation = webRequest.SendWebRequest();

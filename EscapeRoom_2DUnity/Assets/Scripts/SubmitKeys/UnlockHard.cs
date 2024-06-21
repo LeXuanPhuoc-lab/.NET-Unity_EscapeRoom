@@ -87,7 +87,7 @@ namespace SubmitKeys
             string key = string.Concat(value1, value2, value3, value4);
             string isHard = "true";
 
-            string url = $"http://localhost:6000/api/players/{username}/room/unclock/{key}?isHard={isHard}";
+            string url = $"https://escaperoom.ddnsking.com/api/players/{username}/room/unclock/{key}?isHard={isHard}";
             Debug.Log("Request URL: " + url);
             StartCoroutine(GetRequest(url));
         }

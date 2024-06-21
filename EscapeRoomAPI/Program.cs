@@ -64,8 +64,6 @@ builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
           .AllowAnyMethod();
 }));
 
-// SignalR
-builder.Services.AddSignalR();
 
 var app = builder.Build();
 

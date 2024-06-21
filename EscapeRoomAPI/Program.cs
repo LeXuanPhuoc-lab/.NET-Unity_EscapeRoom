@@ -60,6 +60,7 @@ builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
 {
     policy.WithOrigins("*")
           .AllowAnyHeader()
+          .SetIsOriginAllowed(_ => true)
           .AllowAnyMethod();
 }));
 
@@ -84,10 +85,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("Cors");
+
+app.UseRouting();
+
 app.UseAuthorization();
 
-app.MapControllers();
-
 app.MapHub<StartRoomHub>("/start-room");
+app.MapControllers(); 
 
 app.Run();

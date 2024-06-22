@@ -5044,6 +5044,7 @@ MonoBehaviour:
   errorMessage: {fileID: 1619036043}
   correctSound: {fileID: 1450489754}
   incorrectSound: {fileID: 1450489755}
+  LeaderBoard: {fileID: 0}
 --- !u!114 &1102535319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8568,9 +8569,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1971342677}
-  - component: {fileID: 1971342676}
   - component: {fileID: 1971342678}
-  - component: {fileID: 1971342679}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -8578,19 +8577,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1971342676
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1971342675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec928fdfa5723204c82eb341e991baf4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveInput: {x: 0, y: 0}
 --- !u!4 &1971342677
 Transform:
   m_ObjectHideFlags: 0
@@ -8615,19 +8601,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1971342675}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e03728a38e980e44da629f8ee9c38f5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1971342679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1971342675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca6785970b1b4346bb6f3dd2a47ea687, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a4a912fe1a74606aa24e30a5767a5bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   remainTimeText: {fileID: 199039673}

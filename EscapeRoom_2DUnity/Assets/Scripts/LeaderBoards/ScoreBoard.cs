@@ -12,7 +12,6 @@ using Home;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEngine.SocialPlatforms.Impl;
-using SimpleJSON;
 using Assets.Scripts.Models;
 
 namespace ScoreBoard {

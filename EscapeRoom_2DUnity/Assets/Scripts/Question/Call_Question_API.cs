@@ -45,8 +45,8 @@ public class Call_Question_API : MonoBehaviour
     public int? digitKey;
     public static bool isQuestionScreenActive = false;
     private string currentItemID = string.Empty;
-    private Dictionary<string, Question> questionsDictionary = new Dictionary<string, Question>();
-    public Dictionary<string, int?> questionAnsweredCorrectly = new Dictionary<string, int?>();
+    private Dictionary<string, Question> questionsDictionary = StaticData.QuestionsDictionary;
+    public Dictionary<string, int?> questionAnsweredCorrectly = StaticData.QuestionAnsweredCorrectly;
 
     public Question CurrentQuestion { get; private set; }
 

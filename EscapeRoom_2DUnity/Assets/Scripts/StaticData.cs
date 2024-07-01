@@ -16,4 +16,5 @@ public class StaticData : MonoBehaviour
         new Dictionary<string, Call_Question_API.Question>();
 
     public static Dictionary<string, int?> QuestionAnsweredCorrectly = new Dictionary<string, int?>();
+    public static int TotalPlayer;
 }

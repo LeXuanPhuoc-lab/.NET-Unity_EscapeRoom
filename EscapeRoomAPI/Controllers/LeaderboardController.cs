@@ -51,7 +51,7 @@ public class LeaderboardController : ControllerBase
         // Check if leaderboard already create
         var existingLeaderboard = await _context.Leaderboards
                 .Include(x => x.Player)
-                .Where(x => x.SessionId == playerGameSession.SessionId) 
+                    .Where(x => x.SessionId == playerGameSession.SessionId) 
                 .ToListAsync();
 
         if (existingLeaderboard.Any())

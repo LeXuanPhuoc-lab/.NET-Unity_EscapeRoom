@@ -1,30 +1,17 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using ScoreBoard;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace ScoreBoard {
+public class ScoreBoardEntryUI : MonoBehaviour
+{
+    [SerializeField] private TextMeshProUGUI rankText;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
-    public class ScoreBoardEntryUI : MonoBehaviour
+    public void Initialise(ScoreBoardEntryData entryData, int rank)
     {
-
-        [SerializeField]
-        private TextMeshProUGUI TopText = null;
-        [SerializeField]
-        private TextMeshProUGUI entryNameText = null;
-        [SerializeField]
-        private TextMeshProUGUI entryScoreText = null;
-    
-     public void Initialise(ScoreBoardEntryData data)
-        {
-            TopText.text = data.Top.ToString();
-            entryNameText.text = data.entryName;
-            entryScoreText.text = data.entryScore.ToString();
-
-
-        }
+        rankText.text = rank.ToString();
+        nameText.text = entryData.entryName;
+        scoreText.text = entryData.entryScore.ToString();
     }
 }
-

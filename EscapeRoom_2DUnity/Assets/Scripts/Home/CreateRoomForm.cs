@@ -47,6 +47,7 @@ namespace Home
                 EndTimeToMinute = int.Parse(endTimeToMinuteValue),
                 IsPublic = !isPrivate.isOn
             });
+            StaticData.TotalPlayer = int.Parse(totalPlayer.text);
         }
     }
 }

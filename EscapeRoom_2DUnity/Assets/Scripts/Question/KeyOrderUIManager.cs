@@ -18,11 +18,11 @@ public class KeyOrderUIManager : MonoBehaviour
         {
             if (StaticData.KeyOder.Equals("Ascending"))
             {
-                keyOrderText.text = "a<b<c<d";
+                keyOrderText.text = "Trên một con đường quanh co, có những bậc thang dẫn lối. Mỗi bước bạn đi, số lượng bậc thang lại thêm một. Bạn đang bước trên con đường nào?";
             }
             else
             {
-                keyOrderText.text = "a>b>c>d";
+                keyOrderText.text = "Một dòng sông chảy êm đềm, nước từ thượng nguồn trôi xuống hạ lưu. Lượng nước giảm dần mỗi khi qua một trạm bơm. Bạn đang chứng kiến điều gì?";
             }
 
             keyOrderUI.SetActive(true); // Show the UI

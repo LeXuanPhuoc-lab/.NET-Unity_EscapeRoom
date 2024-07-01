@@ -52,7 +52,7 @@ public class StartRoomHub : Hub
 
         var result = await _context.SaveChangesAsync() > 0;  
 
-        if(result) await Clients.All.SendAsync("OnStartingProcessed", 
+        if(result) await Clients.All.SendAsync(" ", 
             true, 
             playerGameSession.Session.EndTime.TotalSeconds,
             playerGameSession.SessionId);

@@ -59,9 +59,9 @@ builder.Services.AddSingleton<IFirebaseService, FirebaseService>();
 builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
 {
     policy.WithOrigins("*")
-          .AllowAnyHeader()
-          .SetIsOriginAllowed(_ => true)
-          .AllowAnyMethod();
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(_ => true)
+        .AllowAnyMethod();
 }));
 
 

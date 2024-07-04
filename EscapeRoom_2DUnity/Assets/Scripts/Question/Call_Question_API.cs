@@ -124,11 +124,11 @@ public class Call_Question_API : MonoBehaviour
     {
         if (StaticData.CurrentScreen != "MH1")
         {
-            return $"https://escaperoom.ddnsking.com/api/questions/hard-level?username={StaticData.Username}";
+            return $"https://localhost:7000/api/questions/hard-level?username={StaticData.Username}";
         }
         else
         {
-            return $"https://escaperoom.ddnsking.com/api/questions/normal-level?username={StaticData.Username}";
+            return $"https://localhost:7000/api/questions/normal-level?username={StaticData.Username}";
         }
     }
 

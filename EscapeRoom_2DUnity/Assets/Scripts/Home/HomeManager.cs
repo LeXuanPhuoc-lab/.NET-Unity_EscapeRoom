@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,7 @@ namespace Home
         // public event Action RoomStarted;
 
         private HubConnection _connection;
-        private const string ServerAddress = "https://escaperoom.ddnsking.com";
+        private const string ServerAddress = "https://localhost:7000";
 
         [HideInInspector] public GameSessionDto gameSession;
         [SerializeField] private HomeCanvas homeCanvas;
@@ -120,7 +121,7 @@ namespace Home
         private async Task ProcessStartRoom()
         {
 
-            
+
             await _connection.InvokeAsync("InvokeStartAsync", StaticData.Username);
         }
 
@@ -213,9 +214,9 @@ namespace Home
                         }
                     });
 
-                // Start 
+                // Start        
                 await _connection.StartAsync();
-                Debug.Log("Connected with server");
+                StaticData.HubConnection = _connection;
             }
             catch (Exception e)
             {

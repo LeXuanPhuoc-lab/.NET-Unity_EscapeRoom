@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Microsoft.AspNetCore.SignalR.Client;
 
 public class StaticData : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class StaticData : MonoBehaviour
     public static string KeyOder = string.Empty;
     public static string SessionId = String.Empty;
     public static string PlayerId = string.Empty;
+    public static HubConnection HubConnection;
+    public static bool IsSessionDone;
 
     public static Dictionary<string, Call_Question_API.Question> QuestionsDictionary =
         new Dictionary<string, Call_Question_API.Question>();

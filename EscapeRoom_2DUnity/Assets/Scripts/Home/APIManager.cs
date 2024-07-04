@@ -40,7 +40,7 @@ namespace Home
 
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.PostAsync(
-                "https://escaperoom.ddnsking.com/api/players/room",
+                "https://localhost:7000/api/players/room",
                 new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -64,7 +64,7 @@ namespace Home
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.GetAsync(
-                $"https://escaperoom.ddnsking.com/api/game-sessions/code?username={StaticData.Username}&sessionCode={roomCode}");
+                $"https://localhost:7000/api/game-sessions/code?username={StaticData.Username}&sessionCode={roomCode}");
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -85,7 +85,7 @@ namespace Home
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.GetAsync(
-                $"https://escaperoom.ddnsking.com/api/game-sessions/{sessionId}?username={StaticData.Username}");
+                $"https://localhost:7000/api/game-sessions/{sessionId}?username={StaticData.Username}");
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -107,7 +107,7 @@ namespace Home
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.GetAsync(
-                $"https://escaperoom.ddnsking.com/api/game-sessions");
+                $"https://localhost:7000/api/game-sessions");
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -131,7 +131,7 @@ namespace Home
 
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.PostAsync(
-                "https://escaperoom.ddnsking.com/api/sign-in",
+                "https://localhost:7000/api/sign-in",
                 new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -156,7 +156,7 @@ namespace Home
 
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.PostAsync(
-                "https://escaperoom.ddnsking.com/api/register",
+                "https://localhost:7000/api/register",
                 new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -178,7 +178,7 @@ namespace Home
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.GetAsync(
-                $"https://escaperoom.ddnsking.com/api/players/{StaticData.Username}/room");
+                $"https://localhost:7000/api/players/{StaticData.Username}/room");
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -201,7 +201,7 @@ namespace Home
         {
             var httpClient = new HttpClient();
             var httpResponseMessage = await httpClient.DeleteAsync(
-                $"https://escaperoom.ddnsking.com/api/players/{StaticData.Username}/room");
+                $"https://localhost:7000/api/players/{StaticData.Username}/room");
 
             var serializedResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
 
@@ -225,7 +225,7 @@ namespace Home
             var httpClient = new HttpClient();
             Debug.Log(30);
             var httpResponseMessage = await httpClient.PutAsync(
-                $"https://escaperoom.ddnsking.com/api/players/{StaticData.Username}/room/ready",
+                $"https://localhost:7000/api/players/{StaticData.Username}/room/ready",
                 new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
             Debug.Log(40);
@@ -257,7 +257,7 @@ namespace Home
             var httpClient = new HttpClient();
             Debug.Log(30);
             var httpResponseMessage = await httpClient.PutAsync(
-                $"https://escaperoom.ddnsking.com/api/players/{StaticData.Username}/room/start",
+                $"https://localhost:7000/api/players/{StaticData.Username}/room/start",
                 new StringContent(requestBody, Encoding.UTF8, "application/json"));
 
             Debug.Log(40);

@@ -32,7 +32,7 @@ public class SubmitAnswer : MonoBehaviour
 
     IEnumerator PostSubmitAnswer(string questionId, string selectAnswerId, Button answerButton)
     {
-        string uri = "https://escaperoom.ddnsking.com/api/questions/submit-answer";
+        string uri = "https://localhost:7000/api/questions/submit-answer";
         var requestBody = new
         {
             username = StaticData.Username,
@@ -49,6 +49,7 @@ public class SubmitAnswer : MonoBehaviour
             webRequest.SetRequestHeader("Content-Type", "application/json");
 
             yield return webRequest.SendWebRequest();
+            Debug.Log(JsonConvert.SerializeObject(webRequest));
 
             if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
                 webRequest.result == UnityWebRequest.Result.DataProcessingError)

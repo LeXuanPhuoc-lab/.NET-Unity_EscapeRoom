@@ -2481,13 +2481,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6996634458192595263, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
+      propertyPath: m_fontSize
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996634458192595263, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8089721574780979404, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -614
+      value: -658
       objectReference: {fileID: 0}
     - target: {fileID: 8089721574780979404, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 371
+      value: 417
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

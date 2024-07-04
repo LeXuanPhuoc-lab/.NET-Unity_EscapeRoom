@@ -30791,7 +30791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4949827700728964742, guid: e215a537f75503ec686ef469075b8157, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 526.3986
+      value: 526.39856
       objectReference: {fileID: 0}
     - target: {fileID: 4949827700728964743, guid: e215a537f75503ec686ef469075b8157, type: 3}
       propertyPath: m_Layer
@@ -55569,6 +55569,22 @@ PrefabInstance:
     - target: {fileID: 6029618197469457085, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
       propertyPath: m_Name
       value: Canvas 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996634458192595263, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
+      propertyPath: m_fontSize
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996634458192595263, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8089721574780979404, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -652
+      objectReference: {fileID: 0}
+    - target: {fileID: 8089721574780979404, guid: 6bc408cfaa14f254f8af698cb65b1c31, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 408
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

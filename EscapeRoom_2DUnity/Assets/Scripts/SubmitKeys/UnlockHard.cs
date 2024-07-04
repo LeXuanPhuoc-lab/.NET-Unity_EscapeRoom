@@ -1,5 +1,9 @@
+using System;
 using System.Collections;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR.Client;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -26,10 +30,16 @@ namespace SubmitKeys
 
         private void Start()
         {
-            errorMessage.SetActive(false);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+            errorMessage.SetActive(false);
             uiPanel.SetActive(false);
             sendButton.onClick.AddListener(OnSendButtonClick);
             LeaderBoard.SetActive(false);
+
+            if (StaticData.IsSessionDone)
+            {
+                LeaderBoard.SetActive(true);
+                LeaderBoard.GetComponent<ScoreBoard.ScoreBoard>().LoadAndDisplayLeaderboard();
+            }
         }
 
         public void OnTriggerEnter2D(Collider2D collision)
@@ -74,7 +84,7 @@ namespace SubmitKeys
             string username = StaticData.Username;
             string key = string.Concat(value1, value2, value3, value4);
             string isHard = "true";
-            string url = $"https://escaperoom.ddnsking.com/api/players/{username}/room/unclock/{key}?isHard={isHard}";
+            string url = $"https://localhost:7000/api/players/{username}/room/unclock/{key}?isHard={isHard}";
             Debug.Log("Request URL: " + url);
             StartCoroutine(GetRequest(url));
         }
@@ -95,6 +105,28 @@ namespace SubmitKeys
                 HideUI();
                 LeaderBoard.SetActive(true);
                 LeaderBoard.GetComponent<ScoreBoard.ScoreBoard>().LoadAndDisplayLeaderboard(); // Load and display leaderboard
+
+                var hubConnection = StaticData.HubConnection;
+
+                if (hubConnection != null)
+                {
+                    // yield return new WaitForSeconds(5);
+                    Task invokeTask = hubConnection.InvokeAsync("InvokeLeaderBoard", StaticData.Username);
+                    yield return new WaitUntil(() => invokeTask.IsCompleted);
+
+                    if (invokeTask.IsFaulted)
+                    {
+                        Debug.LogError("SignalR InvokeLeaderBoard failed: " + invokeTask.Exception?.GetBaseException().Message);
+                    }
+                    else
+                    {
+                        Debug.Log("SignalR InvokeLeaderBoard called successfully.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("HubConnection is not initialized.");
+                }
             }
             else
             {

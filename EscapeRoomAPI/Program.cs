@@ -19,6 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 // Add DbContext
 builder.Services.AddDbContext<EscapeRoomUnityContext>(opt =>
 {
@@ -26,12 +27,12 @@ builder.Services.AddDbContext<EscapeRoomUnityContext>(opt =>
 });
 
 // Add FluentValidation
-builder.Services.AddTransient<IValidator<SignInRequest>, SignInValidator>();
-builder.Services.AddTransient<IValidator<RegisterRequest>, RegisterValidator>();
-builder.Services.AddTransient<IValidator<CreateRoomRequest>, CreateRoomValidator>();
-builder.Services.AddTransient<IValidator<IFormFile>, ImageFileValidator>();
+builder.Services.AddScoped<IValidator<SignInRequest>, SignInValidator>();
+builder.Services.AddScoped<IValidator<RegisterRequest>, RegisterValidator>();
+builder.Services.AddScoped<IValidator<CreateRoomRequest>, CreateRoomValidator>();
+builder.Services.AddScoped<IValidator<IFormFile>, ImageFileValidator>();
 
-// Add Database Intializer
+// Add Database Initializer
 builder.Services.AddScoped<DatabaseInitializer>();
 
 // Add AutoMapper
@@ -65,13 +66,23 @@ builder.Services.AddCors(p => p.AddPolicy("Cors", policy =>
 }));
 
 
+// Configure HttpClient
+builder.Services.AddHttpClient("Unity", httpClient =>
+{
+    //httpClient.BaseAddress = new Uri("https://escaperoom.ddnsking.com");
+    httpClient.BaseAddress = new Uri("https://localhost:7000");
+});
+
 var app = builder.Build();
 
 // Hook into application lifetime events and trigger only application fully started
-app.Lifetime.ApplicationStarted.Register(async () =>
+app.Lifetime.ApplicationStarted.Register(() =>
 {
-    // Database Initialiser
-    await app.InitialiseDatabaseAsync();
+    // Database Initializer
+    Task.Run(async () =>
+    {
+        await app.InitializeDatabaseAsync();
+    });
 });
 
 // Configure the HTTP request pipeline.

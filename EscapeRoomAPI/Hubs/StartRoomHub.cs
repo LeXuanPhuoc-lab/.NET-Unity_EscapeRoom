@@ -11,12 +11,17 @@ public class StartRoomHub : Hub
 {
     private readonly EscapeRoomUnityContext _context;
     private readonly IMapper _mapper;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private static HttpClient _httpClient;
 
     public StartRoomHub(EscapeRoomUnityContext context,
-        IMapper mapper)
+        IMapper mapper,
+        IHttpClientFactory httpClientFactory)
     {
         _context = context;
         _mapper = mapper;
+        _httpClientFactory = httpClientFactory;
+        _httpClient = _httpClientFactory.CreateClient("Unity");
     }
 
 
@@ -52,7 +57,7 @@ public class StartRoomHub : Hub
 
         var result = await _context.SaveChangesAsync() > 0;  
 
-        if(result) await Clients.All.SendAsync(" ", 
+        if(result) await Clients.All.SendAsync("OnStartingProcessed", 
             true, 
             playerGameSession.Session.EndTime.TotalSeconds,
             playerGameSession.SessionId);
@@ -88,5 +93,28 @@ public class StartRoomHub : Hub
         if (totalPlayerInSession > 0) 
             await Clients.All.SendAsync("OnTriggerInWaitingRoomProcessed", 
                 totalPlayerInSession, sessionPlayerCap, totalReadyPlayers, gameSessionId);
+    }
+
+    public async Task InvokeLeaderBoard(string username)
+    {
+        //var httpResponse = await _httpClient.GetAsync($"/api/leaderboard?username={username}");
+        //var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+
+        //Get player by username
+        // var player = await _context.Players.FirstOrDefaultAsync(x =>
+        //     x.Username.Equals(username));
+
+        //if (player is null) return;
+
+
+        //// Check if user already in any game session
+        //var playerGameSession = await _context.PlayerGameSessions
+        //        .Include(x => x.Session)
+        //        .FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
+
+        //if (playerGameSession is null) return;
+        //else await Clients.All.SendAsync("ShowLeaderBoard");
+        var message = "Show LeaderBoard for all users";
+        await Clients.All.SendAsync("ShowLeaderBoard", message);
     }
 }

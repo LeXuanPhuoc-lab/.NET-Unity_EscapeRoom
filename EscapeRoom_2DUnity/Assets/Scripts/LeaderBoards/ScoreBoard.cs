@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Models;
 using TMPro;
+using Unity.VisualScripting;
 
 namespace ScoreBoard
 {
@@ -40,7 +41,7 @@ namespace ScoreBoard
 
         public async Task<List<ScoreBoardEntryData>> getLeaderBoardAsync(string usernamePlayer)
         {
-            using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://escaperoom.ddnsking.com/api/leaderboard?username={usernamePlayer}"))
+            using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://localhost:7000/api/leaderboard?username={usernamePlayer}"))
             {
                 var operation = webRequest.SendWebRequest();
 
@@ -90,10 +91,10 @@ namespace ScoreBoard
 
         private void UpdateUI(ScoreBoardSaveData saveScore)
         {
-            foreach (Transform child in highScoreHolderTransform)
-            {
-                Destroy(child.gameObject);
-            }
+            // foreach (Transform child in highScoreHolderTransform)
+            // {
+            //     // Destroy(child.gameObject);
+            // }
 
             for (int i = 0; i < saveScore.highScore.Count; i++)
             {

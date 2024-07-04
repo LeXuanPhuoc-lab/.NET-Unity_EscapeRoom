@@ -13,6 +13,7 @@ public class StaticData : MonoBehaviour
     public static string SessionId = String.Empty;
     public static string PlayerId = string.Empty;
     public static HubConnection HubConnection;
+    public static GameObject PauseMenu;
     public static bool IsSessionDone;
 
     public static Dictionary<string, Call_Question_API.Question> QuestionsDictionary =

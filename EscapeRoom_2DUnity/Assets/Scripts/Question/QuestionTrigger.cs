@@ -8,16 +8,15 @@ public class QuestionTrigger : MonoBehaviour
     private HintTrigger hintTrigger;
     private bool isPlayerNear = false;
     public GameObject textGuide;
-    
+
     void Start()
     {
         // Find the Call_Question_API script in the scene
         questionAPI = FindObjectOfType<Call_Question_API>();
         // Find the HintTrigger script in the scene
         hintTrigger = FindObjectOfType<HintTrigger>();
-        
+
         textGuide.SetActive(false);
-        
     }
 
     void Update()

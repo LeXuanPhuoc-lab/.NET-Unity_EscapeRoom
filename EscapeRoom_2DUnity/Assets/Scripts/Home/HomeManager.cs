@@ -83,6 +83,7 @@ namespace Home
             {
                 StaticData.Username = requestBody.Username;
                 homeCanvas.ShowObject("MainButtons");
+                homeCanvas.ShowObject("FindRoomMenu");
                 Debug.Log(StaticData.Username);
             }
         }
@@ -167,7 +168,6 @@ namespace Home
 
             Debug.Log(22);
         }
-
 
         public async void ConnectSignalRServer()
         {

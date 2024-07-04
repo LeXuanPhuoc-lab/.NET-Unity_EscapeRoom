@@ -8,6 +8,7 @@ public class HintTrigger : MonoBehaviour
     [SerializeField] private TMP_Text hintText;
     [SerializeField] private Image hintImage;
 
+
     void Start()
     {
         hintUI.SetActive(false);

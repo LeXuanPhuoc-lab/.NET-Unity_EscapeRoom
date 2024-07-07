@@ -8,6 +8,12 @@ public class QuestionTrigger : MonoBehaviour
     private HintTrigger hintTrigger;
     private bool isPlayerNear = false;
     public GameObject textGuide;
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("audio").GetComponent<AudioManager>();
+    }
 
     void Start()
     {
@@ -29,6 +35,8 @@ public class QuestionTrigger : MonoBehaviour
             }
             else
             {
+                // Open chest sound sfx
+                audioManager.PlaySFX(audioManager.openChest);
                 // Show question screen
                 questionAPI.ShowQuestionScreen(gameObject);
             }

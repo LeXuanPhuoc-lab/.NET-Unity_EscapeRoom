@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using EscapeRoomAPI.Dtos;
 using EscapeRoomAPI.Entities;
@@ -25,7 +26,8 @@ public class StartRoomHub : Hub
     }
 
 
-    public override Task OnConnectedAsync(){
+    public override Task OnConnectedAsync()
+    {
         Clients.All.SendAsync("InvokeConnectionMessage", "Connected to server successfully");
         return base.OnConnectedAsync();
     }
@@ -33,14 +35,14 @@ public class StartRoomHub : Hub
     public async Task InvokeStartAsync(string username)
     {
         // Get player by username
-        var player = await _context.Players.FirstOrDefaultAsync(x => 
+        var player = await _context.Players.FirstOrDefaultAsync(x =>
             x.Username.Equals(username));
-        
-        if(player is null) return;
- 
+
+        if (player is null) return;
+
         // Get player game session
-        var playerGameSession = await 
-            _context.PlayerGameSessions 
+        var playerGameSession = await
+            _context.PlayerGameSessions
                         .Include(x => x.Session)
                     .FirstOrDefaultAsync(x => x.PlayerId.Equals(player.PlayerId));
 
@@ -51,14 +53,14 @@ public class StartRoomHub : Hub
         {
             _context.Attach(playerGameSession.Session);
         }
-        
+
         _context.Entry(playerGameSession.Session).Property(x => x.IsWaiting).CurrentValue = false;
         _context.Entry(playerGameSession.Session).Property(x => x.IsWaiting).IsModified = true;
 
-        var result = await _context.SaveChangesAsync() > 0;  
+        var result = await _context.SaveChangesAsync() > 0;
 
-        if(result) await Clients.All.SendAsync("OnStartingProcessed", 
-            true, 
+        if (result) await Clients.All.SendAsync("OnStartingProcessed",
+            true,
             playerGameSession.Session.EndTime.TotalSeconds,
             playerGameSession.SessionId);
     }
@@ -80,41 +82,57 @@ public class StartRoomHub : Hub
         if (playerGameSession is null) return;
 
         // Total player game in session
-        var totalPlayerInSession = await _context.PlayerGameSessions.CountAsync(x => 
+        var totalPlayerInSession = await _context.PlayerGameSessions.CountAsync(x =>
             x.SessionId == playerGameSession.SessionId);
         // Total session players
         var sessionPlayerCap = playerGameSession.Session.TotalPlayer;
         // Total ready players
-        var totalReadyPlayers = await _context.PlayerGameSessions.CountAsync(x => 
+        var totalReadyPlayers = await _context.PlayerGameSessions.CountAsync(x =>
             x.SessionId == playerGameSession.SessionId && x.IsReady);
         // Game session id
         var gameSessionId = playerGameSession.SessionId;
 
-        if (totalPlayerInSession > 0) 
-            await Clients.All.SendAsync("OnTriggerInWaitingRoomProcessed", 
+        if (totalPlayerInSession > 0)
+            await Clients.All.SendAsync("OnTriggerInWaitingRoomProcessed",
                 totalPlayerInSession, sessionPlayerCap, totalReadyPlayers, gameSessionId);
     }
 
     public async Task InvokeLeaderBoard(string username)
     {
-        //var httpResponse = await _httpClient.GetAsync($"/api/leaderboard?username={username}");
-        //var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+        // Get player by username
+        var player = await _context.Players.FirstOrDefaultAsync(x =>
+            x.Username.Equals(username));
 
-        //Get player by username
-        // var player = await _context.Players.FirstOrDefaultAsync(x =>
-        //     x.Username.Equals(username));
-
-        //if (player is null) return;
+        if (player is null) return;
 
 
-        //// Check if user already in any game session
-        //var playerGameSession = await _context.PlayerGameSessions
-        //        .Include(x => x.Session)
-        //        .FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
+        // Check if user already in any game session
+        var playerGameSession = await _context.PlayerGameSessions
+                .Include(x => x.Session)
+                .FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
 
-        //if (playerGameSession is null) return;
-        //else await Clients.All.SendAsync("ShowLeaderBoard");
+        if (playerGameSession is null) return;
+
         var message = "Show LeaderBoard for all users";
         await Clients.All.SendAsync("ShowLeaderBoard", message);
+    }
+
+    public async Task InvokeRoomCreateAsync(string username)
+    {
+        var gameSessions = await _context.GameSessions
+            // Include game session to count total player already joined room
+            .Include(x => x.PlayerGameSessions)
+            //.ThenInclude(x => x.Player) -> It's unnecessary to get player
+            // With conditions: game is not end yet, still waiting for other players and is public
+            .Where(x => !x.IsEnd && x.IsWaiting && x.IsPublic == true).ToListAsync();
+
+        // Not found any game session
+        if (!gameSessions.Any())
+        {
+            return;
+        }
+
+        var gameSessionDtos = _mapper.Map<List<GameSessionDto>>(gameSessions);
+        await Clients.All.SendAsync("OnTriggerCreateRoom", JsonSerializer.Serialize(gameSessionDtos));
     }
 }

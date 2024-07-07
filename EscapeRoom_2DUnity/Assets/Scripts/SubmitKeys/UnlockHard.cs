@@ -91,7 +91,6 @@ namespace SubmitKeys
 
         private IEnumerator GetRequest(string url)
         {
-            LeaderBoard.SetActive(true);
             UnityWebRequest request = UnityWebRequest.Get(url);
             request.downloadHandler = new DownloadHandlerBuffer();
             yield return request.SendWebRequest();

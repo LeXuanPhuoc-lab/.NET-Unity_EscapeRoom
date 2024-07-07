@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Microsoft.AspNetCore.SignalR.Client;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace Home
 {
@@ -15,8 +19,13 @@ namespace Home
         private const float itemHeight = 100f; // Height of each item
         private const float itemSpacing = 10f; // Spacing between items
 
-        private void OnEnable()
+        private HubConnection hubConnection;
+
+        private async Task OnEnable()
         {
+            await HomeManager.Instance.ConnectSignalRServer();
+            InitializeHubConnection();
+            SubscribeToConnectionEvents();
             GenerateRoomLists();
         }
 
@@ -39,13 +48,86 @@ namespace Home
             }
         }
 
+        private void InitializeHubConnection()
+        {
+            hubConnection = StaticData.HubConnection;
+
+            if (hubConnection == null)
+            {
+                Debug.LogError("HubConnection is not initialized.");
+                return;
+            }
+
+            SubscribeToUpdateRoomList();
+
+            if (hubConnection.State == HubConnectionState.Connected)
+            {
+                Debug.Log("Connected and listening from server.");
+            }
+            else
+            {
+                Debug.LogError("HubConnection is not connected. Current state: " + hubConnection.State);
+            }
+        }
+
+        private void SubscribeToConnectionEvents()
+        {
+            hubConnection.Reconnecting += error =>
+            {
+                Debug.LogWarning("Reconnecting...");
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Reconnected += connectionId =>
+            {
+                Debug.Log("Reconnected. Re-subscribing to events...");
+                SubscribeToUpdateRoomList();
+                return Task.CompletedTask;
+            };
+
+            hubConnection.Closed += async error =>
+            {
+                Debug.LogError("Connection closed. Attempting to reconnect...");
+                await hubConnection.StartAsync();
+            };
+        }
+
+        private void SubscribeToUpdateRoomList()
+        {
+            Debug.Log("Subscribing to Update room list event...");
+
+            hubConnection.On<string>("OnTriggerCreateRoom", (roomList) =>
+            {
+                Debug.Log("Receive list room from server successfully, with data: " + roomList);
+                var roomListConverted = JsonConvert.DeserializeObject<List<GameSessionDto>>(roomList);
+
+                Debug.Log(scrollView.childCount);
+                foreach (Transform child in scrollView)
+                {
+                    if (!child.gameObject != roomItemPrefab)
+                        Destroy(child.gameObject);
+                }
+
+                foreach (var room in roomListConverted)
+                {
+                    AddRoomItem(room);
+                }
+            });
+        }
+
         private void AddRoomItem(GameSessionDto room)
         {
+            string sessionName = room.SessionName;
+            if (sessionName.Length > 15)
+            {
+                sessionName = sessionName.Substring(0, 12) + "...";
+            }
             var newRoomItem = Instantiate(roomItemPrefab);
             newRoomItem.transform.SetParent(scrollView.transform, false);
 
             var textComponent = newRoomItem.GetComponentInChildren<TMP_Text>();
-            textComponent.text = $"Room: {room.SessionName}";;
+            textComponent.fontSize = 33;
+            textComponent.text = $"Room name: {sessionName}\nTotal players: {room.PlayerGameSessions.ToList().Count}/{room.TotalPlayer}\n"; 
             textComponent.alignment = TMPro.TextAlignmentOptions.Left;
             // newRoomItem.GetComponentInChildren<TMP_Text>().text = $"Room Name: {room.SessionName}";
             newRoomItem.GetComponent<Button>().onClick.AddListener(() => HandleJoinRoomBySelect(room.SessionId));

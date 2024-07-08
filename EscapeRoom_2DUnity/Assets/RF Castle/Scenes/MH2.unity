@@ -3107,11 +3107,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 134016521978830104, guid: c2a6a6853291ca34f88416a79e58d1d4, type: 3}
       propertyPath: m_text
-      value: Click E to open question
+      value: "Nh\u1EA5n E \u0111\u1EC3 kh\xE1m ph\xE1"
       objectReference: {fileID: 0}
     - target: {fileID: 134016521978830104, guid: c2a6a6853291ca34f88416a79e58d1d4, type: 3}
       propertyPath: m_fontSize
-      value: 64.9
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 134016521978830104, guid: c2a6a6853291ca34f88416a79e58d1d4, type: 3}
       propertyPath: m_fontColor.b
@@ -12136,11 +12136,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4949827700728964742, guid: e215a537f75503ec686ef469075b8157, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.00010710005
+      value: -0.00008140552
       objectReference: {fileID: 0}
     - target: {fileID: 4949827700728964742, guid: e215a537f75503ec686ef469075b8157, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 849.7495
+      value: 849.74945
       objectReference: {fileID: 0}
     - target: {fileID: 4949827700728964743, guid: e215a537f75503ec686ef469075b8157, type: 3}
       propertyPath: m_Layer

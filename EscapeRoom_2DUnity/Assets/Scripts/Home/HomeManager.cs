@@ -14,7 +14,7 @@ namespace Home
         // public event Action RoomStarted;
 
         private HubConnection _connection;
-        private const string ServerAddress = "https://localhost:7000";
+        private const string ServerAddress = "https://escaperoom.ddnsking.com";
 
         [HideInInspector] public GameSessionDto gameSession;
         [SerializeField] private HomeCanvas homeCanvas;

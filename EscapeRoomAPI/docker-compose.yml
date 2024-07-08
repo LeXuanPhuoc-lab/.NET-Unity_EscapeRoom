@@ -1,9 +1,12 @@
 services:
   escape_room:
     # networks:
+    image: kaycccc/escaperoomapi-escape_room:1.0.1 
     build:
       context: .
       dockerfile: Dockerfile
+      args: 
+      - ASPNETCORE_ENVIRONMENT=Docker
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:8080

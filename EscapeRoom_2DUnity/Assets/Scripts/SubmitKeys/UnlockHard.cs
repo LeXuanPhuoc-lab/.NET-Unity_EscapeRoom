@@ -84,7 +84,7 @@ namespace SubmitKeys
             string username = StaticData.Username;
             string key = string.Concat(value1, value2, value3, value4);
             string isHard = "true";
-            string url = $"https://localhost:7000/api/players/{username}/room/unclock/{key}?isHard={isHard}";
+            string url = $"https://escaperoom.ddnsking.com/api/players/{username}/room/unclock/{key}?isHard={isHard}";
             Debug.Log("Request URL: " + url);
             StartCoroutine(GetRequest(url));
         }

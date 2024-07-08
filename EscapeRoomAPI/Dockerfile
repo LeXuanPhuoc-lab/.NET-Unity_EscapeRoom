@@ -6,6 +6,9 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy-amd64 AS build
 WORKDIR /app
 
+ARG ASPNETCORE_ENVIRONMENT
+ENV ASPNETCORE_ENVIRONMENT=$ASPNETCORE_ENVIRONMENT
+
 # Copy project files and restore deps
 COPY ["./EscapeRoomAPI.csproj", "./EscapeRoomAPI/"]
 RUN dotnet restore "./EscapeRoomAPI/EscapeRoomAPI.csproj" 

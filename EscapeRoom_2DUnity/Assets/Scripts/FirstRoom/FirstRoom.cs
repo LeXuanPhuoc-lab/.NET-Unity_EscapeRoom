@@ -10,7 +10,7 @@ namespace FirstRoom
         [SerializeField] private TMP_Text remainTimeText;
 
         private HubConnection _connection;
-        private const string ServerAddress = "https://localhost:7000";
+        private const string ServerAddress = "https://escaperoom.ddnsking.com";
 
         void Start()
         {
@@ -44,7 +44,7 @@ namespace FirstRoom
                 float minutes = Mathf.FloorToInt(StaticData.RemainTime / 60);
                 float seconds = Mathf.FloorToInt(StaticData.RemainTime % 60);
 
-                 remainTimeText.text = $"{minutes:00}:{seconds:00}";
+                remainTimeText.text = $"{minutes:00}:{seconds:00}";
             }
             catch (NullReferenceException e)
             {

@@ -39,10 +39,11 @@ public partial class EscapeRoomUnityContext : DbContext
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", true, true)
             .AddJsonFile("appsettings.Docker.json", false, true)
+            .AddEnvironmentVariables()
             .Build();
 
         var isDevelopment = config["ASPNETCORE_ENVIRONMENT"].Equals("Development");
-        return config.GetConnectionString(isDevelopment ? "DefaultDB" : "ServerDB");
+        return config.GetConnectionString(isDevelopment ? "DefaultDB" : "DeployDB");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

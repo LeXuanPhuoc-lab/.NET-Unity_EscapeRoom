@@ -16,8 +16,8 @@ namespace ScoreBoard
         private int maxLeadeBoard = StaticData.TotalPlayer;
         // [SerializeField] public Transform highScoreHolderTransform = null; // Ensure this is assigned in the Inspector
         [SerializeField] public GameObject ScoreBoardEntryObject = null; // Ensure this is assigned in the Inspector
-        [SerializeField] public Transform scrollView = null; 
-        
+        [SerializeField] public Transform scrollView = null;
+
         private void Start()
         {
             gameObject.SetActive(false);
@@ -42,7 +42,7 @@ namespace ScoreBoard
 
         public async Task<List<ScoreBoardEntryData>> getLeaderBoardAsync(string usernamePlayer)
         {
-            using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://localhost:7000/api/leaderboard?username={usernamePlayer}"))
+            using (UnityWebRequest webRequest = UnityWebRequest.Get($"https://escaperoom.ddnsking.com/api/leaderboard?username={usernamePlayer}"))
             {
                 var operation = webRequest.SendWebRequest();
 

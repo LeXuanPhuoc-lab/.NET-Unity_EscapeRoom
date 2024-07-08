@@ -9,7 +9,7 @@ namespace FirstRoom
         [SerializeField] private TMP_Text remainTimeText;
 
         private HubConnection _connection;
-        private const string ServerAddress = "https://localhost:7000";
+        private const string ServerAddress = "https://escaperoom.ddnsking.com";
         
         void Start()
         {

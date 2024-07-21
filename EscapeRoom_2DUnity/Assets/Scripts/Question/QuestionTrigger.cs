@@ -8,16 +8,21 @@ public class QuestionTrigger : MonoBehaviour
     private HintTrigger hintTrigger;
     private bool isPlayerNear = false;
     public GameObject textGuide;
-    
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("audio").GetComponent<AudioManager>();
+    }
+
     void Start()
     {
         // Find the Call_Question_API script in the scene
         questionAPI = FindObjectOfType<Call_Question_API>();
         // Find the HintTrigger script in the scene
         hintTrigger = FindObjectOfType<HintTrigger>();
-        
+
         textGuide.SetActive(false);
-        
     }
 
     void Update()
@@ -30,6 +35,8 @@ public class QuestionTrigger : MonoBehaviour
             }
             else
             {
+                // Open chest sound sfx
+                audioManager.PlaySFX(audioManager.openChest);
                 // Show question screen
                 questionAPI.ShowQuestionScreen(gameObject);
             }

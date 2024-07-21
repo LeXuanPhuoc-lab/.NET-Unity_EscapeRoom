@@ -9,6 +9,7 @@ TagManager:
   - Passed
   - NextRoom
   - GoToNhaRoom
+  - audio
   layers:
   - Default
   - TransparentFX

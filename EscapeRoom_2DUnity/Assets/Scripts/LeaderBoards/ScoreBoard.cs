@@ -7,15 +7,17 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Models;
 using TMPro;
+using Unity.VisualScripting;
 
 namespace ScoreBoard
 {
     public class ScoreBoard : MonoBehaviour
     {
         private int maxLeadeBoard = StaticData.TotalPlayer;
-        [SerializeField] public Transform highScoreHolderTransform = null; // Ensure this is assigned in the Inspector
+        // [SerializeField] public Transform highScoreHolderTransform = null; // Ensure this is assigned in the Inspector
         [SerializeField] public GameObject ScoreBoardEntryObject = null; // Ensure this is assigned in the Inspector
-
+        [SerializeField] public Transform scrollView = null; 
+        
         private void Start()
         {
             gameObject.SetActive(false);
@@ -90,7 +92,7 @@ namespace ScoreBoard
 
         private void UpdateUI(ScoreBoardSaveData saveScore)
         {
-            foreach (Transform child in highScoreHolderTransform)
+            foreach (Transform child in scrollView)
             {
                 Destroy(child.gameObject);
             }
@@ -98,8 +100,11 @@ namespace ScoreBoard
             for (int i = 0; i < saveScore.highScore.Count; i++)
             {
                 var highscore = saveScore.highScore[i];
-                var entryObject = Instantiate(ScoreBoardEntryObject, highScoreHolderTransform);
+                // var entryObject = Instantiate(ScoreBoardEntryObject, highScoreHolderTransform);
+                var entryObject = Instantiate(ScoreBoardEntryObject);
                 var entryUI = entryObject.GetComponent<ScoreBoardEntryUI>();
+
+                entryUI.transform.SetParent(scrollView.transform, false);
                 entryUI.Initialise(highscore, i + 1);
             }
         }

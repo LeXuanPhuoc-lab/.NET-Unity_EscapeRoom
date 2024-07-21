@@ -44,7 +44,7 @@ namespace FirstRoom
                 float minutes = Mathf.FloorToInt(StaticData.RemainTime / 60);
                 float seconds = Mathf.FloorToInt(StaticData.RemainTime % 60);
 
-                 remainTimeText.text = $"{minutes:00}:{seconds:00}";
+                remainTimeText.text = $"{minutes:00}:{seconds:00}";
             }
             catch (NullReferenceException e)
             {

@@ -24,20 +24,20 @@ namespace Home
 
         private bool _isHost;
 
+        private async void OnEnable()
+        {
+            await HomeManager.Instance.ConnectSignalRServer();
+        }
+
         private void Awake()
         {
             Debug.Log("Awake in wait room");
         }
 
-        private void OnEnable()
-        {
-            HomeManager.Instance.ConnectSignalRServer();
-        }
-
         public void UpdateStates()
         {
             Debug.Log("UpdateStates");
-            roomText.text = $"Room: {HomeManager.Instance.gameSession.SessionName}";
+            roomText.text = HomeManager.Instance.gameSession.SessionName;
             roomCodeText.text = $"Code: {HomeManager.Instance.gameSession.SessionCode}";
             totalPlayerText.text =
                 $"Total Player: {HomeManager.Instance.gameSession.PlayerGameSessions.Count()}/{HomeManager.Instance.gameSession.TotalPlayer}";
@@ -77,9 +77,9 @@ namespace Home
             readyButtonText.text = "Ready";
         }
 
-        public void HandleReady()
+        public async void HandleReady()
         {
-            HomeManager.Instance.Ready();
+            await HomeManager.Instance.Ready();
         }
 
         private void SetButtonTextColor(string hexColor)
@@ -109,14 +109,14 @@ namespace Home
             }
         }
 
-        public void HandleOutRoom()
+        public async void HandleOutRoom()
         {
-            HomeManager.Instance.OutRoom();
+            await HomeManager.Instance.OutRoom();
         }
 
-        public void HandleStartRoom()
+        public async void HandleStartRoom()
         {
-            HomeManager.Instance.StartRoom();
+            await HomeManager.Instance.StartRoom();
         }
     }
 }

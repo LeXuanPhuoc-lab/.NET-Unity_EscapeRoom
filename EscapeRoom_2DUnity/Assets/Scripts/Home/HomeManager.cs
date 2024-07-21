@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -32,7 +33,7 @@ namespace Home
             }
         }
 
-        public async void CreateRoom(CreateRoomBody requestBody)
+        public async Task CreateRoom(CreateRoomBody requestBody)
         {
             Debug.Log(3);
             gameSession = await APIManager.Instance.CreateRoomAsync(requestBody);
@@ -43,6 +44,8 @@ namespace Home
                 waitRoom.ResetReadyButton();
                 waitRoom.UpdateStates();
                 homeCanvas.ShowObject("WaitRoom");
+
+                await ProccessUpdateRoomListAsync();
             }
         }
 
@@ -51,7 +54,7 @@ namespace Home
             return await APIManager.Instance.GetRoomsAsync();
         }
 
-        public async void JoinRoomByCode(string roomCode)
+        public async Task JoinRoomByCode(string roomCode)
         {
             gameSession = await APIManager.Instance.JoinRoomByCodeAsync(roomCode);
 
@@ -60,10 +63,14 @@ namespace Home
                 waitRoom.ResetReadyButton();
                 waitRoom.UpdateStates();
                 homeCanvas.ShowObject("WaitRoom");
+
+                // Process find room
+                await ProcessFindOrReadyOrExistRoomAsync();
+                await ProccessUpdateRoomListAsync();
             }
         }
 
-        public async void JoinRoomBySelect(int sessionId)
+        public async Task JoinRoomBySelect(int sessionId)
         {
             gameSession = await APIManager.Instance.JoinRoomBySelectAsync(sessionId);
 
@@ -72,21 +79,26 @@ namespace Home
                 waitRoom.ResetReadyButton();
                 waitRoom.UpdateStates();
                 homeCanvas.ShowObject("WaitRoom");
+
+                // Process find room
+                await ProcessFindOrReadyOrExistRoomAsync();
+                await ProccessUpdateRoomListAsync();
             }
         }
 
-        public async void Login(LoginBody requestBody)
+        public async Task Login(LoginBody requestBody)
         {
             var success = await APIManager.Instance.LoginAsync(requestBody);
             if (success)
             {
                 StaticData.Username = requestBody.Username;
                 homeCanvas.ShowObject("MainButtons");
+                // homeCanvas.ShowObject("FindRoomMenu");
                 Debug.Log(StaticData.Username);
             }
         }
 
-        public async void Register(LoginBody requestBody)
+        public async Task Register(LoginBody requestBody)
         {
             var success = await APIManager.Instance.RegisterAsync(requestBody);
             if (success)
@@ -102,7 +114,12 @@ namespace Home
             await _connection.InvokeAsync("InvokeFindOrReadyOrExistAsync", StaticData.Username);
         }
 
-        public async void FindRandomRoom()
+        private async Task ProccessUpdateRoomListAsync()
+        {
+            await _connection.InvokeAsync("InvokeRoomCreateAsync", StaticData.Username);
+        }
+
+        public async Task FindRandomRoom()
         {
             gameSession = await APIManager.Instance.FindRandomRoomAsync();
 
@@ -114,17 +131,16 @@ namespace Home
 
                 // Process find room
                 await ProcessFindOrReadyOrExistRoomAsync();
+                await ProccessUpdateRoomListAsync();
             }
         }
 
         private async Task ProcessStartRoom()
         {
-
-            
             await _connection.InvokeAsync("InvokeStartAsync", StaticData.Username);
         }
 
-        public async void StartRoom()
+        public async Task StartRoom()
         {
             var success = await APIManager.Instance.StartRoomAsync();
 
@@ -132,6 +148,8 @@ namespace Home
             {
                 await ProcessStartRoom();
             }
+
+            await ProccessUpdateRoomListAsync();
         }
 
         public void ShowError(string message)
@@ -139,7 +157,7 @@ namespace Home
             homeCanvas.ShowError(message);
         }
 
-        public async void OutRoom()
+        public async Task OutRoom()
         {
             var success = await APIManager.Instance.OutRoomAsync();
             if (success)
@@ -148,9 +166,11 @@ namespace Home
                 homeCanvas.ShowObject("MainButtons");
                 await ProcessFindOrReadyOrExistRoomAsync();
             }
+
+            await ProccessUpdateRoomListAsync();
         }
 
-        public async void Ready()
+        public async Task Ready()
         {
             Debug.Log(19);
             var success = await APIManager.Instance.ReadyAsync();
@@ -167,8 +187,7 @@ namespace Home
             Debug.Log(22);
         }
 
-
-        public async void ConnectSignalRServer()
+        public async Task ConnectSignalRServer()
         {
             try
             {
@@ -213,9 +232,23 @@ namespace Home
                         }
                     });
 
-                // Start 
+                _connection.On<int, int, int, int>("OnTriggerJoinRoomProcessed",
+                (totalPlayerInSession, sessionPlayerCap, totalReadyPlayers, gameSessionId) =>
+                {
+                    if (gameSession is not null)
+                    {
+                        // Only process start game for users in same room with host user
+                        if (gameSession.SessionId == gameSessionId)
+                        {
+                            waitRoom.ProcessFindOrReadyUpdate(totalPlayerInSession, sessionPlayerCap,
+                                totalReadyPlayers);
+                        }
+                    }
+                });
+
+                // Start        
                 await _connection.StartAsync();
-                Debug.Log("Connected with server");
+                StaticData.HubConnection = _connection;
             }
             catch (Exception e)
             {
